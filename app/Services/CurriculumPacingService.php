@@ -406,10 +406,18 @@ class CurriculumPacingService
     }
 
     /**
-     * Bank 100+ Kosakata Inti Level 1 Terjemahan Bahasa Indonesia & Detail Penggunaan
+     * Bank 1000++ Kosakata Inti Level 1 Terjemahan Bahasa Indonesia & Detail Penggunaan
      */
     public static function getLevelOneVocabularyBank(string $langCode): array
     {
+        $jsonPath = database_path("data/vocabularies/{$langCode}_level1.json");
+        if (file_exists($jsonPath)) {
+            $data = json_decode(file_get_contents($jsonPath), true);
+            if (is_array($data) && !empty($data)) {
+                return $data;
+            }
+        }
+
         return match ($langCode) {
             'ar' => self::getArabicLevelOneVocabBank(),
             'ja' => self::getJapaneseLevelOneVocabBank(),

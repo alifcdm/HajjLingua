@@ -47,6 +47,20 @@ class LearnController extends Controller
         $pair = LanguagePair::where('target_language_id', $lesson->unit->level->language_id)
             ->first();
 
+        // Cari pelajaran sebelumnya
+        $previousLesson = Lesson::where('unit_id', $lesson->unit_id)
+            ->where('sort_order', '<', $lesson->sort_order)
+            ->orderBy('sort_order', 'desc')
+            ->first();
+
+        if (!$previousLesson) {
+            $prevUnit = $lesson->unit->level->units()
+                ->where('sort_order', '<', $lesson->unit->sort_order)
+                ->orderBy('sort_order', 'desc')
+                ->first();
+            $previousLesson = $prevUnit?->lessons()->orderBy('sort_order', 'desc')->first();
+        }
+
         // Cari pelajaran berikutnya
         $nextLesson = Lesson::where('unit_id', $lesson->unit_id)
             ->where('sort_order', '>', $lesson->sort_order)
@@ -61,13 +75,27 @@ class LearnController extends Controller
             $nextLesson = $nextUnit?->lessons()->orderBy('sort_order')->first();
         }
 
-        return view('learn.lesson', compact('lesson', 'pair', 'nextLesson'));
+        // Pastikan materi memiliki minimal 100 pembelajaran interaktif komunikasi 2 orang atau lebih
+        $body = $lesson->content_body;
+        if (empty($body['interactive_dialogues']) || count($body['interactive_dialogues']) < 100) {
+            $body['interactive_dialogues'] = \App\Services\InteractiveDialogueService::generate100Dialogues(
+                $lesson->unit->level->language->code,
+                $body['vocabularies'] ?? [],
+                [],
+                $lesson->sort_order
+            );
+            $lesson->content_body = $body;
+            $lesson->save();
+        }
+
+        return view('learn.lesson', compact('lesson', 'pair', 'nextLesson', 'previousLesson'));
     }
 
     public function completeLesson(Request $request, $id)
     {
         $lesson = Lesson::with('unit.level')->findOrFail($id);
         $score = (int) $request->input('score', 100);
+        $action = $request->input('action', 'next'); // 'next' atau 'stay'
 
         UserLessonProgress::updateOrCreate(
             [
@@ -99,16 +127,25 @@ class LearnController extends Controller
             ? route('lesson.show', $nextLesson->id) 
             : route('exam.show', $lesson->unit->level_id);
 
-        if ($request->wantsJson()) {
+        if ($request->wantsJson() || $request->ajax()) {
             return response()->json([
                 'success' => true,
+                'stay' => ($action === 'stay'),
                 'score' => $score,
+                'current_url' => route('lesson.show', $lesson->id),
                 'next_url' => $nextUrl,
                 'is_last' => $nextLesson === null,
-                'message' => $nextLesson 
-                    ? "Hebat! Materi {$lesson->title} selesai. Bersiap melanjutkan ke materi berikutnya!"
-                    : "Luar biasa! Seluruh materi level ini selesai. Anda diarahkan ke Ujian Kelulusan!"
+                'message' => ($action === 'stay')
+                    ? "Hebat! Progres materi '{$lesson->title}' berhasil dicatat. Anda tetap di materi ini."
+                    : ($nextLesson 
+                        ? "Hebat! Materi {$lesson->title} selesai. Bersiap melanjutkan ke materi berikutnya!"
+                        : "Luar biasa! Seluruh materi level ini selesai. Anda diarahkan ke Ujian Kelulusan!")
             ]);
+        }
+
+        if ($action === 'stay') {
+            return redirect()->route('lesson.show', $lesson->id)
+                ->with('success', "Progres materi '{$lesson->title}' tersimpan! Anda tetap berada di materi ini untuk pendalaman.");
         }
 
         if ($nextLesson) {

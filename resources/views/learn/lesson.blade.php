@@ -5,18 +5,28 @@
 
     <!-- Top Navigation -->
     <div class="mb-4 sm:mb-6 flex flex-wrap items-center justify-between gap-3">
-        <a href="{{ route('learn.index', ['slug' => $pair->slug ?? 'id-ar', 'level' => $lesson->unit->level->code]) }}" class="text-xs text-slate-500 hover:text-blue-600 flex items-center gap-1 transition">
-            <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
-            <span>Kembali ke Silabus {{ $lesson->unit->level->code }}</span>
-        </a>
+        <div class="flex items-center gap-2">
+            <a href="{{ route('learn.index', ['slug' => $pair->slug ?? 'id-ar', 'level' => $lesson->unit->level->code]) }}" class="text-xs text-slate-500 hover:text-blue-600 flex items-center gap-1 transition">
+                <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
+                <span>Silabus {{ $lesson->unit->level->code }}</span>
+            </a>
+            @if(isset($previousLesson) && $previousLesson)
+                <a href="{{ route('lesson.show', $previousLesson->id) }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-xs font-semibold text-slate-700 shadow-2xs transition" title="Kembali ke: {{ $previousLesson->title }}">
+                    <i data-lucide="chevron-left" class="w-4 h-4 text-blue-600"></i>
+                    <span>Materi Sebelumnya</span>
+                </a>
+            @endif
+        </div>
         <div class="flex items-center gap-2">
             <span class="text-[11px] font-semibold px-2.5 py-1 rounded-full bg-blue-50 text-blue-700">
                 {{ $lesson->unit->title }}
             </span>
             @if($nextLesson)
-                <span class="hidden md:inline-flex text-[11px] text-slate-400">
-                    Berikutnya: {{ Str::limit($nextLesson->title, 25) }}
-                </span>
+                <a href="{{ route('lesson.show', $nextLesson->id) }}" class="inline-flex items-center gap-1 text-[11px] text-blue-600 hover:text-blue-800 font-semibold" title="Lanjut ke: {{ $nextLesson->title }}">
+                    <span class="hidden md:inline">Berikutnya: {{ Str::limit($nextLesson->title, 20) }}</span>
+                    <span class="md:hidden">Berikutnya</span>
+                    <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+                </a>
             @endif
         </div>
     </div>
@@ -78,7 +88,7 @@
                                 <div class="text-xs font-semibold text-slate-500 mb-2">
                                     {{ $alpha['name'] ?? ($alpha['romaji'] ?? ($alpha['romaja'] ?? $alpha['phonetic'])) }}
                                 </div>
-                                <button type="button" onclick="speakText('{{ addslashes($alpha['audio'] ?? $alpha['char']) }}', '{{ $lesson->unit->level->language->code }}')" class="w-9 h-9 rounded-full bg-blue-100 text-blue-700 hover:bg-blue-600 hover:text-white transition flex items-center justify-center mx-auto shadow-sm">
+                                <button type="button" data-text="{{ $alpha['audio'] ?? $alpha['char'] }}" data-lang="{{ $lesson->unit->level->language->code }}" onclick="playVoice(this)" class="w-9 h-9 rounded-full bg-blue-100 text-blue-700 hover:bg-blue-600 hover:text-white transition flex items-center justify-center mx-auto shadow-sm" title="Dengarkan pengucapan huruf">
                                     <i data-lucide="volume-2" class="w-4 h-4"></i>
                                 </button>
                             </div>
@@ -102,7 +112,7 @@
                                         <div class="text-2xl font-bold text-slate-900 {{ $lesson->unit->level->language->code === 'ar' ? 'font-arabic text-3xl' : ($lesson->unit->level->language->code === 'ja' ? 'font-japanese' : 'font-korean') }}">
                                             {{ $voc['arabic'] ?? ($voc['kanji_kana'] ?? ($voc['hangeul'] ?? ($voc['word'] ?? ''))) }}
                                         </div>
-                                        <button type="button" onclick="speakText('{{ addslashes($voc['audio'] ?? ($voc['arabic'] ?? ($voc['kanji_kana'] ?? ($voc['hangeul'] ?? ($voc['word'] ?? ''))))) }}', '{{ $lesson->unit->level->language->code }}')" class="w-9 h-9 rounded-xl bg-blue-50 text-blue-700 hover:bg-blue-600 hover:text-white transition flex items-center justify-center flex-shrink-0 shadow-sm ml-2">
+                                        <button type="button" data-text="{{ $voc['audio'] ?? ($voc['arabic'] ?? ($voc['kanji_kana'] ?? ($voc['hangeul'] ?? ($voc['word'] ?? '')))) }}" data-lang="{{ $lesson->unit->level->language->code }}" onclick="playVoice(this)" class="w-9 h-9 rounded-xl bg-blue-50 text-blue-700 hover:bg-blue-600 hover:text-white transition flex items-center justify-center flex-shrink-0 shadow-sm ml-2" title="Dengarkan kosakata penutur asli">
                                             <i data-lucide="volume-2" class="w-4 h-4"></i>
                                         </button>
                                     </div>
@@ -136,7 +146,7 @@
                                                 {{ $voc['example_trans'] ?? '' }}
                                             </div>
                                         </div>
-                                        <button type="button" onclick="speakText('{{ addslashes($voc['example']) }}', '{{ $lesson->unit->level->language->code }}')" class="p-1.5 rounded-lg bg-blue-100 text-blue-700 hover:bg-blue-600 hover:text-white transition shadow-2xs flex-shrink-0 mt-0.5" title="Dengarkan seluruh kalimat contoh">
+                                        <button type="button" data-text="{{ $voc['example'] }}" data-lang="{{ $lesson->unit->level->language->code }}" onclick="playVoice(this)" class="p-1.5 rounded-lg bg-blue-100 text-blue-700 hover:bg-blue-600 hover:text-white transition shadow-2xs flex-shrink-0 mt-0.5" title="Dengarkan seluruh kalimat contoh">
                                             <i data-lucide="volume-2" class="w-3.5 h-3.5"></i>
                                         </button>
                                     </div>
@@ -188,7 +198,7 @@
                                                             Arti Kalimat: {{ $examp['meaning'] }}
                                                         </div>
                                                     </div>
-                                                    <button type="button" onclick="speakText('{{ addslashes($examp['target']) }}', '{{ $lesson->unit->level->language->code }}')" class="p-2.5 rounded-xl bg-indigo-50 text-indigo-700 hover:bg-indigo-600 hover:text-white transition shadow-sm flex-shrink-0" title="Dengarkan seluruh kalimat penutur asli">
+                                                    <button type="button" data-text="{{ $examp['target'] }}" data-lang="{{ $lesson->unit->level->language->code }}" onclick="playVoice(this)" class="p-2.5 rounded-xl bg-indigo-50 text-indigo-700 hover:bg-indigo-600 hover:text-white transition shadow-sm flex-shrink-0" title="Dengarkan seluruh kalimat penutur asli">
                                                         <i data-lucide="volume-2" class="w-4 h-4"></i>
                                                     </button>
                                                 </div>
@@ -198,7 +208,7 @@
                                                         <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1.5">Bedah Suku Kata & Terjemahan Kata per Kata:</span>
                                                         <div class="flex flex-wrap gap-1.5">
                                                             @foreach($breakdown as $item)
-                                                                <div class="inline-flex flex-col items-center bg-slate-50 hover:bg-indigo-50 border border-slate-200 hover:border-indigo-300 rounded-lg px-2.5 py-1 text-center transition cursor-pointer" onclick="speakText('{{ addslashes($item['token']) }}', '{{ $lesson->unit->level->language->code }}')" title="Klik untuk dengarkan pelafalan suku kata">
+                                                                <div class="inline-flex flex-col items-center bg-slate-50 hover:bg-indigo-50 border border-slate-200 hover:border-indigo-300 rounded-lg px-2.5 py-1 text-center transition cursor-pointer" data-text="{{ $item['token'] }}" data-lang="{{ $lesson->unit->level->language->code }}" onclick="playVoice(this)" title="Klik untuk dengarkan pelafalan suku kata">
                                                                     <span class="font-bold text-xs text-slate-800 {{ $lesson->unit->level->language->code === 'ar' ? 'font-arabic text-base' : '' }}">{{ $item['token'] }}</span>
                                                                     <span class="text-[10px] text-indigo-600 font-semibold">[{{ $item['syllables'] }}]</span>
                                                                     <span class="text-[9px] text-slate-500 font-semibold">{{ $item['meaning'] }}</span>
@@ -217,58 +227,165 @@
                 </div>
             @endif
 
-            <!-- 5. Interactive Dialogues -->
-            @if(!empty($lesson->content_body['dialogues']))
-                <div>
-                    <h3 class="text-sm font-bold uppercase tracking-wider text-slate-500 mb-4 flex items-center gap-2">
-                        <i data-lucide="users" class="w-4 h-4 text-emerald-600"></i>
-                        <span>Simulasi Percakapan Situasional & Bedah Suku Kata</span>
-                    </h3>
-                    <div class="space-y-3">
-                        @foreach($lesson->content_body['dialogues'] as $dia)
-                            @php
-                                $diaTrans = \App\Services\LinguisticBreakdownService::getSentenceTransliteration($lesson->unit->level->language->code, $dia['line'], $dia['trans'] ?? null);
-                                $diaBreakdown = $dia['breakdown'] ?? \App\Services\LinguisticBreakdownService::getBreakdown($lesson->unit->level->language->code, $dia['line'], $diaTrans, $dia['meaning'] ?? null);
-                            @endphp
-                            <div class="p-4 sm:p-5 rounded-2xl border border-slate-200 bg-slate-50 hover:bg-white transition shadow-sm">
-                                <div class="flex items-start justify-between gap-3 mb-2">
-                                    <div class="flex items-start gap-3">
-                                        <div class="w-8 h-8 rounded-full bg-emerald-100 text-emerald-700 font-bold text-xs flex items-center justify-center flex-shrink-0 mt-0.5">
-                                            {{ substr($dia['speaker'], 0, 1) }}
-                                        </div>
-                                        <div>
-                                            <div class="text-[11px] font-bold text-emerald-700 uppercase tracking-wider">{{ $dia['speaker'] }}</div>
-                                            <div class="text-base sm:text-lg font-bold text-slate-900 {{ $lesson->unit->level->language->code === 'ar' ? 'font-arabic text-xl sm:text-2xl' : '' }}">
-                                                {{ $dia['line'] }}
-                                            </div>
-                                            <div class="text-xs text-emerald-600 font-semibold mt-0.5">Pelafalan Abjad: {{ $diaTrans }}</div>
-                                            <div class="text-xs text-slate-600 mt-1">Arti: {{ $dia['meaning'] }}</div>
-                                        </div>
+            <!-- 5. Interactive Communications (100 Skenario Komunikasi 2 Orang atau Lebih) -->
+            @php
+                $dialogueList = $lesson->content_body['interactive_dialogues'] ?? [];
+                if (empty($dialogueList) || count($dialogueList) < 100) {
+                    $dialogueList = \App\Services\InteractiveDialogueService::generate100Dialogues(
+                        $lesson->unit->level->language->code,
+                        $lesson->content_body['vocabularies'] ?? [],
+                        [],
+                        $lesson->sort_order
+                    );
+                }
+            @endphp
+
+            <div class="rounded-3xl border border-emerald-200 bg-gradient-to-b from-emerald-50/50 via-white to-slate-50 p-5 sm:p-7 shadow-sm">
+                <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <span class="w-8 h-8 rounded-xl bg-emerald-600 text-white flex items-center justify-center shadow-xs">
+                                <i data-lucide="messages-square" class="w-4 h-4"></i>
+                            </span>
+                            <h3 class="text-base sm:text-lg font-extrabold text-slate-900">
+                                100 Modul Percakapan Interaktif (Komunikasi 2 Orang atau Lebih)
+                            </h3>
+                        </div>
+                        <p class="text-xs text-slate-500 mt-1 max-w-2xl leading-relaxed">
+                            Simulasi komunikasi situasional nyata dengan minimal 100 modul percakapan multi-penutur. Lengkap dengan pelafalan penutur asli, transliterasi huruf abjad, terjemahan Indonesia, dan bedah suku kata.
+                        </p>
+                    </div>
+                    <span class="px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 text-xs font-bold border border-emerald-200 shadow-2xs">
+                        100 Skenario Tersedia
+                    </span>
+                </div>
+
+                <!-- Search and Filter Bar -->
+                <div class="flex flex-col sm:flex-row gap-3 mb-5">
+                    <div class="relative flex-1">
+                        <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3.5 top-3"></i>
+                        <input type="text" id="dialogueSearchInput" onkeyup="filterDialogueScenarios()" placeholder="Cari skenario percakapan, topik, atau situasi..." class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 bg-white text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none shadow-xs">
+                    </div>
+                    <select id="dialogueCategoryFilter" onchange="filterDialogueScenarios()" class="px-4 py-2.5 rounded-xl border border-slate-200 bg-white text-xs font-semibold text-slate-700 focus:ring-2 focus:ring-emerald-500 focus:outline-none shadow-xs">
+                        <option value="all">Semua Kategori (100 Skenario)</option>
+                        <option value="Salam & Perkenalan">Salam & Perkenalan (10 Skenario)</option>
+                        <option value="Restoran & Kuliner">Restoran & Kuliner (10 Skenario)</option>
+                        <option value="Navigasi & Stasiun">Navigasi & Stasiun (10 Skenario)</option>
+                        <option value="Pasar & Belanja">Pasar & Belanja (10 Skenario)</option>
+                        <option value="Kampus & Pendidikan">Kampus & Pendidikan (10 Skenario)</option>
+                        <option value="Kantor & Rapat">Kantor & Rapat (10 Skenario)</option>
+                        <option value="Hotel & Wisata">Hotel & Wisata (10 Skenario)</option>
+                        <option value="Kesehatan & Medis">Kesehatan & Medis (10 Skenario)</option>
+                        <option value="Diskusi 3 Orang">Diskusi 3 Orang (10 Skenario)</option>
+                        <option value="Solusi Masalah & Darurat">Solusi Masalah & Darurat (10 Skenario)</option>
+                    </select>
+                </div>
+
+                <!-- Scenario Cards Container -->
+                <div id="dialogueScenariosContainer" class="space-y-4">
+                    @foreach($dialogueList as $scIndex => $sc)
+                        <div class="dialogue-scenario-card p-5 rounded-2xl border border-slate-200 bg-white hover:border-emerald-300 transition shadow-xs {{ $scIndex >= 10 ? 'hidden' : '' }}" data-index="{{ $scIndex }}" data-category="{{ $sc['category'] }}" data-search="{{ strtolower($sc['title'] . ' ' . $sc['category'] . ' ' . implode(' ', $sc['participants'] ?? [])) }}">
+                            
+                            <!-- Scenario Header -->
+                            <div class="flex flex-wrap items-center justify-between gap-2 pb-3 mb-3 border-b border-slate-100">
+                                <div>
+                                    <div class="flex items-center gap-2">
+                                        <span class="px-2 py-0.5 rounded-md bg-emerald-100 text-emerald-800 text-[10px] font-bold">
+                                            {{ $sc['category'] }}
+                                        </span>
+                                        <span class="text-xs font-bold text-slate-900">
+                                            {{ $sc['title'] }}
+                                        </span>
                                     </div>
-                                    <button type="button" onclick="speakText('{{ addslashes($dia['line']) }}', '{{ $lesson->unit->level->language->code }}')" class="p-2.5 rounded-xl bg-emerald-100 text-emerald-700 hover:bg-emerald-600 hover:text-white transition shadow-sm flex-shrink-0" title="Dengarkan seluruh kalimat percakapan">
-                                        <i data-lucide="volume-2" class="w-4 h-4"></i>
+                                    <p class="text-[11px] text-slate-500 mt-0.5">
+                                        {{ $sc['situation'] }}
+                                    </p>
+                                </div>
+                                <div class="flex items-center gap-1.5 flex-wrap">
+                                    @foreach($sc['participants'] as $pName)
+                                        <span class="inline-flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded-full bg-slate-100 text-slate-700">
+                                            <i data-lucide="user" class="w-3 h-3 text-slate-500"></i>
+                                            <span>{{ $pName }}</span>
+                                        </span>
+                                    @endforeach
+                                    <button type="button" onclick="playFullScenario('{{ $sc['id'] }}', '{{ $lesson->unit->level->language->code }}')" class="ml-2 px-3 py-1 rounded-lg bg-emerald-50 text-emerald-700 hover:bg-emerald-600 hover:text-white transition text-xs font-bold flex items-center gap-1 shadow-2xs" title="Putar dialog percakapan berurutan">
+                                        <i data-lucide="play-circle" class="w-3.5 h-3.5"></i>
+                                        <span>Putar Skenario</span>
                                     </button>
                                 </div>
-
-                                @if(!empty($diaBreakdown))
-                                    <div class="mt-2.5 pt-2 border-t border-slate-200">
-                                        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1.5">Bedah Suku Kata & Terjemahan Kata per Kata:</span>
-                                        <div class="flex flex-wrap gap-1.5">
-                                            @foreach($diaBreakdown as $b)
-                                                <div class="inline-flex flex-col items-center bg-white hover:bg-emerald-50 border border-slate-200 hover:border-emerald-300 rounded-lg px-2 py-1 text-center transition cursor-pointer shadow-2xs" onclick="speakText('{{ addslashes($b['token']) }}', '{{ $lesson->unit->level->language->code }}')" title="Klik untuk dengarkan pelafalan suku kata">
-                                                    <span class="font-bold text-xs text-slate-800 {{ $lesson->unit->level->language->code === 'ar' ? 'font-arabic text-base' : '' }}">{{ $b['token'] }}</span>
-                                                    <span class="text-[10px] text-emerald-600 font-semibold">[{{ $b['syllables'] }}]</span>
-                                                    <span class="text-[9px] text-slate-500 font-semibold">{{ $b['meaning'] }}</span>
-                                                </div>
-                                            @endforeach
-                                        </div>
-                                    </div>
-                                @endif
                             </div>
-                        @endforeach
+
+                            <!-- Turns in Chat Bubble Style -->
+                            <div class="space-y-3" id="scenario-turns-{{ $sc['id'] }}">
+                                @foreach($sc['turns'] as $tIdx => $turn)
+                                    @php
+                                        $isSpeakerOne = ($tIdx % 2 === 0);
+                                        $bubbleBg = $isSpeakerOne ? 'bg-slate-50 border-slate-200' : 'bg-emerald-50/50 border-emerald-200';
+                                        $badgeBg = $isSpeakerOne ? 'bg-blue-100 text-blue-800' : 'bg-emerald-100 text-emerald-800';
+                                    @endphp
+                                    <div class="p-4 rounded-2xl border {{ $bubbleBg }} transition shadow-2xs scenario-turn-item" data-audio-text="{{ $turn['audio'] ?? $turn['text'] }}">
+                                        <div class="flex items-start justify-between gap-3 mb-2">
+                                            <div class="flex items-start gap-2.5">
+                                                <div class="w-7 h-7 rounded-full {{ $badgeBg }} font-bold text-xs flex items-center justify-center flex-shrink-0 mt-0.5 shadow-2xs">
+                                                    {{ substr($turn['speaker'], 0, 1) }}
+                                                </div>
+                                                <div>
+                                                    <div class="text-[11px] font-bold text-slate-800">
+                                                        {{ $turn['speaker'] }} <span class="text-[10px] text-slate-400 font-normal">({{ $turn['role'] }})</span>
+                                                    </div>
+                                                    <div class="text-base sm:text-lg font-bold text-slate-900 mt-0.5 {{ $lesson->unit->level->language->code === 'ar' ? 'font-arabic text-xl sm:text-2xl' : '' }}">
+                                                        {{ $turn['text'] }}
+                                                    </div>
+                                                    <div class="text-xs text-emerald-600 font-semibold mt-0.5">
+                                                        Pelafalan Abjad: {{ $turn['trans'] }}
+                                                    </div>
+                                                    <div class="text-xs text-slate-600 mt-1">
+                                                        Arti: {{ $turn['meaning'] }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <button type="button" data-text="{{ $turn['audio'] ?? $turn['text'] }}" data-lang="{{ $lesson->unit->level->language->code }}" onclick="playVoice(this)" class="p-2.5 rounded-xl bg-white border border-slate-200 text-slate-700 hover:bg-emerald-600 hover:text-white hover:border-emerald-600 transition shadow-xs flex-shrink-0" title="Dengarkan seluruh kalimat percakapan">
+                                                <i data-lucide="volume-2" class="w-4 h-4"></i>
+                                            </button>
+                                        </div>
+
+                                        @if(!empty($turn['breakdown']))
+                                            <div class="mt-2.5 pt-2 border-t border-slate-200/80">
+                                                <span class="text-[9px] font-bold text-slate-400 uppercase tracking-wider block mb-1">Bedah Suku Kata & Arti Kata per Kata:</span>
+                                                <div class="flex flex-wrap gap-1">
+                                                    @foreach($turn['breakdown'] as $b)
+                                                        <div class="inline-flex flex-col items-center bg-white hover:bg-emerald-50 border border-slate-200 hover:border-emerald-300 rounded-lg px-2 py-0.5 text-center transition cursor-pointer shadow-2xs" data-text="{{ $b['token'] }}" data-lang="{{ $lesson->unit->level->language->code }}" onclick="playVoice(this)" title="Klik untuk dengarkan pelafalan suku kata">
+                                                            <span class="font-bold text-xs text-slate-800 {{ $lesson->unit->level->language->code === 'ar' ? 'font-arabic text-sm' : '' }}">{{ $b['token'] }}</span>
+                                                            <span class="text-[9px] text-emerald-600 font-semibold">[{{ $b['syllables'] }}]</span>
+                                                            <span class="text-[9px] text-slate-500 font-semibold">{{ $b['meaning'] }}</span>
+                                                        </div>
+                                                    @endforeach
+                                                </div>
+                                            </div>
+                                        @endif
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+
+                <!-- Scenario Pagination Controller -->
+                <div class="mt-5 pt-4 border-t border-slate-200 flex flex-wrap items-center justify-between gap-3 text-xs">
+                    <span id="scenarioCountIndicator" class="text-slate-500 font-medium">
+                        Menampilkan 10 dari 100 Skenario Komunikasi
+                    </span>
+                    <div class="flex items-center gap-1.5" id="scenarioPaginationButtons">
+                        <button type="button" onclick="loadMoreScenarios()" id="btnLoadMoreScenarios" class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold transition shadow-xs flex items-center gap-1.5">
+                            <i data-lucide="plus-circle" class="w-3.5 h-3.5"></i>
+                            <span>Tampilkan 10 Skenario Berikutnya</span>
+                        </button>
+                        <button type="button" onclick="showAllScenarios()" id="btnShowAllScenarios" class="px-3.5 py-2 rounded-xl border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 font-semibold transition shadow-2xs">
+                            Lihat Semua 100 Skenario
+                        </button>
                     </div>
                 </div>
-            @endif
+            </div>
 
             <!-- 6. Pembelajaran Mendalam: Etiket, Nuansa & Jebakan Konteks -->
             <div class="p-5 rounded-2xl bg-gradient-to-br from-slate-50 to-blue-50/40 border border-slate-200 space-y-4">
@@ -289,7 +406,7 @@
                 </div>
             </div>
 
-            <!-- 7. Interactive Quiz Exercise with Auto-Next Trigger -->
+            <!-- 7. Interactive Quiz Exercise with Choice Dialog -->
             @if($lesson->exercises->isNotEmpty())
                 <div class="pt-6 border-t border-slate-200">
                     <h3 class="text-sm font-bold uppercase tracking-wider text-slate-500 mb-4 flex items-center gap-2">
@@ -322,7 +439,7 @@
                                             </div>
                                         @endif
                                     </div>
-                                    <button type="button" onclick="speakText('{{ addslashes($ex->prompt_script) }}', '{{ $lesson->unit->level->language->code }}')" class="p-3 rounded-xl bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white transition shadow-sm ml-3 flex-shrink-0" title="Dengarkan pengucapan penutur asli">
+                                    <button type="button" data-text="{{ $ex->prompt_script }}" data-lang="{{ $lesson->unit->level->language->code }}" onclick="playVoice(this)" class="p-3 rounded-xl bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white transition shadow-sm ml-3 flex-shrink-0" title="Dengarkan pengucapan penutur asli">
                                         <i data-lucide="volume-2" class="w-5 h-5"></i>
                                     </button>
                                 </div>
@@ -345,58 +462,90 @@
 
         <!-- Desktop Lesson Completion Footer -->
         <div class="p-6 bg-slate-50 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div>
-                <span class="text-xs text-slate-600 font-semibold block">Selesaikan materi untuk melangkah ke bab selanjutnya.</span>
-                @if($nextLesson)
-                    <span class="text-[11px] text-blue-600 font-medium">Langkah selanjutnya: {{ $nextLesson->title }}</span>
-                @else
-                    <span class="text-[11px] text-amber-600 font-medium">Materi terakhir! Anda akan lanjut ke Ujian Kelulusan.</span>
+            <div class="flex items-center gap-3">
+                @if(isset($previousLesson) && $previousLesson)
+                    <a href="{{ route('lesson.show', $previousLesson->id) }}" class="px-4 py-3 rounded-xl border border-slate-300 bg-white hover:bg-slate-100 text-slate-700 font-bold text-xs sm:text-sm transition flex items-center gap-2 shadow-xs" title="Kembali ke: {{ $previousLesson->title }}">
+                        <i data-lucide="arrow-left" class="w-4 h-4 text-slate-600"></i>
+                        <span>Materi Sebelumnya</span>
+                    </a>
                 @endif
+                <div>
+                    <span class="text-xs text-slate-600 font-semibold block">Selesaikan materi untuk melangkah ke bab selanjutnya.</span>
+                    @if($nextLesson)
+                        <span class="text-[11px] text-blue-600 font-medium">Langkah selanjutnya: {{ $nextLesson->title }}</span>
+                    @else
+                        <span class="text-[11px] text-amber-600 font-medium">Materi terakhir! Anda akan lanjut ke Ujian Kelulusan.</span>
+                    @endif
+                </div>
             </div>
             
-            <form id="completeLessonForm" action="{{ route('lesson.complete', $lesson->id) }}" method="POST">
-                @csrf
-                <button type="submit" id="btnCompleteDesktop" class="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold text-xs sm:text-sm hover:opacity-95 transition shadow-md flex items-center justify-center gap-2">
-                    <i data-lucide="check-circle" class="w-4 h-4"></i>
-                    <span>{{ $nextLesson ? 'Selesaikan & Lanjut ke Materi Berikutnya' : 'Selesaikan & Lanjut ke Ujian Kelulusan' }}</span>
-                    <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            <div class="flex items-center gap-2.5 w-full sm:w-auto">
+                <button type="button" onclick="completeAndStay()" class="flex-1 sm:flex-none px-4 py-3.5 rounded-xl border-2 border-slate-300 bg-white hover:bg-slate-100 text-slate-700 font-bold text-xs sm:text-sm transition shadow-xs flex items-center justify-center gap-2">
+                    <i data-lucide="rotate-ccw" class="w-4 h-4 text-slate-500"></i>
+                    <span>Tandai Selesai & Tetap di Sini</span>
                 </button>
-            </form>
+
+                <form id="completeLessonForm" action="{{ route('lesson.complete', $lesson->id) }}" method="POST" class="flex-1 sm:flex-none">
+                    @csrf
+                    <input type="hidden" name="action" id="lessonActionInput" value="next">
+                    <button type="submit" id="btnCompleteDesktop" class="w-full sm:w-auto px-5 py-3.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold text-xs sm:text-sm hover:opacity-95 transition shadow-md flex items-center justify-center gap-2">
+                        <i data-lucide="check-circle" class="w-4 h-4"></i>
+                        <span>{{ $nextLesson ? 'Selesaikan & Lanjut ke Materi Berikutnya' : 'Selesaikan & Lanjut ke Ujian' }}</span>
+                        <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    </button>
+                </form>
+            </div>
         </div>
 
     </div>
 
 </div>
 
-<!-- Mobile Sticky Bottom Action Bar (Smooth & Touch-Friendly) -->
-<div class="fixed bottom-0 left-0 right-0 p-3 bg-white/95 backdrop-blur-md border-t border-slate-200 z-50 sm:hidden flex items-center justify-between shadow-lg">
-    <div class="truncate max-w-[150px]">
-        <div class="text-[10px] text-slate-400 font-bold uppercase truncate">{{ $lesson->unit->title }}</div>
-        <div class="text-xs font-bold text-slate-800 truncate">{{ $lesson->title }}</div>
+<!-- Mobile Sticky Bottom Action Bar (Touch-Friendly & Previous/Stay/Next) -->
+<div class="fixed bottom-0 left-0 right-0 p-3 bg-white/95 backdrop-blur-md border-t border-slate-200 z-50 sm:hidden flex items-center justify-between gap-2 shadow-lg">
+    <div class="flex items-center gap-1.5 truncate max-w-[130px]">
+        @if(isset($previousLesson) && $previousLesson)
+            <a href="{{ route('lesson.show', $previousLesson->id) }}" class="p-2 rounded-xl border border-slate-200 bg-slate-50 text-slate-700 flex items-center justify-center shadow-2xs" title="Materi Sebelumnya">
+                <i data-lucide="chevron-left" class="w-4 h-4 text-blue-600"></i>
+            </a>
+        @endif
+        <div class="truncate">
+            <div class="text-[9px] text-slate-400 font-bold uppercase truncate">{{ $lesson->unit->title }}</div>
+            <div class="text-xs font-bold text-slate-800 truncate">{{ $lesson->title }}</div>
+        </div>
     </div>
-    <form action="{{ route('lesson.complete', $lesson->id) }}" method="POST">
-        @csrf
-        <button type="submit" class="px-4 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold text-xs flex items-center gap-1.5 shadow-md">
+    <div class="flex items-center gap-1.5">
+        <button type="button" onclick="completeAndStay()" class="px-3 py-2 rounded-xl border border-slate-300 bg-white text-slate-700 font-bold text-xs flex items-center gap-1 shadow-2xs">
+            <i data-lucide="rotate-ccw" class="w-3.5 h-3.5 text-slate-500"></i>
+            <span>Tetap</span>
+        </button>
+        <button type="button" onclick="completeAndAdvance()" class="px-3.5 py-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold text-xs flex items-center gap-1 shadow-md">
             <span>{{ $nextLesson ? 'Lanjut' : 'Ujian' }}</span>
             <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
         </button>
-    </form>
+    </div>
 </div>
 
-<!-- Interactive Celebration Modal -->
+<!-- Interactive Celebration Modal (Choose to advance or stay) -->
 <div id="celebrationModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
     <div class="bg-white rounded-3xl p-6 sm:p-8 max-w-sm w-full text-center shadow-2xl animate-bounce-once">
-        <div class="w-16 h-16 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto mb-4">
+        <div class="w-16 h-16 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto mb-4 shadow-sm">
             <i data-lucide="sparkles" class="w-8 h-8"></i>
         </div>
         <h3 class="text-xl font-black text-slate-900 mb-1">Materi Selesai!</h3>
         <p class="text-xs text-slate-500 mb-6" id="modalSubtext">
-            Hebat! Jawaban Anda benar. Menyiapkan materi berikutnya...
+            Hebat! Jawaban Anda benar. Pilih tindakan Anda selanjutnya:
         </p>
-        <button type="button" onclick="submitAndAdvance()" class="w-full py-3 rounded-xl bg-blue-600 text-white font-bold text-xs hover:bg-blue-700 transition shadow-md flex items-center justify-center gap-1.5">
-            <span>Lanjut Sekarang</span>
-            <i data-lucide="arrow-right" class="w-4 h-4"></i>
-        </button>
+        <div class="flex flex-col gap-2.5">
+            <button type="button" onclick="completeAndAdvance()" class="w-full py-3 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold text-xs hover:opacity-95 transition shadow-md flex items-center justify-center gap-1.5">
+                <span>Lanjut ke Materi Selanjutnya</span>
+                <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            </button>
+            <button type="button" onclick="completeAndStay()" class="w-full py-3 rounded-xl border border-slate-300 bg-slate-50 text-slate-700 font-bold text-xs hover:bg-slate-100 transition shadow-xs flex items-center justify-center gap-1.5">
+                <i data-lucide="rotate-ccw" class="w-4 h-4 text-slate-500"></i>
+                <span>Tetap di Materi Ini (Ulangi/Pelajari Lagi)</span>
+            </button>
+        </div>
     </div>
 </div>
 
@@ -416,24 +565,127 @@
                 btn.classList.add('ring-4', 'ring-emerald-400', 'animate-pulse');
             }
 
-            // Show interactive celebration banner after short delay
+            // Show interactive celebration modal
             setTimeout(() => {
                 const modal = document.getElementById('celebrationModal');
                 if (modal) {
                     modal.classList.remove('hidden');
                 }
-            }, 1000);
+            }, 800);
         } else {
             feedback.classList.add('bg-rose-100', 'text-rose-800');
             feedback.innerHTML = '<span class="font-bold">✗ Belum tepat.</span> Coba lagi atau baca kembali materi di atas.';
         }
     }
 
-    function submitAndAdvance() {
+    function completeAndStay() {
+        const modal = document.getElementById('celebrationModal');
+        if (modal) modal.classList.add('hidden');
+
+        fetch('{{ route("lesson.complete", $lesson->id) }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({ action: 'stay', score: 100 })
+        })
+        .then(r => r.json())
+        .then(data => {
+            showAudioToast('✓ ' + (data.message || 'Progres disimpan! Anda tetap berada di materi ini.'));
+        })
+        .catch(err => {
+            const input = document.getElementById('lessonActionInput');
+            if (input) input.value = 'stay';
+            document.getElementById('completeLessonForm').submit();
+        });
+    }
+
+    function completeAndAdvance() {
+        const input = document.getElementById('lessonActionInput');
+        if (input) input.value = 'next';
         const form = document.getElementById('completeLessonForm');
-        if (form) {
-            form.submit();
+        if (form) form.submit();
+    }
+
+    // 100 Dialogues Client Controller (Pagination, Filter & Full Play)
+    let visibleScenariosCount = 10;
+
+    function filterDialogueScenarios() {
+        const q = (document.getElementById('dialogueSearchInput')?.value || '').toLowerCase().trim();
+        const cat = document.getElementById('dialogueCategoryFilter')?.value || 'all';
+        const cards = document.querySelectorAll('.dialogue-scenario-card');
+        let matchedCount = 0;
+
+        cards.forEach(card => {
+            const cardCat = card.getAttribute('data-category');
+            const cardSearch = card.getAttribute('data-search') || '';
+            const matchesCat = (cat === 'all' || cardCat === cat);
+            const matchesQuery = (q === '' || cardSearch.includes(q));
+
+            if (matchesCat && matchesQuery) {
+                matchedCount++;
+                if (q !== '' || cat !== 'all' || matchedCount <= visibleScenariosCount) {
+                    card.classList.remove('hidden');
+                } else {
+                    card.classList.add('hidden');
+                }
+            } else {
+                card.classList.add('hidden');
+            }
+        });
+
+        const indicator = document.getElementById('scenarioCountIndicator');
+        if (indicator) {
+            indicator.innerText = `Menampilkan ${Math.min(matchedCount, (q !== '' || cat !== 'all' ? matchedCount : visibleScenariosCount))} dari ${matchedCount} Skenario Ditemukan`;
         }
+    }
+
+    function loadMoreScenarios() {
+        visibleScenariosCount = Math.min(100, visibleScenariosCount + 10);
+        filterDialogueScenarios();
+        if (visibleScenariosCount >= 100) {
+            const btn = document.getElementById('btnLoadMoreScenarios');
+            if (btn) btn.classList.add('hidden');
+        }
+    }
+
+    function showAllScenarios() {
+        visibleScenariosCount = 100;
+        filterDialogueScenarios();
+        const btnMore = document.getElementById('btnLoadMoreScenarios');
+        const btnAll = document.getElementById('btnShowAllScenarios');
+        if (btnMore) btnMore.classList.add('hidden');
+        if (btnAll) btnAll.classList.add('hidden');
+    }
+
+    // Putar percakapan skenario secara otomatis giliran demi giliran
+    let isPlayingScenario = false;
+    async function playFullScenario(scenarioId, langCode) {
+        if (isPlayingScenario) return;
+        isPlayingScenario = true;
+
+        const container = document.getElementById('scenario-turns-' + scenarioId);
+        if (!container) {
+            isPlayingScenario = false;
+            return;
+        }
+
+        const turns = container.querySelectorAll('.scenario-turn-item');
+        for (let i = 0; i < turns.length; i++) {
+            const turn = turns[i];
+            const text = turn.getAttribute('data-audio-text');
+            turn.classList.add('ring-2', 'ring-emerald-400', 'bg-emerald-100/70');
+
+            speakText(text, langCode);
+
+            // Perkirakan jeda bicara (sekitar 3.5 detik per turn)
+            await new Promise(r => setTimeout(r, 3500));
+            turn.classList.remove('ring-2', 'ring-emerald-400', 'bg-emerald-100/70');
+        }
+
+        isPlayingScenario = false;
     }
 </script>
 @endpush

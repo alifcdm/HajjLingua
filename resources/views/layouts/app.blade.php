@@ -186,21 +186,13 @@
             if (!text) return '';
             let cleaned = text.trim();
 
-            if (langCode === 'ja') {
-                cleaned = cleaned.replace(/\([a-zA-Z\s\/\-]+\)/g, '');
-                if (cleaned.includes('(')) {
-                    const parts = cleaned.split('(');
-                    if (parts[0].trim().length > 0) cleaned = parts[0].trim();
-                }
-            } else if (langCode === 'ar') {
-                cleaned = cleaned.replace(/\([a-zA-Z\s\/\-\'\`]+\)/g, '').trim();
-            } else if (langCode === 'ko') {
-                cleaned = cleaned.replace(/\([a-zA-Z\s\/\-]+\)/g, '').trim();
-            } else if (langCode === 'zh') {
-                cleaned = cleaned.replace(/\([a-zA-Z0-9\s\/\-āáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜ]+\)/g, '').trim();
+            if (['ar', 'ja', 'ko', 'zh'].includes(langCode)) {
+                cleaned = cleaned.replace(/\([a-zA-Z0-9\s\/\-\'\`’āáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜ\,\.]+\)/g, '').trim();
             } else if (langCode === 'en') {
                 cleaned = cleaned.replace(/\/.*?\//g, '').replace(/\(.*?\)/g, '').trim();
             }
+
+            cleaned = cleaned.replace(/[\r\n]+/g, ' ').replace(/["'“”‘’]/g, '');
 
             return cleaned.trim() || text;
         }
@@ -317,22 +309,57 @@
             return null;
         }
 
+        let activeFallbackAudio = null;
+
+        function playTtsAudioFallback(cleanScript, langCode) {
+            const gLangMap = {
+                'ar': 'ar',
+                'ja': 'ja',
+                'ko': 'ko',
+                'zh': 'zh-CN',
+                'en': 'en',
+                'id': 'id'
+            };
+            const tl = gLangMap[langCode] || langCode;
+            const encodedText = encodeURIComponent(cleanScript.substring(0, 300));
+            const url = `https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=${tl}&q=${encodedText}`;
+
+            if (activeFallbackAudio) {
+                try {
+                    activeFallbackAudio.pause();
+                } catch(e) {}
+                activeFallbackAudio = null;
+            }
+
+            activeFallbackAudio = new Audio(url);
+            activeFallbackAudio.playbackRate = 0.95;
+            activeFallbackAudio.onended = () => hideAudioToast();
+            activeFallbackAudio.onerror = (e) => {
+                console.warn('Fallback audio playback error:', e);
+                hideAudioToast();
+            };
+
+            const playPromise = activeFallbackAudio.play();
+            if (playPromise !== undefined) {
+                playPromise.catch(err => {
+                    console.warn('Audio play prevented:', err);
+                    hideAudioToast();
+                });
+            }
+        }
+
+        function playVoice(buttonElement) {
+            if (!buttonElement) return;
+            const text = buttonElement.getAttribute('data-text') || buttonElement.getAttribute('data-audio') || buttonElement.innerText;
+            const lang = buttonElement.getAttribute('data-lang') || 'en';
+            speakText(text, lang);
+        }
+        window.playVoice = playVoice;
+
         function speakText(text, langCode) {
-            if (!('speechSynthesis' in window)) {
-                alert('Browser Anda belum mendukung Text-To-Speech Web Speech API.');
-                return;
-            }
-
-            // Pastikan antrean audio direset dan mesin aktif (anti-freeze di Chrome/Edge)
-            window.speechSynthesis.cancel();
-            if (window.speechSynthesis.paused) {
-                window.speechSynthesis.resume();
-            }
-
             const cleanScript = sanitizeTextForSpeech(text, langCode);
             if (!cleanScript) return;
 
-            const utterance = new SpeechSynthesisUtterance(cleanScript);
             const langNames = {
                 'ar': 'Bahasa Arab',
                 'ja': 'Bahasa Jepang',
@@ -351,6 +378,23 @@
                 'zh': 'zh-CN'
             };
 
+            const langTitle = langNames[langCode] || langCode.toUpperCase();
+            showAudioToast(`Pelafalan ${langTitle}: ${cleanScript}`);
+
+            if (!('speechSynthesis' in window)) {
+                playTtsAudioFallback(cleanScript, langCode);
+                return;
+            }
+
+            // Pastikan antrean audio tidak freeze di Chrome/Edge
+            if (window.speechSynthesis.speaking || window.speechSynthesis.pending) {
+                window.speechSynthesis.cancel();
+            }
+            if (window.speechSynthesis.paused) {
+                window.speechSynthesis.resume();
+            }
+
+            const utterance = new SpeechSynthesisUtterance(cleanScript);
             const targetVoice = findNativeVoice(langCode);
             if (targetVoice) {
                 utterance.voice = targetVoice;
@@ -359,30 +403,31 @@
                 utterance.lang = fallbackMap[langCode] || (langCode.includes('-') ? langCode : 'en-US');
             }
 
-            // Kecepatan natural ideal untuk pembelajar bahasa asing
             utterance.rate = 0.88;
             utterance.pitch = 1.0;
-
-            const langTitle = langNames[langCode] || langCode.toUpperCase();
-            showAudioToast(`Pelafalan ${langTitle}: ${cleanScript}`);
 
             utterance.onend = () => {
                 hideAudioToast();
             };
 
             utterance.onerror = (e) => {
-                console.warn('SpeechSynthesis event:', e);
-                hideAudioToast();
+                console.warn('SpeechSynthesis event, falling back to Google TTS:', e);
+                playTtsAudioFallback(cleanScript, langCode);
             };
 
-            window.speechSynthesis.speak(utterance);
-            // Panggil resume lagi untuk memastikan Chrome Windows tidak menahan utterance
-            setTimeout(() => {
-                if (window.speechSynthesis.paused) {
-                    window.speechSynthesis.resume();
-                }
-            }, 100);
+            try {
+                window.speechSynthesis.speak(utterance);
+                setTimeout(() => {
+                    if (window.speechSynthesis.paused) {
+                        window.speechSynthesis.resume();
+                    }
+                }, 100);
+            } catch(e) {
+                console.warn('SpeechSynthesis exception:', e);
+                playTtsAudioFallback(cleanScript, langCode);
+            }
         }
+        window.speakText = speakText;
 
         // Initialize Lucide icons
         document.addEventListener('DOMContentLoaded', () => {

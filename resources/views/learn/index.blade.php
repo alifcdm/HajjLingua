@@ -164,30 +164,33 @@
                 <div>
                     <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2">
                         <i data-lucide="book-marked" class="w-5 h-5 text-amber-500"></i>
-                        <span>Pusat Kosakata Inti Level 1 (Terjemahan Bahasa Indonesia & Penggunaan Sehari-hari)</span>
+                        <span>Pusat Kosakata Inti Level 1 (1000++ Kosakata Terjemahan Bahasa Indonesia & Penggunaan Sehari-hari)</span>
                     </h3>
                     <p class="text-xs sm:text-sm text-slate-500 mt-1">
-                        Kumpulan kosakata esensial frekuensi tinggi yang wajib dikuasai penutur pemula. Dilengkapi audio pengucapan, transliterasi, arti bahasa Indonesia, dan contoh situasi penggunaannya dalam percakapan sehari-hari.
+                        Bank 1000++ kosakata esensial frekuensi tinggi yang wajib dikuasai pembelajar bahasa. Dilengkapi audio pengucapan penutur asli, pelafalan huruf abjad/transliterasi, arti resmi bahasa Indonesia, dan contoh situasi penggunaannya dalam percakapan sehari-hari.
                     </p>
                 </div>
+                <span class="px-3.5 py-1.5 rounded-full bg-blue-100 text-blue-800 text-xs font-bold border border-blue-200 shadow-2xs">
+                    {{ count($levelOneVocabs) }}+ Kosakata Tersedia
+                </span>
             </div>
 
             <!-- Vocabulary Search -->
             <div class="relative max-w-md mb-6">
                 <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3.5 top-3"></i>
-                <input type="text" id="vocabSearchInput" onkeyup="filterVocabularies()" placeholder="Cari kosakata atau arti bahasa Indonesia..." class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 text-xs focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                <input type="text" id="vocabSearchInput" onkeyup="filterVocabularies()" placeholder="Cari dari 1000++ kosakata atau arti bahasa Indonesia..." class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 text-xs focus:ring-2 focus:ring-blue-500 focus:outline-none shadow-xs">
             </div>
 
             <!-- Vocabulary Cards Grid -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="vocabGrid">
-                @foreach($levelOneVocabs as $voc)
-                    <div class="vocab-card p-5 rounded-2xl border border-slate-200 bg-slate-50/50 hover:bg-white hover:border-blue-400 hover:shadow-md transition flex flex-col justify-between" data-word="{{ strtolower($voc['word'] . ' ' . ($voc['trans'] ?? '') . ' ' . $voc['meaning']) }}">
+                @foreach($levelOneVocabs as $vIndex => $voc)
+                    <div class="vocab-card p-5 rounded-2xl border border-slate-200 bg-slate-50/50 hover:bg-white hover:border-blue-400 hover:shadow-md transition flex flex-col justify-between {{ $vIndex >= 36 ? 'hidden' : '' }}" data-index="{{ $vIndex }}" data-word="{{ strtolower($voc['word'] . ' ' . ($voc['trans'] ?? '') . ' ' . $voc['meaning']) }}">
                         <div>
                             <div class="flex items-start justify-between mb-3">
                                 <span class="px-2 py-0.5 rounded bg-blue-100 text-blue-800 text-[10px] font-bold">
                                     {{ $voc['pos'] ?? 'Kosakata Inti' }}
                                 </span>
-                                <button type="button" onclick="speakText('{{ addslashes($voc['audio'] ?? $voc['word']) }}', '{{ $pair->targetLanguage->code }}')" class="w-8 h-8 rounded-lg bg-blue-50 text-blue-700 hover:bg-blue-600 hover:text-white transition flex items-center justify-center shadow-sm">
+                                <button type="button" data-text="{{ $voc['audio'] ?? $voc['word'] }}" data-lang="{{ $pair->targetLanguage->code }}" onclick="playVoice(this)" class="w-8 h-8 rounded-lg bg-blue-50 text-blue-700 hover:bg-blue-600 hover:text-white transition flex items-center justify-center shadow-sm" title="Dengarkan pengucapan penutur asli">
                                     <i data-lucide="volume-2" class="w-4 h-4"></i>
                                 </button>
                             </div>
@@ -216,17 +219,38 @@
 
                         <!-- Daily Example Sentence -->
                         @if(!empty($voc['example']))
-                            <div class="p-3 rounded-xl bg-blue-50/60 border border-blue-100 text-xs">
-                                <div class="font-bold text-slate-900 {{ $pair->targetLanguage->code === 'ar' ? 'font-arabic text-base' : '' }}">
-                                    {{ $voc['example'] }}
+                            <div class="p-3 rounded-xl bg-blue-50/60 border border-blue-100 text-xs flex items-start justify-between gap-2">
+                                <div>
+                                    <div class="font-bold text-slate-900 {{ $pair->targetLanguage->code === 'ar' ? 'font-arabic text-base' : '' }}">
+                                        {{ $voc['example'] }}
+                                    </div>
+                                    <div class="text-slate-600 font-medium mt-1">
+                                        {{ $voc['example_trans'] }}
+                                    </div>
                                 </div>
-                                <div class="text-slate-600 font-medium mt-1">
-                                    {{ $voc['example_trans'] }}
-                                </div>
+                                <button type="button" data-text="{{ $voc['example'] }}" data-lang="{{ $pair->targetLanguage->code }}" onclick="playVoice(this)" class="p-1.5 rounded-lg bg-blue-100 text-blue-700 hover:bg-blue-600 hover:text-white transition shadow-2xs flex-shrink-0" title="Dengarkan kalimat contoh">
+                                    <i data-lucide="volume-2" class="w-3.5 h-3.5"></i>
+                                </button>
                             </div>
                         @endif
                     </div>
                 @endforeach
+            </div>
+
+            <!-- Vocabulary Load More & Pagination Controller -->
+            <div class="mt-6 pt-4 border-t border-slate-200 flex flex-wrap items-center justify-between gap-3 text-xs">
+                <span id="vocabCountIndicator" class="text-slate-500 font-medium">
+                    Menampilkan 36 dari {{ count($levelOneVocabs) }} Kosakata
+                </span>
+                <div class="flex items-center gap-2">
+                    <button type="button" onclick="loadMoreVocabularies()" id="btnLoadMoreVocab" class="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold transition shadow-xs flex items-center gap-1.5">
+                        <i data-lucide="plus-circle" class="w-3.5 h-3.5"></i>
+                        <span>Muat 36 Kosakata Lainnya</span>
+                    </button>
+                    <button type="button" onclick="showAllVocabularies()" id="btnShowAllVocab" class="px-4 py-2 rounded-xl border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 font-semibold transition shadow-2xs">
+                        Lihat Semua {{ count($levelOneVocabs) }} Kosakata
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -258,18 +282,52 @@
         }
     }
 
+    let visibleVocabCount = 36;
+
     function filterVocabularies() {
-        const query = document.getElementById('vocabSearchInput').value.toLowerCase().trim();
+        const query = document.getElementById('vocabSearchInput')?.value.toLowerCase().trim() || '';
         const cards = document.querySelectorAll('.vocab-card');
+        let matched = 0;
 
         cards.forEach(card => {
             const data = card.getAttribute('data-word') || '';
-            if (data.includes(query)) {
-                card.style.display = '';
+            const isMatch = (query === '' || data.includes(query));
+
+            if (isMatch) {
+                matched++;
+                if (query !== '' || matched <= visibleVocabCount) {
+                    card.classList.remove('hidden');
+                } else {
+                    card.classList.add('hidden');
+                }
             } else {
-                card.style.display = 'none';
+                card.classList.add('hidden');
             }
         });
+
+        const indicator = document.getElementById('vocabCountIndicator');
+        if (indicator) {
+            indicator.innerText = `Menampilkan ${Math.min(matched, (query !== '' ? matched : visibleVocabCount))} dari ${matched} Kosakata`;
+        }
+    }
+
+    function loadMoreVocabularies() {
+        visibleVocabCount += 36;
+        filterVocabularies();
+        const total = document.querySelectorAll('.vocab-card').length;
+        if (visibleVocabCount >= total) {
+            const btn = document.getElementById('btnLoadMoreVocab');
+            if (btn) btn.classList.add('hidden');
+        }
+    }
+
+    function showAllVocabularies() {
+        visibleVocabCount = 999999;
+        filterVocabularies();
+        const btnMore = document.getElementById('btnLoadMoreVocab');
+        const btnAll = document.getElementById('btnShowAllVocab');
+        if (btnMore) btnMore.classList.add('hidden');
+        if (btnAll) btnAll.classList.add('hidden');
     }
 </script>
 @endpush
