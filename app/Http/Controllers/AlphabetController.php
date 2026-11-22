@@ -12,7 +12,7 @@ class AlphabetController extends Controller
     {
         $language = Language::where('code', $langCode)->firstOrFail();
         $alphabetData = LinguisticMatrixService::getCompleteAlphabetMatrix($langCode);
-        $allLanguages = Language::whereIn('code', ['ar', 'ja', 'ko', 'en'])->get();
+        $allLanguages = Language::whereIn('code', ['ar', 'ja', 'ko', 'zh', 'en'])->get();
 
         return view('alphabet.index', compact('language', 'alphabetData', 'allLanguages', 'langCode'));
     }

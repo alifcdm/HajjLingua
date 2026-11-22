@@ -79,27 +79,12 @@ class CurriculumPacingService
                                             'target' => $primaryWord['example'] ?? $primaryWord['word'],
                                             'trans' => LinguisticBreakdownService::getSentenceTransliteration($langCode, $primaryWord['example'] ?? $primaryWord['word'], $primaryWord['trans'] ?? null),
                                             'meaning' => $primaryWord['example_trans'] ?? $primaryWord['meaning'],
-                                            'audio' => $primaryWord['word'],
+                                            'audio' => $primaryWord['example'] ?? $primaryWord['word'],
                                         ]
                                     ]
                                 ]
                             ],
-                            'dialogues' => [
-                                [
-                                    'speaker' => 'Penutur A',
-                                    'line' => $primaryWord['word'] . '?',
-                                    'trans' => ($primaryWord['trans'] ?? '') . '?',
-                                    'meaning' => "Apakah ini terkait dengan {$primaryWord['meaning']}?",
-                                    'audio' => $primaryWord['word'],
-                                ],
-                                [
-                                    'speaker' => 'Penutur B',
-                                    'line' => ($primaryWord['example'] ?? $primaryWord['word']),
-                                    'trans' => LinguisticBreakdownService::getSentenceTransliteration($langCode, $primaryWord['example'] ?? $primaryWord['word'], $primaryWord['trans'] ?? null),
-                                    'meaning' => ($primaryWord['example_trans'] ?? $primaryWord['meaning']),
-                                    'audio' => $primaryWord['word'],
-                                ],
-                            ]
+                            'dialogues' => self::buildRichDialogues($langCode, $vocabsForLesson, $uData, $lessonOrder)
                         ],
                         'audio_script' => $primaryWord['word'],
                     ]);
@@ -127,6 +112,108 @@ class CurriculumPacingService
             DB::rollBack();
             throw $e;
         }
+    }
+
+    /**
+     * Membangun materi simulasi percakapan multi-turn (4-6 giliran percakapan kontekstual)
+     */
+    private static function buildRichDialogues(string $langCode, array $vocabs, array $uData, int $lessonOrder): array
+    {
+        $v1 = $vocabs[0] ?? ['word' => 'Halo', 'trans' => 'Halo', 'meaning' => 'Halo', 'example' => 'Halo teman', 'example_trans' => 'Halo teman'];
+        $v2 = $vocabs[1] ?? $v1;
+        $v3 = $vocabs[2] ?? $v1;
+
+        $spA = match ($langCode) {
+            'ar' => 'Ahmad',
+            'ja' => 'Tanaka',
+            'ko' => 'Minjun',
+            'zh' => 'Li Wei',
+            default => 'Alex',
+        };
+        $spB = match ($langCode) {
+            'ar' => 'Fatimah',
+            'ja' => 'Yuki',
+            'ko' => 'Jisoo',
+            'zh' => 'Wang Fang',
+            default => 'Emma',
+        };
+
+        // Turn 1: Pertanyaan pembuka menggunakan kosakata 1
+        $line1 = match ($langCode) {
+            'ar' => "السَّلَامُ عَلَيْكُمْ، هَلْ عِنْدَكَ {$v1['word']}؟",
+            'ja' => "すみません、{$v1['word']}はありますか？",
+            'ko' => "실례합니다, 혹시 {$v1['word']} 있어요?",
+            'zh' => "请问，你有{$v1['word']}吗？",
+            default => "Excuse me, do you have {$v1['word']}?",
+        };
+        $meaning1 = match ($langCode) {
+            'ar' => "Assalamu'alaikum, apakah Anda memiliki {$v1['meaning']}?",
+            'ja' => "Permisi, apakah ada {$v1['meaning']}?",
+            'ko' => "Permisi, apakah Anda punya {$v1['meaning']}?",
+            'zh' => "Permisi, apakah Anda punya {$v1['meaning']}?",
+            default => "Permisi, apakah Anda memiliki {$v1['meaning']}?",
+        };
+
+        // Turn 2: Jawaban penjelasan penutur B
+        $line2 = match ($langCode) {
+            'ar' => !empty($v1['example']) ? $v1['example'] : "نَعَمْ، عِنْدِي {$v1['word']} هُنَا.",
+            'ja' => !empty($v1['example']) ? $v1['example'] : "はい、ここに{$v1['word']}がありますよ。",
+            'ko' => !empty($v1['example']) ? $v1['example'] : "네, 여기에 {$v1['word']} 있습니다.",
+            'zh' => !empty($v1['example']) ? $v1['example'] : "有的，这里有{$v1['word']}。",
+            default => !empty($v1['example']) ? $v1['example'] : "Yes, here is the {$v1['word']}.",
+        };
+        $meaning2 = !empty($v1['example_trans']) ? $v1['example_trans'] : "Ya, ada {$v1['meaning']} di sini.";
+
+        // Turn 3: Percakapan lanjutan konfirmasi kosakata 2
+        $line3 = match ($langCode) {
+            'ar' => "مُمْتَازٌ! وَكَيْفَ بـِ {$v2['word']}؟",
+            'ja' => "素晴らしいですね！そして{$v2['word']}はどうですか？",
+            'ko' => "좋네요! 그리고 {$v2['word']}은 어때요?",
+            'zh' => "太好了！那么{$v2['word']}怎么样？",
+            default => "Great! And how about the {$v2['word']}?",
+        };
+        $meaning3 = "Bagus sekali! Dan bagaimana dengan {$v2['meaning']}?";
+
+        // Turn 4: Solusi & penutup penutur B
+        $line4 = match ($langCode) {
+            'ar' => !empty($v2['example']) ? $v2['example'] : "شُكْرًا جَزِيلاً لَكَ عَلَى الْمُسَاعَدَةِ.",
+            'ja' => !empty($v2['example']) ? $v2['example'] : "どうもありがとうございます！",
+            'ko' => !empty($v2['example']) ? $v2['example'] : "도와주셔서 정말 감사합니다!",
+            'zh' => !empty($v2['example']) ? $v2['example'] : "非常感谢你的帮助！",
+            default => !empty($v2['example']) ? $v2['example'] : "Thank you very much for your help!",
+        };
+        $meaning4 = !empty($v2['example_trans']) ? $v2['example_trans'] : "Terima kasih banyak atas bantuannya!";
+
+        return [
+            [
+                'speaker' => $spA,
+                'line' => $line1,
+                'trans' => LinguisticBreakdownService::getSentenceTransliteration($langCode, $line1),
+                'meaning' => $meaning1,
+                'audio' => $line1,
+            ],
+            [
+                'speaker' => $spB,
+                'line' => $line2,
+                'trans' => LinguisticBreakdownService::getSentenceTransliteration($langCode, $line2),
+                'meaning' => $meaning2,
+                'audio' => $line2,
+            ],
+            [
+                'speaker' => $spA,
+                'line' => $line3,
+                'trans' => LinguisticBreakdownService::getSentenceTransliteration($langCode, $line3),
+                'meaning' => $meaning3,
+                'audio' => $line3,
+            ],
+            [
+                'speaker' => $spB,
+                'line' => $line4,
+                'trans' => LinguisticBreakdownService::getSentenceTransliteration($langCode, $line4),
+                'meaning' => $meaning4,
+                'audio' => $line4,
+            ],
+        ];
     }
 
     /**
@@ -327,6 +414,7 @@ class CurriculumPacingService
             'ar' => self::getArabicLevelOneVocabBank(),
             'ja' => self::getJapaneseLevelOneVocabBank(),
             'ko' => self::getKoreanLevelOneVocabBank(),
+            'zh' => self::getChineseLevelOneVocabBank(),
             'en' => self::getEnglishLevelOneVocabBank(),
             default => []
         };
@@ -1352,6 +1440,515 @@ class CurriculumPacingService
                 'example' => 'This traditional dish is absolutely delicious.',
                 'example_trans' => 'Hidangan tradisional ini sungguh sangat lezat.',
                 'audio' => 'Delicious'
+            ],
+        ];
+    }
+
+    /**
+     * Bank 60+ Kosakata Inti HSK 1 Mandarin Chinese Terjemahan Indonesia
+     */
+    private static function getChineseLevelOneVocabBank(): array
+    {
+        return [
+            [
+                'word' => '你好',
+                'trans' => 'Nǐ hǎo',
+                'meaning' => 'Halo / Apa Kabar',
+                'pos' => 'Ungkapan Sapaan',
+                'daily_usage' => 'Sapaan umum ramah kepada siapa saja saat bertemu kapan pun.',
+                'example' => '你好，很高兴认识你。',
+                'example_trans' => 'Halo, sangat senang bisa berkenalan dengan Anda.',
+                'audio' => '你好，很高兴认识你。'
+            ],
+            [
+                'word' => '谢谢',
+                'trans' => 'Xièxie',
+                'meaning' => 'Terima Kasih',
+                'pos' => 'Ungkapan Kesantunan',
+                'daily_usage' => 'Ucapan terima kasih universal atas pertolongan atau pelayanan.',
+                'example' => '太谢谢你了，老师。',
+                'example_trans' => 'Terima kasih banyak, guru.',
+                'audio' => '太谢谢你了，老师。'
+            ],
+            [
+                'word' => '再见',
+                'trans' => 'Zàijiàn',
+                'meaning' => 'Selamat Tinggal / Sampai Jumpa',
+                'pos' => 'Ungkapan Perpisahan',
+                'daily_usage' => 'Diucapkan saat berpisah; maknanya bertemu lagi di lain waktu.',
+                'example' => '明天见，再见！',
+                'example_trans' => 'Sampai jumpa besok, selamat tinggal!',
+                'audio' => '明天见，再见！'
+            ],
+            [
+                'word' => '对不起',
+                'trans' => 'Duìbuqǐ',
+                'meaning' => 'Maaf / Mohon Maaf',
+                'pos' => 'Ungkapan Permintaan Maaf',
+                'daily_usage' => 'Meminta maaf atas kekhilafan atau ketidaksengajaan.',
+                'example' => '对不起，我迟到了。',
+                'example_trans' => 'Maaf, saya terlambat.',
+                'audio' => '对不起，我迟到了。'
+            ],
+            [
+                'word' => '没关系',
+                'trans' => 'Méi guānxi',
+                'meaning' => 'Tidak Apa-apa / Tak Masalah',
+                'pos' => 'Respon Permintaan Maaf',
+                'daily_usage' => 'Menenangkan lawan bicara yang meminta maaf.',
+                'example' => '没关系，请进吧。',
+                'example_trans' => 'Tidak apa-apa, silakan masuk.',
+                'audio' => '没关系，请进吧。'
+            ],
+            [
+                'word' => '不客气',
+                'trans' => 'Bù kèqi',
+                'meaning' => 'Sama-sama / Jangan Sungkan',
+                'pos' => 'Respon Terima Kasih',
+                'daily_usage' => 'Jawaban santun atas ucapan terima kasih.',
+                'example' => '不客气，这是我应该做的。',
+                'example_trans' => 'Sama-sama, ini sudah tugas saya.',
+                'audio' => '不客气，这是我应该做的。'
+            ],
+            [
+                'word' => '我',
+                'trans' => 'Wǒ',
+                'meaning' => 'Saya / Aku',
+                'pos' => 'Kata Ganti Orang Pertama',
+                'daily_usage' => 'Menyebut diri sendiri dalam situasi formal maupun santai.',
+                'example' => '我是印尼人。',
+                'example_trans' => 'Saya adalah orang Indonesia.',
+                'audio' => '我是印尼人。'
+            ],
+            [
+                'word' => '你',
+                'trans' => 'Nǐ',
+                'meaning' => 'Kamu / Anda',
+                'pos' => 'Kata Ganti Orang Kedua',
+                'daily_usage' => 'Menyapa lawan bicara seumuran atau lebih muda.',
+                'example' => '你是学生吗？',
+                'example_trans' => 'Apakah kamu seorang murid / mahasiswa?',
+                'audio' => '你是学生吗？'
+            ],
+            [
+                'word' => '您',
+                'trans' => 'Nín',
+                'meaning' => 'Anda (Bentuk Hormat)',
+                'pos' => 'Kata Ganti Hormat',
+                'daily_usage' => 'Menyapa orang yang lebih tua, guru, atau mitra bisnis.',
+                'example' => '您好，请喝茶。',
+                'example_trans' => 'Halo Bapak/Ibu, silakan minum teh.',
+                'audio' => '您好，请喝茶。'
+            ],
+            [
+                'word' => '他',
+                'trans' => 'Tā',
+                'meaning' => 'Dia (Laki-laki)',
+                'pos' => 'Kata Ganti Orang Ketiga',
+                'daily_usage' => 'Merujuk pria yang sedang dibicarakan.',
+                'example' => '他是我们的汉语老师。',
+                'example_trans' => 'Dia adalah guru bahasa Mandarin kami.',
+                'audio' => '他是我们的汉语老师。'
+            ],
+            [
+                'word' => '她',
+                'trans' => 'Tā',
+                'meaning' => 'Dia (Perempuan)',
+                'pos' => 'Kata Ganti Orang Ketiga',
+                'daily_usage' => 'Merujuk perempuan yang sedang dibicarakan.',
+                'example' => '她是一名医生。',
+                'example_trans' => 'Dia adalah seorang dokter.',
+                'audio' => '她是一名医生。'
+            ],
+            [
+                'word' => '我们',
+                'trans' => 'Wǒmen',
+                'meaning' => 'Kami / Kita',
+                'pos' => 'Kata Ganti Jamak',
+                'daily_usage' => 'Menyebut kelompok yang mencakup pembicara.',
+                'example' => '我们都在学习汉语。',
+                'example_trans' => 'Kita semua sedang belajar bahasa Mandarin.',
+                'audio' => '我们都在学习汉语。'
+            ],
+            [
+                'word' => '老师',
+                'trans' => 'Lǎoshī',
+                'meaning' => 'Guru / Pengajar',
+                'pos' => 'Kata Benda',
+                'daily_usage' => 'Panggilan penghormatan untuk pengajar di kelas.',
+                'example' => '王老师今天在学校。',
+                'example_trans' => 'Guru Wang hari ini ada di sekolah.',
+                'audio' => '王老师今天在学校。'
+            ],
+            [
+                'word' => '学生',
+                'trans' => 'Xuéshēng',
+                'meaning' => 'Murid / Pelajar / Mahasiswa',
+                'pos' => 'Kata Benda',
+                'daily_usage' => 'Status orang yang menuntut ilmu di sekolah/kampus.',
+                'example' => '学校里有很多学生。',
+                'example_trans' => 'Di sekolah ada sangat banyak siswa.',
+                'audio' => '学校里有很多学生。'
+            ],
+            [
+                'word' => '朋友',
+                'trans' => 'Péngyou',
+                'meaning' => 'Teman / Sahabat',
+                'pos' => 'Kata Benda',
+                'daily_usage' => 'Menyebut kawan dekat atau relasi pertemanan.',
+                'example' => '他是我的好朋友。',
+                'example_trans' => 'Dia adalah teman baik saya.',
+                'audio' => '他是我的好朋友。'
+            ],
+            [
+                'word' => '中国',
+                'trans' => 'Zhōngguó',
+                'meaning' => 'Tiongkok / China',
+                'pos' => 'Kata Benda Geografis',
+                'daily_usage' => 'Negara Tiongkok tempat asal bahasa Mandarin.',
+                'example' => '我想去中国旅游。',
+                'example_trans' => 'Saya ingin berwisata ke Tiongkok.',
+                'audio' => '我想去中国旅游。'
+            ],
+            [
+                'word' => '印尼',
+                'trans' => 'Yìnní',
+                'meaning' => 'Indonesia',
+                'pos' => 'Kata Benda Geografis',
+                'daily_usage' => 'Singkatan resmi negara Indonesia dalam bahasa Mandarin.',
+                'example' => '印尼的天气很热。',
+                'example_trans' => 'Cuaca di Indonesia sangat panas.',
+                'audio' => '印尼的天气很热。'
+            ],
+            [
+                'word' => '书',
+                'trans' => 'Shū',
+                'meaning' => 'Buku',
+                'pos' => 'Kata Benda',
+                'daily_usage' => 'Buku bacaan atau buku pelajaran.',
+                'example' => '这本书很有意思。',
+                'example_trans' => 'Buku ini sangat menarik.',
+                'audio' => '这本书很有意思。'
+            ],
+            [
+                'word' => '水',
+                'trans' => 'Shuǐ',
+                'meaning' => 'Air',
+                'pos' => 'Kata Benda',
+                'daily_usage' => 'Kebutuhan air minum atau air putih sehari-hari.',
+                'example' => '请给我一杯水。',
+                'example_trans' => 'Tolong beri saya segelas air.',
+                'audio' => '请给我一杯水。'
+            ],
+            [
+                'word' => '茶',
+                'trans' => 'Chá',
+                'meaning' => 'Teh',
+                'pos' => 'Kata Benda',
+                'daily_usage' => 'Minuman teh tradisional khas budaya Tiongkok.',
+                'example' => '中国人很喜欢喝茶。',
+                'example_trans' => 'Orang Tiongkok sangat suka minum teh.',
+                'audio' => '中国人很喜欢喝茶。'
+            ],
+            [
+                'word' => '米饭',
+                'trans' => 'Mǐfàn',
+                'meaning' => 'Nasi Putih',
+                'pos' => 'Kata Benda',
+                'daily_usage' => 'Makanan pokok saat makan siang atau malam.',
+                'example' => '今天中午我们吃米饭。',
+                'example_trans' => 'Siang hari ini kita makan nasi putih.',
+                'audio' => '今天中午我们吃米饭。'
+            ],
+            [
+                'word' => '吃饭',
+                'trans' => 'Chī fàn',
+                'meaning' => 'Makan / Menyantap Makanan',
+                'pos' => 'Frasa Kata Kerja',
+                'daily_usage' => 'Mengajak makan atau menanyakan apakah sudah makan.',
+                'example' => '你吃饭了吗？',
+                'example_trans' => 'Apakah kamu sudah makan?',
+                'audio' => '你吃饭了吗？'
+            ],
+            [
+                'word' => '喝',
+                'trans' => 'Hē',
+                'meaning' => 'Minum',
+                'pos' => 'Kata Kerja',
+                'daily_usage' => 'Melakukan aktivitas meminum cairan.',
+                'example' => '我想喝热咖啡。',
+                'example_trans' => 'Saya ingin minum kopi hangat.',
+                'audio' => '我想喝热咖啡。'
+            ],
+            [
+                'word' => '家',
+                'trans' => 'Jiā',
+                'meaning' => 'Rumah / Keluarga',
+                'pos' => 'Kata Benda',
+                'daily_usage' => 'Menyebut kediaman atau anggota keluarga.',
+                'example' => '我家有四口人。',
+                'example_trans' => 'Keluarga saya memiliki empat orang anggota.',
+                'audio' => '我家有四口人。'
+            ],
+            [
+                'word' => '学校',
+                'trans' => 'Xuéxiào',
+                'meaning' => 'Sekolah / Kampus',
+                'pos' => 'Kata Benda',
+                'daily_usage' => 'Tempat belajar formal dari SD hingga perguruan tinggi.',
+                'example' => '我们每天去学校。',
+                'example_trans' => 'Kami setiap hari pergi ke sekolah.',
+                'audio' => '我们每天去学校。'
+            ],
+            [
+                'word' => '医院',
+                'trans' => 'Yīyuàn',
+                'meaning' => 'Rumah Sakit',
+                'pos' => 'Kata Benda',
+                'daily_usage' => 'Fasilitas medis untuk berobat ketika sakit.',
+                'example' => '前面有一家大医院。',
+                'example_trans' => 'Di depan ada sebuah rumah sakit besar.',
+                'audio' => '前面有一家大医院。'
+            ],
+            [
+                'word' => '商店',
+                'trans' => 'Shāngdiàn',
+                'meaning' => 'Toko / Warung',
+                'pos' => 'Kata Benda',
+                'daily_usage' => 'Tempat berbelanja barang kebutuhan sehari-hari.',
+                'example' => '我去商店买苹果。',
+                'example_trans' => 'Saya pergi ke toko untuk membeli apel.',
+                'audio' => '我去商店买苹果。'
+            ],
+            [
+                'word' => '这',
+                'trans' => 'Zhè',
+                'meaning' => 'Ini',
+                'pos' => 'Kata Tunjuk Dekat',
+                'daily_usage' => 'Menunjuk benda atau hal yang dekat dengan pembicara.',
+                'example' => '这是什么东西？',
+                'example_trans' => 'Ini barang apa?',
+                'audio' => '这是什么东西？'
+            ],
+            [
+                'word' => '那',
+                'trans' => 'Nà',
+                'meaning' => 'Itu',
+                'pos' => 'Kata Tunjuk Jauh',
+                'daily_usage' => 'Menunjuk benda atau hal yang jauh dari pembicara.',
+                'example' => '那是我的汉语词典。',
+                'example_trans' => 'Itu adalah kamus bahasa Mandarin saya.',
+                'audio' => '那是我的汉语词典。'
+            ],
+            [
+                'word' => '哪里',
+                'trans' => 'Nǎlǐ',
+                'meaning' => 'Di Mana?',
+                'pos' => 'Kata Tanya Lokasi',
+                'daily_usage' => 'Menanyakan keberadaan seseorang atau tempat.',
+                'example' => '洗手间在哪里？',
+                'example_trans' => 'Toilet berada di mana?',
+                'audio' => '洗手间在哪里？'
+            ],
+            [
+                'word' => '多少钱',
+                'trans' => 'Duōshao qián',
+                'meaning' => 'Berapa Harganya?',
+                'pos' => 'Frasa Transaksi',
+                'daily_usage' => 'Kalimat inti belanja menanyakan harga barang.',
+                'example' => '这个多少钱一斤？',
+                'example_trans' => 'Berapa harga barang ini per setengah kilo?',
+                'audio' => '这个多少钱一斤？'
+            ],
+            [
+                'word' => '太贵了',
+                'trans' => 'Tài guì le',
+                'meaning' => 'Terlalu Mahal',
+                'pos' => 'Frasa Tawar Menawar',
+                'daily_usage' => 'Digunakan saat merasa harga barang di pasar terlalu tinggi.',
+                'example' => '太贵了，便宜一点吧。',
+                'example_trans' => 'Terlalu mahal, boleh lebih murah sedikit?',
+                'audio' => '太贵了，便宜一点吧。'
+            ],
+            [
+                'word' => '是',
+                'trans' => 'Shì',
+                'meaning' => 'Adalah / Benar / Ya',
+                'pos' => 'Kopula Predikat',
+                'daily_usage' => 'Menghubungkan subjek dengan profesi atau identitas.',
+                'example' => '他是中国人。',
+                'example_trans' => 'Dia adalah orang Tiongkok.',
+                'audio' => '他是中国人。'
+            ],
+            [
+                'word' => '不是',
+                'trans' => 'Bù shì',
+                'meaning' => 'Bukan / Tidak Benar',
+                'pos' => 'Bentuk Negasi Kopula',
+                'daily_usage' => 'Menyangkal pernyataan identitas atau informasi.',
+                'example' => '我不是医生，我是学生。',
+                'example_trans' => 'Saya bukan dokter, saya seorang pelajar.',
+                'audio' => '我不是医生，我是学生。'
+            ],
+            [
+                'word' => '有',
+                'trans' => 'Yǒu',
+                'meaning' => 'Punya / Ada',
+                'pos' => 'Kata Kerja Keberadaan',
+                'daily_usage' => 'Menyatakan kepemilikan barang atau keberadaan sesuatu.',
+                'example' => '你有一只小猫吗？',
+                'example_trans' => 'Apakah kamu punya seekor anak kucing?',
+                'audio' => '你有一只小猫吗？'
+            ],
+            [
+                'word' => '看',
+                'trans' => 'Kàn',
+                'meaning' => 'Melihat / Membaca / Menonton',
+                'pos' => 'Kata Kerja',
+                'daily_usage' => 'Membaca buku, melihat pemandangan, atau nonton film.',
+                'example' => '我喜欢看中国电影。',
+                'example_trans' => 'Saya suka menonton film Tiongkok.',
+                'audio' => '我喜欢看中国电影。'
+            ],
+            [
+                'word' => '听',
+                'trans' => 'Tīng',
+                'meaning' => 'Mendengarkan',
+                'pos' => 'Kata Kerja',
+                'daily_usage' => 'Mendengarkan musik atau perkataan seseorang.',
+                'example' => '请认真听老师讲课。',
+                'example_trans' => 'Tolong dengarkan guru menerangkan pelajaran dengan saksama.',
+                'audio' => '请认真听老师讲课。'
+            ],
+            [
+                'word' => '说',
+                'trans' => 'Shuō',
+                'meaning' => 'Berbicara / Mengatakan',
+                'pos' => 'Kata Kerja',
+                'daily_usage' => 'Kemampuan berbicara dalam bahasa asing.',
+                'example' => '你会说普通话吗？',
+                'example_trans' => 'Apakah Anda bisa berbicara bahasa Mandarin?',
+                'audio' => '你会说普通话吗？'
+            ],
+            [
+                'word' => '去',
+                'trans' => 'Qù',
+                'meaning' => 'Pergi',
+                'pos' => 'Kata Kerja Perpindahan',
+                'daily_usage' => 'Bergerak menuju suatu destinasi tujuan.',
+                'example' => '下午你要去哪儿？',
+                'example_trans' => 'Sore nanti kamu mau pergi ke mana?',
+                'audio' => '下午你要去哪儿？'
+            ],
+            [
+                'word' => '来',
+                'trans' => 'Lái',
+                'meaning' => 'Datang',
+                'pos' => 'Kata Kerja',
+                'daily_usage' => 'Tiba menuju ke tempat pembicara berada.',
+                'example' => '欢迎来我家做客。',
+                'example_trans' => 'Selamat datang bertamu ke rumah saya.',
+                'audio' => '欢迎来我家做客。'
+            ],
+            [
+                'word' => '买',
+                'trans' => 'Mǎi',
+                'meaning' => 'Membeli',
+                'pos' => 'Kata Kerja',
+                'daily_usage' => 'Melakukan transaksi pembelian barang atau tiket.',
+                'example' => '我想买一张车票。',
+                'example_trans' => 'Saya ingin membeli satu tiket kereta.',
+                'audio' => '我想买一张车票。'
+            ],
+            [
+                'word' => '喜欢',
+                'trans' => 'Xǐhuan',
+                'meaning' => 'Suka / Gemar',
+                'pos' => 'Kata Kerja Perasaan',
+                'daily_usage' => 'Menyatakan minat terhadap hobi, makanan, atau orang.',
+                'example' => '我很喜欢吃印尼菜。',
+                'example_trans' => 'Saya sangat suka menyantap masakan Indonesia.',
+                'audio' => '我很喜欢吃印尼菜。'
+            ],
+            [
+                'word' => '想',
+                'trans' => 'Xiǎng',
+                'meaning' => 'Ingin / Berpikir / Rindu',
+                'pos' => 'Kata Kerja Bantu',
+                'daily_usage' => 'Menyatakan keinginan atau niat melakukan sesuatu.',
+                'example' => '我想学好普通话。',
+                'example_trans' => 'Saya ingin menguasai bahasa Mandarin dengan baik.',
+                'audio' => '我想学好普通话。'
+            ],
+            [
+                'word' => '好',
+                'trans' => 'Hǎo',
+                'meaning' => 'Bagus / Baik',
+                'pos' => 'Kata Sifat',
+                'daily_usage' => 'Pujian mutu atau menyatakan persetujuan.',
+                'example' => '好，我们明天出发。',
+                'example_trans' => 'Baik, kita berangkat besok.',
+                'audio' => '好，我们明天出发。'
+            ],
+            [
+                'word' => '大',
+                'trans' => 'Dà',
+                'meaning' => 'Besar',
+                'pos' => 'Kata Sifat',
+                'daily_usage' => 'Ukuran fisik atau skala yang besar.',
+                'example' => '这个苹果很大。',
+                'example_trans' => 'Apel ini sangat besar.',
+                'audio' => '这个苹果很大。'
+            ],
+            [
+                'word' => '小',
+                'trans' => 'Xiǎo',
+                'meaning' => 'Kecil',
+                'pos' => 'Kata Sifat',
+                'daily_usage' => 'Ukuran fisik yang kecil atau usia muda.',
+                'example' => '这只小狗真可爱。',
+                'example_trans' => 'Anak anjing ini sungguh sangat lucu.',
+                'audio' => '这只小狗真可爱。'
+            ],
+            [
+                'word' => '很多',
+                'trans' => 'Hěn duō',
+                'meaning' => 'Sangat Banyak',
+                'pos' => 'Frasa Kuantitas',
+                'daily_usage' => 'Jumlah barang atau orang yang berlimpah.',
+                'example' => '今天来了很多人。',
+                'example_trans' => 'Hari ini datang banyak orang.',
+                'audio' => '今天来了很多人。'
+            ],
+            [
+                'word' => '今天',
+                'trans' => 'Jīntiān',
+                'meaning' => 'Hari Ini',
+                'pos' => 'Keterangan Waktu',
+                'daily_usage' => 'Menyebut aktivitas yang terjadi pada tanggal hari ini.',
+                'example' => '今天是星期天。',
+                'example_trans' => 'Hari ini adalah hari Minggu.',
+                'audio' => '今天是星期天。'
+            ],
+            [
+                'word' => '明天',
+                'trans' => 'Míngtiān',
+                'meaning' => 'Besok',
+                'pos' => 'Keterangan Waktu',
+                'daily_usage' => 'Aktivitas yang direncanakan satu hari ke depan.',
+                'example' => '明天我有中文课。',
+                'example_trans' => 'Besok saya ada kelas bahasa Mandarin.',
+                'audio' => '明天我有中文课。'
+            ],
+            [
+                'word' => '现在',
+                'trans' => 'Xiànzài',
+                'meaning' => 'Sekarang',
+                'pos' => 'Keterangan Waktu',
+                'daily_usage' => 'Menanyakan atau menyatakan jam saat ini.',
+                'example' => '现在几点了？',
+                'example_trans' => 'Sekarang sudah pukul berapa?',
+                'audio' => '现在几点了？'
             ],
         ];
     }

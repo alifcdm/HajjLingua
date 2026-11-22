@@ -11,7 +11,7 @@ class CurriculumPacingSeeder extends Seeder
     public function run(): void
     {
         // Pastikan Level 1 (Dasar) masing-masing bahasa memiliki 100 materi terstruktur (20 jam silabus)
-        $targetLevels = Level::whereIn('code', ['A1', 'N5', 'Basic'])->get();
+        $targetLevels = Level::whereIn('code', ['A1', 'N5', 'Basic', 'HSK 1'])->get();
 
         foreach ($targetLevels as $level) {
             CurriculumPacingService::ensure100CurriculumLessonsForLevel($level);

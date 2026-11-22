@@ -127,13 +127,18 @@
                                 </div>
 
                                 @if(!empty($voc['example']))
-                                    <div class="p-3 rounded-xl bg-blue-50/50 border border-blue-100 text-xs mt-2">
-                                        <div class="font-bold text-slate-900 {{ $lesson->unit->level->language->code === 'ar' ? 'font-arabic text-base' : '' }}">
-                                            {{ $voc['example'] }}
+                                    <div class="p-3 rounded-xl bg-blue-50/50 border border-blue-100 text-xs mt-2 flex items-start justify-between gap-2">
+                                        <div>
+                                            <div class="font-bold text-slate-900 {{ $lesson->unit->level->language->code === 'ar' ? 'font-arabic text-base' : '' }}">
+                                                {{ $voc['example'] }}
+                                            </div>
+                                            <div class="text-slate-600 font-medium mt-1">
+                                                {{ $voc['example_trans'] ?? '' }}
+                                            </div>
                                         </div>
-                                        <div class="text-slate-600 font-medium mt-1">
-                                            {{ $voc['example_trans'] ?? '' }}
-                                        </div>
+                                        <button type="button" onclick="speakText('{{ addslashes($voc['example']) }}', '{{ $lesson->unit->level->language->code }}')" class="p-1.5 rounded-lg bg-blue-100 text-blue-700 hover:bg-blue-600 hover:text-white transition shadow-2xs flex-shrink-0 mt-0.5" title="Dengarkan seluruh kalimat contoh">
+                                            <i data-lucide="volume-2" class="w-3.5 h-3.5"></i>
+                                        </button>
                                     </div>
                                 @endif
                             </div>
@@ -183,7 +188,7 @@
                                                             Arti Kalimat: {{ $examp['meaning'] }}
                                                         </div>
                                                     </div>
-                                                    <button type="button" onclick="speakText('{{ addslashes($examp['audio'] ?? $examp['target']) }}', '{{ $lesson->unit->level->language->code }}')" class="p-2.5 rounded-xl bg-indigo-50 text-indigo-700 hover:bg-indigo-600 hover:text-white transition shadow-sm flex-shrink-0" title="Dengarkan pengucapan penutur asli">
+                                                    <button type="button" onclick="speakText('{{ addslashes($examp['target']) }}', '{{ $lesson->unit->level->language->code }}')" class="p-2.5 rounded-xl bg-indigo-50 text-indigo-700 hover:bg-indigo-600 hover:text-white transition shadow-sm flex-shrink-0" title="Dengarkan seluruh kalimat penutur asli">
                                                         <i data-lucide="volume-2" class="w-4 h-4"></i>
                                                     </button>
                                                 </div>
@@ -240,7 +245,7 @@
                                             <div class="text-xs text-slate-600 mt-1">Arti: {{ $dia['meaning'] }}</div>
                                         </div>
                                     </div>
-                                    <button type="button" onclick="speakText('{{ addslashes($dia['audio'] ?? $dia['line']) }}', '{{ $lesson->unit->level->language->code }}')" class="p-2.5 rounded-xl bg-emerald-100 text-emerald-700 hover:bg-emerald-600 hover:text-white transition shadow-sm flex-shrink-0" title="Dengarkan percakapan">
+                                    <button type="button" onclick="speakText('{{ addslashes($dia['line']) }}', '{{ $lesson->unit->level->language->code }}')" class="p-2.5 rounded-xl bg-emerald-100 text-emerald-700 hover:bg-emerald-600 hover:text-white transition shadow-sm flex-shrink-0" title="Dengarkan seluruh kalimat percakapan">
                                         <i data-lucide="volume-2" class="w-4 h-4"></i>
                                     </button>
                                 </div>

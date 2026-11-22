@@ -12,7 +12,9 @@ class HajjModuleService
         return [
             'overview' => self::getOverviewData(),
             'timeline' => self::getTimelineData(),
+            'rph_timeline' => self::getRphTimelineData(),
             'fiqh' => self::getFiqhData(),
+            'officer_fiqh' => self::getOfficerFiqhData(),
             'prayers' => self::getPrayersData(),
             'regulations' => self::getRegulationsData(),
             'officers_portal' => self::getOfficersPortalData(),
@@ -383,6 +385,155 @@ class HajjModuleService
                         'badge' => 'GACA Aviation Rules',
                         'detail' => 'Koper bagasi maksimal 32 kg per jemaah dan tas kabin 7 kg. Maskapai penerbangan internasional dan otoritas GACA melarang keras memasukkan air zamzam ke dalam koper bagasi karena risiko rembes/bocor. Setiap jemaah resmi mendapat jatah 5 liter air zamzam gratis di bandara debarkasi kepulangan.'
                     ]
+                ]
+            ]
+        ];
+    }
+
+    /**
+     * Rencana Perjalanan Haji (RPH) Tahun 1448 H / 2027 M
+     * Sumber: Keputusan Direktur Jenderal Pelayanan Haji No. 26 Tahun 2026, Kementerian Haji dan Umrah RI
+     */
+    private static function getRphTimelineData(): array
+    {
+        return [
+            'document_title' => 'Rencana Perjalanan Haji (RPH) Tahun 1448 Hijriah / 2027 Masehi',
+            'legal_reference' => 'Keputusan Direktur Jenderal Pelayanan Haji Nomor 26 Tahun 2026, Kementerian Haji dan Umrah Republik Indonesia',
+            'drive_source_url' => 'https://drive.google.com/file/d/1QOF0RUCqNcrucc6ph_ShjTCJRMA3BI_6/view?usp=sharing',
+            'operational_duration' => '40 Hari Masa Operasional Haji di Arab Saudi',
+            'phases' => [
+                [
+                    'milestone' => 'Tahap 1: Masuk Asrama Haji',
+                    'date_masehi' => '10 April 2027',
+                    'date_hijriah' => '03 Dzulqa\'dah 1448 H',
+                    'badge' => 'Embarkasi RI',
+                    'summary' => 'Jemaah haji mulai masuk ke asrama haji embarkasi seluruh Indonesia untuk pemeriksaan akhir kesehatan (One Stop Service), pembagian paspor, gelang logam anti-karat, dan living cost (uang saku SAR).'
+                ],
+                [
+                    'milestone' => 'Tahap 2: Keberangkatan Gelombang I (ke Madinah)',
+                    'date_masehi' => '11 – 25 April 2027',
+                    'date_hijriah' => '04 – 18 Dzulqa\'dah 1448 H',
+                    'badge' => 'Gelombang I',
+                    'summary' => 'Pemberangkatan jemaah haji Gelombang I dari Tanah Air langsung menuju Bandara AMAA Madinah untuk menunaikan Shalat Arbain (40 waktu di Masjid Nabawi) dan ziarah Raudhah.'
+                ],
+                [
+                    'milestone' => 'Tahap 3: Pergerakan Gelombang I (Madinah ke Makkah)',
+                    'date_masehi' => '20 April – 04 Mei 2027',
+                    'date_hijriah' => '13 – 27 Dzulqa\'dah 1448 H',
+                    'badge' => 'Miqat Bir Ali',
+                    'summary' => 'Jemaah Gelombang I yang telah menyelesaikan Arbain diberangkatkan bergelombang dari Madinah ke Makkah, mengambil miqat dan berniat ihram di Masjid Dzulhulaifah (Bir Ali).'
+                ],
+                [
+                    'milestone' => 'Tahap 4: Keberangkatan Gelombang II (ke Jeddah)',
+                    'date_masehi' => '26 April – 10 Mei 2027',
+                    'date_hijriah' => '19 Dzulqa\'dah – 04 Dzulhijjah 1448 H',
+                    'badge' => 'Gelombang II',
+                    'summary' => 'Pemberangkatan jemaah haji Gelombang II dari Tanah Air mendarat di Bandara KAIA Jeddah, berniat ihram di pesawat di atas Yalamlam / asrama embarkasi, langsung menuju Makkah untuk Umrah Wajib.'
+                ],
+                [
+                    'milestone' => 'Tahap 5: Closing Date Bandara Arab Saudi',
+                    'date_masehi' => '10 Mei 2027 (Pukul 24:00 WSA)',
+                    'date_hijriah' => '04 Dzulhijjah 1448 H',
+                    'badge' => 'Batas Akhir Masuk',
+                    'summary' => 'Batas akhir (closing date) seluruh penerbangan jemaah haji internasional mendarat di Bandara King Abdul Aziz Jeddah dan Bandara AMAA Madinah.'
+                ],
+                [
+                    'milestone' => 'Tahap 6: Pergerakan Menuju Arafah & Mina',
+                    'date_masehi' => '14 Mei 2027',
+                    'date_hijriah' => '08 Dzulhijjah 1448 H (Tarwiyah)',
+                    'badge' => 'Pemberangkatan Armuzna',
+                    'summary' => 'Jemaah haji Indonesia diberangkatkan dari hotel pemondokan Makkah menuju tenda Padang Arafah atau Mina dengan pengawalan Satgas Operasional Armuzna PPIH.'
+                ],
+                [
+                    'milestone' => 'Tahap 7: Puncak Wukuf di Padang Arafah',
+                    'date_masehi' => '15 Mei 2027',
+                    'date_hijriah' => '09 Dzulhijjah 1448 H',
+                    'badge' => 'Rukun Haji Akbar',
+                    'summary' => 'Pelaksanaan puncak ibadah haji: Wukuf di Padang Arafah mulai tergelincir matahari (waktu Zhuhur) hingga terbenam matahari, dilanjutkan pergerakan mabit ke Muzdalifah.'
+                ],
+                [
+                    'milestone' => 'Tahap 8: Hari Raya Idul Adha (Hari Nahr)',
+                    'date_masehi' => '16 Mei 2027',
+                    'date_hijriah' => '10 Dzulhijjah 1448 H',
+                    'badge' => 'Nahr & Tahallul',
+                    'summary' => 'Melontar Jumrah Aqabah 7 kerikil di Jamarat Mina, penyembelihan Dam Tamattu\' melalui Rumah Potong Hewan Adahi resmi, Tahallul Awwal, dan Tawaf Ifadhah di Masjidil Haram.'
+                ],
+                [
+                    'milestone' => 'Tahap 9: Hari-Hari Tasyrik di Mina',
+                    'date_masehi' => '17 – 19 Mei 2027',
+                    'date_hijriah' => '11 – 13 Dzulhijjah 1448 H',
+                    'badge' => 'Mabit & Jamarat',
+                    'summary' => 'Bermalam (mabit) di tenda Mina dan melontar 3 jumrah (Ula, Wustha, Aqabah). Nafar Awwal selesai 12 Dzulhijjah (18 Mei), Nafar Tsani selesai 13 Dzulhijjah (19 Mei).'
+                ],
+                [
+                    'milestone' => 'Tahap 10: Pemulangan Gelombang I (via Jeddah)',
+                    'date_masehi' => '21 Mei – 04 Juni 2027',
+                    'date_hijriah' => '15 – 29 Dzulhijjah 1448 H',
+                    'badge' => 'Pemulangan Gel. I',
+                    'summary' => 'Pemulangan jemaah haji Gelombang I dari Makkah setelah Tawaf Wada\' melalui Bandara Internasional King Abdul Aziz (KAIA) Jeddah kembali ke Tanah Air.'
+                ],
+                [
+                    'milestone' => 'Tahap 11: Pergeseran Gelombang II (Makkah ke Madinah)',
+                    'date_masehi' => '27 Mei – 11 Juni 2027',
+                    'date_hijriah' => '21 Dzulhijjah 1448 H – 06 Muharram 1449 H',
+                    'badge' => 'Arbain Gel. II',
+                    'summary' => 'Pergerakan jemaah haji Gelombang II dari Makkah menuju Madinah al-Munawwarah untuk melaksanakan ibadah Shalat Arbain di Masjid Nabawi dan ziarah bersejarah.'
+                ],
+                [
+                    'milestone' => 'Tahap 12: Pemulangan Gelombang II (via Madinah)',
+                    'date_masehi' => '05 – 20 Juni 2027',
+                    'date_hijriah' => '30 Dzulhijjah 1448 H – 15 Muharram 1449 H',
+                    'badge' => 'Pemulangan Gel. II (Penutup)',
+                    'summary' => 'Pemulangan jemaah haji Gelombang II dari Bandara AMAA Madinah menuju debarkasi masing-masing di Tanah Air. Operasional haji tahun 1448 H resmi berakhir.'
+                ]
+            ]
+        ];
+    }
+
+    /**
+     * Fiqih Petugas Haji: Riset Panduan Resmi Kementerian Agama & Kementerian Haji dan Umrah RI
+     */
+    private static function getOfficerFiqhData(): array
+    {
+        return [
+            'title' => 'Fiqih Petugas Haji (Tuntunan Manasik Pelayan Dhuyufurrahman)',
+            'authorities' => 'Kementerian Agama RI & Kementerian Haji dan Umrah Republik Indonesia',
+            'legal_foundations' => [
+                'dalil_social_worship' => [
+                    'arabic' => 'الْمُتَعَدِّي أَفْضَلُ مِنَ الْقَاصِرِ',
+                    'latin' => 'Al-muta‘addī afḍalu minal-qāṣir',
+                    'meaning' => 'Amalan ibadah yang manfaatnya menyebar kepada orang banyak lebih utama dibanding ibadah yang manfaatnya hanya terbatas untuk diri sendiri.'
+                ],
+                'isytirath_prayer' => [
+                    'arabic' => 'اللَّهُمَّ مَحِلِّي حَيْثُ حَبَسْتَنِي',
+                    'latin' => 'Allāhumma maḥallī ḥaiṡu ḥabastanī (Fa in ḥabasanī ḥābisun fa maḥallī ḥaiṡu ḥabastanī)',
+                    'meaning' => 'Ya Allah, tempat tahallulku adalah di mana Engkau menahanku. (Jika aku terhalang tugas melayani jemaah, maka tempat tahallulku di mana aku terhalang tanpa dam).'
+                ]
+            ],
+            'principles' => [
+                [
+                    'topic' => '1. Pelayanan Jemaah Berstatus Ibadah Muta\'addiyah',
+                    'desc' => 'Tugas pokok petugas haji (melayani jemaah sakit, menuntun lansia, evakuasi jemaah tersesat, penyaluran konsumsi, dan perlindungan keamanan) merupakan fardhu kifayah dan \'ibadah muta\'addiyah. Ulama 4 mazhab sepakat pahala menolong jemaah yang kesusahan di terik Armuzna jauh melampaui shalat sunnah pribadi di Masjidil Haram.'
+                ],
+                [
+                    'topic' => '2. Niat Ihram Isytirath (Bersyarat)',
+                    'desc' => 'Petugas haji disunnahkan menyertakan syarat saat berihram. Jika mendadak terjadi situasi darurat jemaah yang menuntut pelepasan pakaian ihram atau terhalang menyelesaikan tawaf/sa\'i tepat waktu, petugas sah bertahallul seketika tanpa dikenakan denda Dam dan tanpa kewajiban mengqadha haji (HR. Muslim & Bukhari dari Sayyidah Dhiba\'ah binti Zubair).'
+                ],
+                [
+                    'topic' => '3. Badal Lontar Jumrah bagi Jemaah Udzur',
+                    'desc' => 'Petugas haji diperbolehkan membadalkan lontar jumrah untuk jemaah lansia, risti, pingsan, atau sakit. Caranya: Di setiap pilar jumrah, petugas melontar 7 butir kerikil untuk dirinya terlebih dahulu, lalu di posisi yang sama langsung melontar 7 butir kerikil atas nama jemaah yang dibadalkan tanpa perlu bolak-balik ke kemah.'
+                ],
+                [
+                    'topic' => '4. Badal Haji Jemaah Wafat / Sakit Permanen',
+                    'desc' => 'Petugas yang telah menunaikan ibadah haji untuk dirinya sendiri sah membadalkan haji jemaah yang wafat di embarkasi/Arab Saudi atau jemaah sakit jiwa/koma permanen atas penugasan resmi kementerian (Badal Haji Pemerintah).'
+                ],
+                [
+                    'topic' => '5. Rukhsah Mabit di Muzdalifah & Mina',
+                    'desc' => 'Petugas yang sibuk bertugas di sektor posko, rumah sakit KKHI, logistik katering, atau linjam mendapatkan rukhsah (keringanan) syar\'i untuk tidak mabit di Mina/Muzdalifah tanpa dikenakan Dam, diqiyaskan dengan pengembala unta (ru\'atul ibil) dan penyedia air minum jemaah (siqayatul hajj Abbas bin Abdul Muthalib).'
+                ],
+                [
+                    'topic' => '6. Skema Murur & Tanazul bagi Petugas dan Lansia',
+                    'desc' => 'Penerapan skema Murur (melintas Muzdalifah di dalam bus menuju Mina tanpa turun) dan skema Tanazul (pemulangan jemaah lemah ke hotel Makkah) adalah sah menurut fiqih kontemporer Kemenhaj RI demi memelihara jiwa (Hifzhun Nafs) dari bahaya kepadatan ekstrem.'
                 ]
             ]
         ];

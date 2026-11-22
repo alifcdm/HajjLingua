@@ -66,6 +66,7 @@ class LinguisticBreakdownService
             'ja' => self::transliterateJapanese($clean),
             'ko' => self::transliterateKorean($clean),
             'ar' => self::transliterateArabic($clean),
+            'zh' => self::transliterateChinese($clean),
             default => $clean,
         };
     }
@@ -269,6 +270,38 @@ class LinguisticBreakdownService
                     ['token' => 'student', 'syllables' => 'stu-dent', 'meaning' => 'Murid / Siswa'],
                 ]
             ],
+            'zh' => [
+                '你好吗？' => [
+                    ['token' => '你', 'syllables' => 'Nǐ', 'meaning' => 'Kamu'],
+                    ['token' => '好', 'syllables' => 'hǎo', 'meaning' => 'Baik'],
+                    ['token' => '吗', 'syllables' => 'ma', 'meaning' => 'Apakah?'],
+                ],
+                '我很好，谢谢。' => [
+                    ['token' => '我', 'syllables' => 'Wǒ', 'meaning' => 'Saya'],
+                    ['token' => '很', 'syllables' => 'hěn', 'meaning' => 'Sangat'],
+                    ['token' => '好', 'syllables' => 'hǎo', 'meaning' => 'Baik'],
+                    ['token' => '谢谢', 'syllables' => 'xiè-xie', 'meaning' => 'Terima kasih'],
+                ],
+                '我是印尼人。' => [
+                    ['token' => '我', 'syllables' => 'Wǒ', 'meaning' => 'Saya'],
+                    ['token' => '是', 'syllables' => 'shì', 'meaning' => 'Adalah'],
+                    ['token' => '印尼人', 'syllables' => 'Yìn-ní-rén', 'meaning' => 'Orang Indonesia'],
+                ],
+                '这是我的书。' => [
+                    ['token' => '这', 'syllables' => 'Zhè', 'meaning' => 'Ini'],
+                    ['token' => '是', 'syllables' => 'shì', 'meaning' => 'Adalah'],
+                    ['token' => '我的', 'syllables' => 'wǒ-de', 'meaning' => 'Milik saya'],
+                    ['token' => '书', 'syllables' => 'shū', 'meaning' => 'Buku'],
+                ],
+                '你想喝茶还是咖啡？' => [
+                    ['token' => '你', 'syllables' => 'Nǐ', 'meaning' => 'Kamu'],
+                    ['token' => '想', 'syllables' => 'xiǎng', 'meaning' => 'Ingin'],
+                    ['token' => '喝', 'syllables' => 'hē', 'meaning' => 'Minum'],
+                    ['token' => '茶', 'syllables' => 'chá', 'meaning' => 'Teh'],
+                    ['token' => '还是', 'syllables' => 'hái-shì', 'meaning' => 'Atau'],
+                    ['token' => '咖啡', 'syllables' => 'kā-fēi', 'meaning' => 'Kopi'],
+                ]
+            ],
             default => []
         };
     }
@@ -278,11 +311,13 @@ class LinguisticBreakdownService
      */
     private static function autoSegmentSentence(string $langCode, string $target, ?string $trans, ?string $meaning): array
     {
-        // Pisahkan token berdasarkan spasi atau karakter bahasa (misal Jepang)
+        // Pisahkan token berdasarkan spasi atau karakter bahasa (misal Jepang & Mandarin)
         $clean = trim($target);
         if ($langCode === 'ja' && !str_contains($clean, ' ')) {
             // Segmentasi morfem dasar Jepang jika kalimat tanpa spasi
             $words = self::segmentJapaneseParticles($clean);
+        } elseif ($langCode === 'zh' && !str_contains($clean, ' ')) {
+            $words = self::segmentChineseCharacters($clean);
         } else {
             $words = preg_split('/\s+/u', $clean, -1, PREG_SPLIT_NO_EMPTY);
         }
@@ -316,6 +351,7 @@ class LinguisticBreakdownService
             'ja' => self::kanaToSyllables($clean),
             'ko' => self::hangulToSyllables($clean),
             'ar' => self::arabicToSyllables($clean),
+            'zh' => self::chineseToPinyin($clean),
             'en' => self::englishToSyllables($clean),
             default => $clean,
         };
@@ -602,6 +638,113 @@ class LinguisticBreakdownService
     }
 
     /**
+     * Transliterasi utuh kalimat Mandarin ke Hanyu Pinyin
+     */
+    private static function transliterateChinese(string $sentence): string
+    {
+        $tokens = self::segmentChineseCharacters(trim($sentence));
+        $res = array_map(fn($t) => self::chineseToPinyin($t), $tokens);
+        return implode(' ', $res);
+    }
+
+    /**
+     * Pemetaan Hanzi ke Hanyu Pinyin bersuku kata
+     */
+    public static function chineseToPinyin(string $text): string
+    {
+        $clean = trim($text, " \t\n\r\0\x0B.,?!:;。！？，、");
+        $charMap = [
+            '你好' => 'Nǐ-hǎo', '您好' => 'Nín-hǎo', '早' => 'Zǎo', '早上好' => 'Zǎoshang-hǎo',
+            '晚上好' => 'Wǎnshang-hǎo', '谢谢' => 'Xiè-xie', '再见' => 'Zài-jiàn',
+            '对不起' => 'Duì-bu-qǐ', '没关系' => 'Méi-guān-xi', '不客气' => 'Bù-kè-qi',
+            '请' => 'Qǐng', '我' => 'Wǒ', '你' => 'Nǐ', '您' => 'Nín', '他' => 'Tā',
+            '她' => 'Tā', '我们' => 'Wǒ-men', '他们' => 'Tā-men', '人' => 'Rén',
+            '老师' => 'Lǎo-shī', '学生' => 'Xué-sheng', '朋友' => 'Péng-you', '医生' => 'Yī-shēng',
+            '中国' => 'Zhōng-guó', '印尼' => 'Yìn-ní', '印尼人' => 'Yìn-ní-rén',
+            '中国人' => 'Zhōng-guó-rén', '书' => 'Shū', '水' => 'Shuǐ', '饭' => 'Fàn',
+            '吃饭' => 'Chī-fàn', '喝水' => 'Hē-shuǐ', '茶' => 'Chá', '咖啡' => 'Kā-fēi',
+            '家' => 'Jiā', '学校' => 'Xué-xiào', '医院' => 'Yī-yuàn', '饭店' => 'Fàn-diàn',
+            '这' => 'Zhè', '这是' => 'Zhè-shì', '那' => 'Nà', '那是' => 'Nà-shì',
+            '哪里' => 'Nǎ-lǐ', '什么' => 'Shén-me', '谁' => 'Shéi', '多少' => 'Duō-shǎo',
+            '多少钱' => 'Duō-shao-qián', '太贵了' => 'Tài-guì-le', '便宜' => 'Pián-yi',
+            '是' => 'Shì', '不是' => 'Bù-shì', '有' => 'Yǒu', '没有' => 'Méi-yǒu',
+            '看' => 'Kàn', '听' => 'Tīng', '说' => 'Shuō', '读' => 'Dú', '写' => 'Xiě',
+            '去' => 'Qù', '来' => 'Lái', '想' => 'Xiǎng', '喜欢' => 'Xǐ-huan',
+            '好' => 'Hǎo', '大' => 'Dà', '小' => 'Xiǎo', '多' => 'Duō', '少' => 'Shǎo',
+            '很' => 'Hěn', '太' => 'Tài', '不' => 'Bù', '也' => 'Yě', '都' => 'Dōu',
+            '吗' => 'ma', '呢' => 'ne', '的' => 'de', '在' => 'zài', '和' => 'hé',
+            '一' => 'Yī', '二' => 'Èr', '三' => 'Sān', '四' => 'Sì', '五' => 'Wǔ',
+            '六' => 'Liù', '七' => 'Qī', '八' => 'Bā', '九' => 'Jiǔ', '十' => 'Shí',
+            '百' => 'Bǎi', '千' => 'Qiān', '块' => 'Kuài', '钱' => 'Qián',
+            '年' => 'Nián', '月' => 'Yuè', '日' => 'Rì', '星期' => 'Xīng-qī', '点' => 'Diǎn',
+            '现在' => 'Xiàn-zài', '今天' => 'Jīn-tiān', '明天' => 'Míng-tiān', '昨天' => 'Zuó-tiān',
+        ];
+
+        if (isset($charMap[$clean])) {
+            return $charMap[$clean];
+        }
+
+        // Jika multi-karakter yang belum terdaftar di kamus frase
+        $len = mb_strlen($clean, 'UTF-8');
+        $chars = [];
+        for ($i = 0; $i < $len; $i++) {
+            $c = mb_substr($clean, $i, 1, 'UTF-8');
+            $chars[] = $charMap[$c] ?? $c;
+        }
+
+        return implode('-', $chars);
+    }
+
+    /**
+     * Segmentasi kalimat Mandarin tanpa spasi menjadi token kata bermakna
+     */
+    private static function segmentChineseCharacters(string $sentence): array
+    {
+        $clean = trim($sentence);
+        $punctuation = "。！？，、：；“”‘’（）,.?!;:";
+        
+        // Pola kata kunci multi-karakter populer HSK 1-2
+        $keywords = [
+            '多少钱', '太贵了', '对不起', '没关系', '不客气', '早上好', '晚上好',
+            '印尼人', '中国人', '洗手间', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六', '星期天',
+            '你好', '您好', '谢谢', '再见', '老师', '学生', '朋友', '医生', '中国', '印尼',
+            '吃饭', '喝水', '咖啡', '学校', '医院', '饭店', '商店', '车站', '这是', '那是',
+            '哪里', '什么', '没有', '喜欢', '现在', '今天', '明天', '昨天', '便宜',
+            '我们', '他们', '她们', '我的', '你的', '他的', '还是'
+        ];
+
+        $tokens = [];
+        $len = mb_strlen($clean, 'UTF-8');
+        $i = 0;
+
+        while ($i < $len) {
+            $matched = false;
+            // Coba cocokkan 4, 3, atau 2 karakter
+            for ($kLen = 4; $kLen >= 2; $kLen--) {
+                if ($i + $kLen <= $len) {
+                    $sub = mb_substr($clean, $i, $kLen, 'UTF-8');
+                    if (in_array($sub, $keywords, true)) {
+                        $tokens[] = $sub;
+                        $i += $kLen;
+                        $matched = true;
+                        break;
+                    }
+                }
+            }
+
+            if (!$matched) {
+                $c = mb_substr($clean, $i, 1, 'UTF-8');
+                if (mb_strpos($punctuation, $c) === false && trim($c) !== '') {
+                    $tokens[] = $c;
+                }
+                $i++;
+            }
+        }
+
+        return !empty($tokens) ? $tokens : [$clean];
+    }
+
+    /**
      * Pembagi partikel bahasa Jepang jika kalimat tidak mengandung spasi
      */
     private static function segmentJapaneseParticles(string $sentence): array
@@ -658,6 +801,30 @@ class LinguisticBreakdownService
                 '먹어요' => 'Makan', '마셔요' => 'Minum', '읽어요' => 'Membaca',
                 '가요' => 'Pergi', '와요' => 'Datang', '만나요' => 'Bertemu',
                 '사람' => 'Orang', '새' => 'Baru/Burung', '좋아요' => 'Bagus/Suka',
+            ],
+            'zh' => [
+                '我' => 'Saya', '你' => 'Kamu', '您' => 'Anda (Sopan)',
+                '他' => 'Dia (L)', '她' => 'Dia (P)', '我们' => 'Kami/Kita',
+                '他们' => 'Mereka', '人' => 'Orang/Manusia', '老师' => 'Guru',
+                '学生' => 'Murid/Siswa', '朋友' => 'Teman', '医生' => 'Dokter',
+                '中国' => 'Tiongkok', '印尼' => 'Indonesia', '中国人' => 'Orang Tiongkok',
+                '印尼人' => 'Orang Indonesia', '书' => 'Buku', '水' => 'Air',
+                '饭' => 'Nasi/Makanan', '吃饭' => 'Makan', '喝水' => 'Minum air',
+                '茶' => 'Teh', '咖啡' => 'Kopi', '家' => 'Rumah/Keluarga',
+                '学校' => 'Sekolah', '医院' => 'Rumah Sakit', '这' => 'Ini',
+                '这是' => 'Ini adalah', '那' => 'Itu', '那是' => 'Itu adalah',
+                '哪里' => 'Di mana', '什么' => 'Apa', '多少' => 'Berapa',
+                '多少钱' => 'Berapa harga', '太贵了' => 'Terlalu mahal', '便宜' => 'Murah',
+                '是' => 'Adalah', '不是' => 'Bukan', '有' => 'Ada/Punya',
+                '没有' => 'Tidak ada', '好' => 'Baik/Bagus', '大' => 'Besar',
+                '小' => 'Kecil', '多' => 'Banyak', '少' => 'Sedikit',
+                '很' => 'Sangat', '太' => 'Terlalu', '不' => 'Tidak/Bukan',
+                '想' => 'Ingin', '喜欢' => 'Suka', '去' => 'Pergi',
+                '来' => 'Datang', '看' => 'Melihat/Membaca', '吃' => 'Makan',
+                '喝' => 'Minum', '说' => 'Bicara', '买' => 'Membeli',
+                '吗' => 'Apakah?', '呢' => 'Bagaimana dengan?', '的' => 'Kepunyaan (partikel)',
+                '谢谢' => 'Terima kasih', '再见' => 'Sampai jumpa', '不客气' => 'Sama-sama',
+                '对不起' => 'Maaf', '没关系' => 'Tidak apa-apa', '早上好' => 'Selamat pagi',
             ]
         ];
 

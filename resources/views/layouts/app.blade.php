@@ -196,6 +196,8 @@
                 cleaned = cleaned.replace(/\([a-zA-Z\s\/\-\'\`]+\)/g, '').trim();
             } else if (langCode === 'ko') {
                 cleaned = cleaned.replace(/\([a-zA-Z\s\/\-]+\)/g, '').trim();
+            } else if (langCode === 'zh') {
+                cleaned = cleaned.replace(/\([a-zA-Z0-9\s\/\-āáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜ]+\)/g, '').trim();
             } else if (langCode === 'en') {
                 cleaned = cleaned.replace(/\/.*?\//g, '').replace(/\(.*?\)/g, '').trim();
             }
@@ -255,6 +257,11 @@
                     prefixes: ['ko-', 'ko_'],
                     exact: ['ko', 'ko-kr'],
                     keywords: ['google', 'natural', 'korean', '한국어', 'sunhi', 'injoon', 'heami']
+                },
+                'zh': {
+                    prefixes: ['zh-', 'zh_'],
+                    exact: ['zh', 'zh-cn', 'zh-tw', 'zh-hk', 'zh-sg'],
+                    keywords: ['google', 'natural', 'chinese', 'mandarin', '普通话', '中文', 'xiaoxiao', 'yunxi', 'yunjian', 'xiaoyi', 'huihui', 'yaoyao', 'kangkang']
                 },
                 'en': {
                     prefixes: ['en-', 'en_'],
@@ -330,6 +337,7 @@
                 'ar': 'Bahasa Arab',
                 'ja': 'Bahasa Jepang',
                 'ko': 'Bahasa Korea',
+                'zh': 'Bahasa Mandarin',
                 'en': 'Bahasa Inggris',
                 'id': 'Bahasa Indonesia'
             };
@@ -339,7 +347,8 @@
                 'id': 'id-ID',
                 'ar': 'ar-SA',
                 'ja': 'ja-JP',
-                'ko': 'ko-KR'
+                'ko': 'ko-KR',
+                'zh': 'zh-CN'
             };
 
             const targetVoice = findNativeVoice(langCode);

@@ -37,6 +37,15 @@ class HajjModuleAndLinguisticBreakdownTest extends TestCase
         $response->assertSee('Muzdalifah');
         $response->assertSee('Tawaf Wada');
 
+        // RPH 1448 H / 2027 M & Regulasi
+        $response->assertSee('Rencana Perjalanan Haji');
+        $response->assertSee('Keputusan Direktur Jenderal Pelayanan Haji');
+        $response->assertSee('10 April 2027');
+
+        // Fiqih Petugas Haji Kemenhaj RI
+        $response->assertSee('Panduan Petugas Haji');
+        $response->assertSee('Niat Bersyarat');
+
         // Rukun & Wajib
         $response->assertSee('6 Rukun Haji');
         $response->assertSee('6 Wajib Haji');
@@ -115,5 +124,45 @@ class HajjModuleAndLinguisticBreakdownTest extends TestCase
         // Web Speech API Voice Engine
         $response->assertSee('findNativeVoice');
         $response->assertSee('speechSynthesis');
+    }
+
+    public function test_chinese_mandarin_track_and_alphabet_matrix_render_correctly(): void
+    {
+        // 1. Home page shows 10 tracks including Chinese Mandarin
+        $response = $this->get('/');
+        $response->assertStatus(200);
+        $response->assertSee('10 Jalur Pembelajaran Bahasa');
+        $response->assertSee('Bahasa Indonesia → Chinese Mandarin');
+        $response->assertSee('English → Chinese Mandarin');
+
+        // 2. Chinese alphabet page (Pinyin & 4 Tones)
+        $zhAlpha = $this->get('/alphabet/zh');
+        $zhAlpha->assertStatus(200);
+        $zhAlpha->assertSee('Chinese Mandarin');
+        $zhAlpha->assertSee('4 Nada Utama Intonasi Pinyin');
+        $zhAlpha->assertSee('23 Inisial Konsonan Pinyin');
+        $zhAlpha->assertSee('24 Final Vokal Pinyin');
+
+        // 3. Chinese HSK 1 Learn Page
+        $zhLearn = $this->get('/learn/id-zh');
+        $zhLearn->assertStatus(200);
+        $zhLearn->assertSee('HSK 1');
+        $zhLearn->assertSee('20 Jam Kurikulum');
+    }
+
+    public function test_lesson_view_speaks_full_sentence_and_renders_multi_turn_dialogues(): void
+    {
+        $lesson = Lesson::whereNotNull('content_body->dialogues')->first();
+        $this->assertNotNull($lesson);
+
+        $dialogues = $lesson->content_body['dialogues'];
+        $this->assertGreaterThanOrEqual(2, count($dialogues));
+
+        $response = $this->get("/lesson/{$lesson->id}");
+        $response->assertStatus(200);
+
+        // Verify full sentence button title
+        $response->assertSee('Dengarkan seluruh kalimat penutur asli');
+        $response->assertSee('Dengarkan seluruh kalimat percakapan');
     }
 }

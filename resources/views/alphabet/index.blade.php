@@ -318,6 +318,100 @@
             </div>
         </div>
 
+    @elseif($langCode === 'zh')
+        <!-- CHINESE PINYIN & TONE MATRIX -->
+        <div class="space-y-10 sm:space-y-12">
+            <!-- 1. The 4 Pinyin Tones + Neutral Tone -->
+            <div>
+                <div class="flex items-center justify-between mb-4">
+                    <div>
+                        <h3 class="text-base sm:text-lg font-bold text-slate-900 flex items-center gap-2">
+                            <i data-lucide="music" class="w-5 h-5 text-rose-600"></i>
+                            <span>4 Nada Utama Intonasi Pinyin (声调 / Shēngdiào) & Nada Netral</span>
+                        </h3>
+                        <p class="text-xs text-slate-500">Klik kartu untuk mendengarkan perubahan nada pada kata penutur asli.</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+                    @foreach($alphabetData['tones'] as $tone)
+                        <div class="p-5 rounded-2xl border border-rose-200 bg-white hover:border-rose-400 hover:shadow-md transition cursor-pointer flex flex-col justify-between" onclick="speakText('{{ $tone['sample_hanzi'] }}', 'zh')">
+                            <div>
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="w-7 h-7 rounded-lg bg-rose-100 text-rose-700 font-bold text-xs flex items-center justify-center">
+                                        {{ $tone['tone_number'] }}
+                                    </span>
+                                    <span class="text-xs font-mono font-bold text-rose-600">{{ $tone['symbol'] }}</span>
+                                </div>
+                                <div class="text-3xl font-black text-slate-900 mb-1 text-center font-japanese">{{ $tone['sample_hanzi'] }}</div>
+                                <div class="text-xs font-mono font-bold text-rose-600 text-center mb-1">{{ $tone['sample_pinyin'] }}</div>
+                                <div class="text-xs font-semibold text-slate-700 text-center mb-2">Arti: {{ $tone['sample_meaning'] }}</div>
+                                <div class="p-2 rounded-xl bg-rose-50/50 border border-rose-100 text-[11px] text-slate-600 leading-snug">
+                                    {{ $tone['desc'] }}
+                                </div>
+                            </div>
+                            <div class="mt-3 pt-2 border-t border-rose-100 text-center">
+                                <span class="text-[10px] font-bold text-rose-600 uppercase flex items-center justify-center gap-1">
+                                    <i data-lucide="volume-2" class="w-3.5 h-3.5"></i>
+                                    Dengarkan Nada
+                                </span>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+
+            <!-- 2. Shengmu (23 Initial Consonants) -->
+            <div>
+                <h3 class="text-base sm:text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+                    <i data-lucide="volume-2" class="w-5 h-5 text-rose-600"></i>
+                    <span>23 Inisial Konsonan Pinyin (声母 / Shēngmǔ) & Terjemahan Kata Contoh Indonesia</span>
+                </h3>
+                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
+                    @foreach($alphabetData['initials'] as $item)
+                        <div class="p-4 rounded-2xl border border-slate-200 bg-white hover:border-rose-400 hover:shadow-md transition text-center cursor-pointer group flex flex-col justify-between shadow-2xs" onclick="speakText('{{ $item['audio'] }}', 'zh')">
+                            <div>
+                                <div class="text-2xl font-black text-slate-900 group-hover:text-rose-600 mb-0.5">{{ $item['pinyin'] }}</div>
+                                <div class="text-[11px] font-mono font-bold text-rose-600 mb-1">{{ $item['ipa'] }}</div>
+                                <div class="text-[10px] text-slate-400 font-semibold mb-2">{{ $item['category'] }}</div>
+                            </div>
+                            <div class="p-2 rounded-xl bg-slate-50 border border-slate-100 text-left">
+                                <div class="flex items-center justify-between text-xs font-bold text-slate-800 font-japanese">
+                                    <span>{{ $item['sample_hanzi'] }}</span>
+                                    <span class="text-rose-600 font-mono">{{ $item['sample_pinyin'] }}</span>
+                                </div>
+                                <div class="text-[10px] text-slate-600 truncate mt-0.5">{{ $item['sample_meaning'] }}</div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+
+            <!-- 3. Yunmu (24 Final Vowels) -->
+            <div>
+                <h3 class="text-base sm:text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+                    <i data-lucide="layers" class="w-5 h-5 text-rose-600"></i>
+                    <span>24 Final Vokal Pinyin (韵母 / Yùnmǔ) & Kata Terapan</span>
+                </h3>
+                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
+                    @foreach($alphabetData['finals'] as $final)
+                        <div class="p-4 rounded-2xl border border-slate-200 bg-white hover:border-rose-400 hover:shadow-md transition text-center cursor-pointer group flex flex-col justify-between shadow-2xs" onclick="speakText('{{ $final['audio'] }}', 'zh')">
+                            <div>
+                                <div class="text-2xl font-black text-slate-900 group-hover:text-rose-600 mb-1">{{ $final['pinyin'] }}</div>
+                            </div>
+                            <div class="p-2 rounded-xl bg-rose-50/40 border border-rose-100 text-left">
+                                <div class="flex items-center justify-between text-xs font-bold text-slate-800 font-japanese">
+                                    <span>{{ $final['sample_hanzi'] }}</span>
+                                    <span class="text-rose-600 font-mono">{{ $final['sample_pinyin'] }}</span>
+                                </div>
+                                <div class="text-[10px] text-slate-600 truncate mt-0.5">{{ $final['sample_meaning'] }}</div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+
     @elseif($langCode === 'en')
         <!-- ENGLISH ALPHABET & 44 PHONEMES -->
         <div>

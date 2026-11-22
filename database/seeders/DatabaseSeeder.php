@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
             JapaneseCurriculumContentSeeder::class,
             KoreanCurriculumContentSeeder::class,
             EnglishCurriculumContentSeeder::class,
+            CurriculumPacingSeeder::class,
         ]);
     }
 }

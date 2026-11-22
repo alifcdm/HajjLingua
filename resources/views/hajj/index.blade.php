@@ -178,6 +178,51 @@
                 @endforeach
             </div>
         </div>
+
+        <!-- Rencana Perjalanan Haji (RPH) 1448 H / 2027 M - Regulasi Resmi Kemenhaj RI -->
+        <div class="bg-gradient-to-br from-slate-900 via-emerald-950 to-slate-900 rounded-3xl border border-emerald-800/50 p-6 sm:p-8 text-white shadow-xl">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 pb-6 border-b border-emerald-800/40 mb-6">
+                <div>
+                    <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 text-xs font-bold mb-2">
+                        <i data-lucide="file-text" class="w-3.5 h-3.5"></i>
+                        <span>Regulasi Resmi: RPH 1448 H / 2027 M</span>
+                    </div>
+                    <h3 class="text-xl sm:text-2xl font-black text-white tracking-tight flex flex-wrap items-center gap-2">
+                        <span>{{ $hajj['rph_timeline']['document_title'] }}</span>
+                    </h3>
+                    <p class="text-xs sm:text-sm text-slate-300 mt-1 max-w-2xl leading-relaxed">
+                        {{ $hajj['rph_timeline']['legal_reference'] }}. Total operasional: <strong>{{ $hajj['rph_timeline']['operational_duration'] }}</strong>.
+                    </p>
+                </div>
+
+                <a href="{{ $hajj['rph_timeline']['drive_source_url'] }}" target="_blank" rel="noopener noreferrer" class="self-start md:self-center inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-bold text-xs transition shadow-md flex-shrink-0">
+                    <i data-lucide="external-link" class="w-4 h-4"></i>
+                    <span>Buka Dokumen PDF (Google Drive)</span>
+                </a>
+            </div>
+
+            <!-- Grid 12 Tahapan RPH -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                @foreach($hajj['rph_timeline']['phases'] as $phase)
+                    <div class="p-4 rounded-2xl bg-slate-900/80 border border-emerald-900/60 hover:border-emerald-500/50 transition flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between gap-2 mb-2">
+                                <span class="px-2.5 py-0.5 rounded-full bg-emerald-950 text-emerald-300 border border-emerald-700/50 text-[10px] font-bold">
+                                    {{ $phase['badge'] }}
+                                </span>
+                                <span class="text-[11px] font-mono text-amber-300 font-semibold">{{ $phase['date_hijriah'] }}</span>
+                            </div>
+                            <h4 class="text-sm font-bold text-white mb-1.5">{{ $phase['milestone'] }}</h4>
+                            <div class="text-xs text-emerald-400 font-semibold mb-2 flex items-center gap-1">
+                                <i data-lucide="calendar" class="w-3.5 h-3.5"></i>
+                                <span>{{ $phase['date_masehi'] }}</span>
+                            </div>
+                            <p class="text-xs text-slate-300 leading-relaxed">{{ $phase['summary'] }}</p>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        </div>
     </div>
 
     <!-- TAB 2: RUKUN, WAJIB & FIQIH HAJI -->
@@ -322,6 +367,75 @@
                         @endforeach
                     </ul>
                 </div>
+            </div>
+        </div>
+
+        <!-- PANDUAN FIQIH KHUSUS PETUGAS HAJI (KEMENHAJ & KEMENAG RI) -->
+        <div class="bg-gradient-to-br from-amber-500/10 via-slate-50 to-emerald-500/10 rounded-3xl border border-amber-300 p-6 sm:p-8 shadow-sm">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 pb-6 border-b border-amber-200 mb-6">
+                <div>
+                    <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-100 text-amber-900 border border-amber-300 text-xs font-bold mb-2">
+                        <i data-lucide="award" class="w-3.5 h-3.5 text-amber-600"></i>
+                        <span>Fiqih Tematik: Panduan Petugas Haji</span>
+                    </div>
+                    <h3 class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
+                        {{ $hajj['officer_fiqh']['title'] }}
+                    </h3>
+                    <p class="text-xs sm:text-sm text-slate-600 mt-1 max-w-2xl leading-relaxed">
+                        Riset berdasarkan buku pedoman resmi manasik haji Kementerian Agama RI dan regulasi Ditjen Pelayanan Haji Kementerian Haji dan Umrah RI.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Dalil Ibadah Muta'addiyah & Doa Isytirath -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                <!-- Box 1: Kaidah Muta'addiyah -->
+                <div class="p-5 rounded-2xl bg-white border border-amber-200 shadow-2xs">
+                    <span class="text-[10px] font-bold text-amber-800 uppercase tracking-wider block mb-1">Kaidah Fiqih Pelayanan Jemaah:</span>
+                    <div class="font-arabic text-xl font-bold text-slate-900 mb-1" dir="rtl">
+                        {{ $hajj['officer_fiqh']['legal_foundations']['dalil_social_worship']['arabic'] }}
+                    </div>
+                    <div class="text-xs text-amber-800 font-semibold mb-1 italic">
+                        "{{ $hajj['officer_fiqh']['legal_foundations']['dalil_social_worship']['latin'] }}"
+                    </div>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        {{ $hajj['officer_fiqh']['legal_foundations']['dalil_social_worship']['meaning'] }}
+                    </p>
+                </div>
+
+                <!-- Box 2: Doa Niat Isytirath -->
+                <div class="p-5 rounded-2xl bg-white border border-emerald-200 shadow-2xs flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between gap-2 mb-1">
+                            <span class="text-[10px] font-bold text-emerald-800 uppercase tracking-wider">Lafadz Niat Bersyarat (Isytirath):</span>
+                            <button type="button" onclick="speakText('{{ addslashes($hajj['officer_fiqh']['legal_foundations']['isytirath_prayer']['arabic']) }}', 'ar')" class="p-1.5 rounded-lg bg-emerald-50 text-emerald-700 hover:bg-emerald-600 hover:text-white transition shadow-sm">
+                                <i data-lucide="volume-2" class="w-3.5 h-3.5"></i>
+                            </button>
+                        </div>
+                        <div class="font-arabic text-lg font-bold text-slate-900 mb-1" dir="rtl">
+                            {{ $hajj['officer_fiqh']['legal_foundations']['isytirath_prayer']['arabic'] }}
+                        </div>
+                        <div class="text-xs text-emerald-700 font-semibold mb-1 italic">
+                            "{{ $hajj['officer_fiqh']['legal_foundations']['isytirath_prayer']['latin'] }}"
+                        </div>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            {{ $hajj['officer_fiqh']['legal_foundations']['isytirath_prayer']['meaning'] }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 6 Butir Fiqih Petugas Haji -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                @foreach($hajj['officer_fiqh']['principles'] as $principle)
+                    <div class="p-4 rounded-2xl bg-white border border-slate-200 hover:border-amber-400 transition shadow-2xs">
+                        <h4 class="text-xs sm:text-sm font-bold text-slate-900 mb-2 flex items-center gap-1.5 text-amber-950">
+                            <i data-lucide="check-circle" class="w-4 h-4 text-emerald-600 flex-shrink-0"></i>
+                            <span>{{ $principle['topic'] }}</span>
+                        </h4>
+                        <p class="text-xs text-slate-600 leading-relaxed">{{ $principle['desc'] }}</p>
+                    </div>
+                @endforeach
             </div>
         </div>
     </div>

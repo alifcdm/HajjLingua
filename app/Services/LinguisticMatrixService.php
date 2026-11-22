@@ -13,6 +13,7 @@ class LinguisticMatrixService
             'ar' => self::getArabicAlphabetMatrix(),
             'ja' => self::getJapaneseAlphabetMatrix(),
             'ko' => self::getKoreanAlphabetMatrix(),
+            'zh' => self::getChineseAlphabetMatrix(),
             'en' => self::getEnglishAlphabetMatrix(),
             default => ['overview' => 'Data aksara tidak ditemukan.']
         };
@@ -315,6 +316,7 @@ class LinguisticMatrixService
             'ar' => self::getArabicLexiconPool(),
             'ja' => self::getJapaneseLexiconPool(),
             'ko' => self::getKoreanLexiconPool(),
+            'zh' => self::getChineseLexiconPool(),
             'en' => self::getEnglishLexiconPool(),
             default => []
         };
@@ -441,6 +443,146 @@ class LinguisticMatrixService
             ['word' => 'Stakeholder', 'trans' => '/ˈsteɪkˌhəʊl.dər/', 'meaning' => 'Pemangku Kepentingan', 'notes' => 'Pihak yang berpengaruh pada kebijakan.'],
             ['word' => 'Trajectory', 'trans' => '/trəˈdʒek.tər.i/', 'meaning' => 'Lintasan / Arah Perkembangan', 'notes' => 'Jalur tren kemajuan.'],
             ['word' => 'Synergy', 'trans' => '/ˈsɪn.ə.dʒi/', 'meaning' => 'Sinergi / Kerja Sama Padu', 'notes' => 'Hasil kolaboratif berlipat ganda.'],
+        ];
+    }
+
+    /**
+     * Data Lengkap Sistem Pinyin Fonetik Bahasa Mandarin: Shengmu, Yunmu & 4 Nada Intonasi
+     */
+    private static function getChineseAlphabetMatrix(): array
+    {
+        return [
+            'overview' => 'Bahasa Mandarin Standar (Putonghua / 普通话) menggunakan karakter Hanzi sebagai sistem tulisan dan Hanyu Pinyin (汉语拼音) sebagai sistem fonetik resmi berbasis alfabet Latin. Setiap suku kata Pinyin terdiri dari Shengmu (声母 / 23 Inisial Konsonan Awal), Yunmu (韵母 / 24 Final Vokal Tunggal & Majemuk), serta 4 Nada Intonasi (Shengdiao / 声调) ditambah Nada Netral. Penguasaan nada sangat mutlak karena nada yang berbeda menghasilkan makna kata yang sama sekali berbeda.',
+            'initials' => [
+                ['pinyin' => 'b', 'ipa' => '[p]', 'category' => 'Bibir (Labial)', 'sample_hanzi' => '爸', 'sample_pinyin' => 'bà', 'sample_meaning' => 'Ayah', 'audio' => '爸'],
+                ['pinyin' => 'p', 'ipa' => '[pʰ]', 'category' => 'Bibir Berhembus (Aspirated)', 'sample_hanzi' => '朋', 'sample_pinyin' => 'péng', 'sample_meaning' => 'Teman', 'audio' => '朋'],
+                ['pinyin' => 'm', 'ipa' => '[m]', 'category' => 'Hidung Bibir (Nasal)', 'sample_hanzi' => '妈', 'sample_pinyin' => 'mā', 'sample_meaning' => 'Ibu', 'audio' => '妈'],
+                ['pinyin' => 'f', 'ipa' => '[f]', 'category' => 'Gigi-Bibir (Labiodental)', 'sample_hanzi' => '饭', 'sample_pinyin' => 'fàn', 'sample_meaning' => 'Nasi / Makanan', 'audio' => '饭'],
+                ['pinyin' => 'd', 'ipa' => '[t]', 'category' => 'Ujung Lidah (Alveolar)', 'sample_hanzi' => '大', 'sample_pinyin' => 'dà', 'sample_meaning' => 'Besar', 'audio' => '大'],
+                ['pinyin' => 't', 'ipa' => '[tʰ]', 'category' => 'Ujung Lidah Berhembus', 'sample_hanzi' => '他', 'sample_pinyin' => 'tā', 'sample_meaning' => 'Dia (Laki-laki)', 'audio' => '他'],
+                ['pinyin' => 'n', 'ipa' => '[n]', 'category' => 'Hidung Alveolar', 'sample_hanzi' => '你', 'sample_pinyin' => 'nǐ', 'sample_meaning' => 'Kamu / Anda', 'audio' => '你'],
+                ['pinyin' => 'l', 'ipa' => '[l]', 'category' => 'Samping Lidah (Lateral)', 'sample_hanzi' => '来', 'sample_pinyin' => 'lái', 'sample_meaning' => 'Datang', 'audio' => '来'],
+                ['pinyin' => 'g', 'ipa' => '[k]', 'category' => 'Pangkal Lidah (Velar)', 'sample_hanzi' => '高', 'sample_pinyin' => 'gāo', 'sample_meaning' => 'Tinggi', 'audio' => '高'],
+                ['pinyin' => 'k', 'ipa' => '[kʰ]', 'category' => 'Pangkal Lidah Berhembus', 'sample_hanzi' => '看', 'sample_pinyin' => 'kàn', 'sample_meaning' => 'Melihat / Membaca', 'audio' => '看'],
+                ['pinyin' => 'h', 'ipa' => '[x]', 'category' => 'Pangkal Lidah Geser', 'sample_hanzi' => '好', 'sample_pinyin' => 'hǎo', 'sample_meaning' => 'Baik / Bagus', 'audio' => '好'],
+                ['pinyin' => 'j', 'ipa' => '[tɕ]', 'category' => 'Permukaan Lidah (Palatal)', 'sample_hanzi' => '家', 'sample_pinyin' => 'jiā', 'sample_meaning' => 'Rumah / Keluarga', 'audio' => '家'],
+                ['pinyin' => 'q', 'ipa' => '[tɕʰ]', 'category' => 'Palatal Berhembus', 'sample_hanzi' => '去', 'sample_pinyin' => 'qù', 'sample_meaning' => 'Pergi', 'audio' => '去'],
+                ['pinyin' => 'x', 'ipa' => '[ɕ]', 'category' => 'Palatal Geser', 'sample_hanzi' => '小', 'sample_pinyin' => 'xiǎo', 'sample_meaning' => 'Kecil', 'audio' => '小'],
+                ['pinyin' => 'zh', 'ipa' => '[ʈʂ]', 'category' => 'Lidah Gulung (Retroflex)', 'sample_hanzi' => '中', 'sample_pinyin' => 'zhōng', 'sample_meaning' => 'Tengah / Tiongkok', 'audio' => '中'],
+                ['pinyin' => 'ch', 'ipa' => '[ʈʂʰ]', 'category' => 'Lidah Gulung Berhembus', 'sample_hanzi' => '吃', 'sample_pinyin' => 'chī', 'sample_meaning' => 'Makan', 'audio' => '吃'],
+                ['pinyin' => 'sh', 'ipa' => '[ʂ]', 'category' => 'Lidah Gulung Geser', 'sample_hanzi' => '水', 'sample_pinyin' => 'shuǐ', 'sample_meaning' => 'Air', 'audio' => '水'],
+                ['pinyin' => 'r', 'ipa' => '[ʐ]', 'category' => 'Lidah Gulung Suara', 'sample_hanzi' => '人', 'sample_pinyin' => 'rén', 'sample_meaning' => 'Orang / Manusia', 'audio' => '人'],
+                ['pinyin' => 'z', 'ipa' => '[ts]', 'category' => 'Gigi Depan (Dental Sibilant)', 'sample_hanzi' => '早', 'sample_pinyin' => 'zǎo', 'sample_meaning' => 'Pagi / Awal', 'audio' => '早'],
+                ['pinyin' => 'c', 'ipa' => '[tsʰ]', 'category' => 'Gigi Depan Berhembus', 'sample_hanzi' => '菜', 'sample_pinyin' => 'cài', 'sample_meaning' => 'Sayur / Masakan', 'audio' => '菜'],
+                ['pinyin' => 's', 'ipa' => '[s]', 'category' => 'Gigi Depan Geser', 'sample_hanzi' => '三', 'sample_pinyin' => 'sān', 'sample_meaning' => 'Tiga', 'audio' => '三'],
+                ['pinyin' => 'y', 'ipa' => '[j]', 'category' => 'Semi Vokal I', 'sample_hanzi' => '月', 'sample_pinyin' => 'yuè', 'sample_meaning' => 'Bulan', 'audio' => '月'],
+                ['pinyin' => 'w', 'ipa' => '[w]', 'category' => 'Semi Vokal U', 'sample_hanzi' => '我', 'sample_pinyin' => 'wǒ', 'sample_meaning' => 'Saya / Aku', 'audio' => '我'],
+            ],
+            'finals' => [
+                ['pinyin' => 'a', 'sample_hanzi' => '八', 'sample_pinyin' => 'bā', 'sample_meaning' => 'Delapan', 'audio' => '八'],
+                ['pinyin' => 'o', 'sample_hanzi' => '我', 'sample_pinyin' => 'wǒ', 'sample_meaning' => 'Saya', 'audio' => '我'],
+                ['pinyin' => 'e', 'sample_hanzi' => '喝', 'sample_pinyin' => 'hē', 'sample_meaning' => 'Minum', 'audio' => '喝'],
+                ['pinyin' => 'i', 'sample_hanzi' => '一', 'sample_pinyin' => 'yī', 'sample_meaning' => 'Satu', 'audio' => '一'],
+                ['pinyin' => 'u', 'sample_hanzi' => '五', 'sample_pinyin' => 'wǔ', 'sample_meaning' => 'Lima', 'audio' => '五'],
+                ['pinyin' => 'ü', 'sample_hanzi' => '雨', 'sample_pinyin' => 'yǔ', 'sample_meaning' => 'Hujan', 'audio' => '雨'],
+                ['pinyin' => 'ai', 'sample_hanzi' => '爱', 'sample_pinyin' => 'ài', 'sample_meaning' => 'Cinta / Menyayangi', 'audio' => '爱'],
+                ['pinyin' => 'ei', 'sample_hanzi' => '杯', 'sample_pinyin' => 'bēi', 'sample_meaning' => 'Cangkir / Gelas', 'audio' => '杯'],
+                ['pinyin' => 'ui', 'sample_hanzi' => '水', 'sample_pinyin' => 'shuǐ', 'sample_meaning' => 'Air', 'audio' => '水'],
+                ['pinyin' => 'ao', 'sample_hanzi' => '包', 'sample_pinyin' => 'bāo', 'sample_meaning' => 'Tas / Roti Bakpao', 'audio' => '包'],
+                ['pinyin' => 'ou', 'sample_hanzi' => '狗', 'sample_pinyin' => 'gǒu', 'sample_meaning' => 'Anjing', 'audio' => '狗'],
+                ['pinyin' => 'iu', 'sample_hanzi' => '九', 'sample_pinyin' => 'jiǔ', 'sample_meaning' => 'Sembilan', 'audio' => '九'],
+                ['pinyin' => 'ie', 'sample_hanzi' => '谢', 'sample_pinyin' => 'xiè', 'sample_meaning' => 'Terima kasih', 'audio' => '谢'],
+                ['pinyin' => 'üe', 'sample_hanzi' => '月', 'sample_pinyin' => 'yuè', 'sample_meaning' => 'Bulan', 'audio' => '月'],
+                ['pinyin' => 'er', 'sample_hanzi' => '二', 'sample_pinyin' => 'èr', 'sample_meaning' => 'Dua', 'audio' => '二'],
+                ['pinyin' => 'an', 'sample_hanzi' => '三', 'sample_pinyin' => 'sān', 'sample_meaning' => 'Tiga', 'audio' => '三'],
+                ['pinyin' => 'en', 'sample_hanzi' => '门', 'sample_pinyin' => 'mén', 'sample_meaning' => 'Pintu', 'audio' => '门'],
+                ['pinyin' => 'in', 'sample_hanzi' => '您', 'sample_pinyin' => 'nín', 'sample_meaning' => 'Anda (Sopan)', 'audio' => '您'],
+                ['pinyin' => 'ang', 'sample_hanzi' => '上', 'sample_pinyin' => 'shàng', 'sample_meaning' => 'Atas', 'audio' => '上'],
+                ['pinyin' => 'eng', 'sample_hanzi' => '冷', 'sample_pinyin' => 'lěng', 'sample_meaning' => 'Dingin', 'audio' => '冷'],
+                ['pinyin' => 'ing', 'sample_hanzi' => '明', 'sample_pinyin' => 'míng', 'sample_meaning' => 'Terang / Besok', 'audio' => '明'],
+                ['pinyin' => 'ong', 'sample_hanzi' => '红', 'sample_pinyin' => 'hóng', 'sample_meaning' => 'Merah', 'audio' => '红'],
+            ],
+            'tones' => [
+                [
+                    'tone_number' => 1,
+                    'name' => 'Nada 1 (Yinping / 阴平)',
+                    'symbol' => 'ā (Tinggi & Datar)',
+                    'pitch' => '55 (Tinggi stabil)',
+                    'sample_hanzi' => '妈',
+                    'sample_pinyin' => 'mā',
+                    'sample_meaning' => 'Ibu',
+                    'desc' => 'Diucapkan dengan nada tinggi rata tanpa berubah, seperti nada menyanyi "do".'
+                ],
+                [
+                    'tone_number' => 2,
+                    'name' => 'Nada 2 (Yangping / 阳平)',
+                    'symbol' => 'á (Naik ke Atas)',
+                    'pitch' => '35 (Sedang ke tinggi)',
+                    'sample_hanzi' => '麻',
+                    'sample_pinyin' => 'má',
+                    'sample_meaning' => 'Rami / Mati rasa',
+                    'desc' => 'Diucapkan naik dari nada sedang ke nada tinggi, mirip intonasi bertanya "Hah?".'
+                ],
+                [
+                    'tone_number' => 3,
+                    'name' => 'Nada 3 (Shangsheng / 上声)',
+                    'symbol' => 'ǎ (Turun-Lalu-Naik)',
+                    'pitch' => '214 (Rendah bergelombang)',
+                    'sample_hanzi' => '马',
+                    'sample_pinyin' => 'mǎ',
+                    'sample_meaning' => 'Kuda',
+                    'desc' => 'Diucapkan turun rendah ke dasar tenggorokan lalu sedikit diangkat kembali.'
+                ],
+                [
+                    'tone_number' => 4,
+                    'name' => 'Nada 4 (Qusheng / 去声)',
+                    'symbol' => 'à (Turun Tajam Cepat)',
+                    'pitch' => '51 (Tinggi anjlok ke bawah)',
+                    'sample_hanzi' => '骂',
+                    'sample_pinyin' => 'mà',
+                    'sample_meaning' => 'Memarahi',
+                    'desc' => 'Diucapkan tegas dan jatuh tajam ke bawah, mirip intonasi tanda seru membentak.'
+                ],
+                [
+                    'tone_number' => 5,
+                    'name' => 'Nada Netral (Qingsheng / 轻声)',
+                    'symbol' => 'a (Pendek Ringan)',
+                    'pitch' => 'Ringan tanpa penekanan',
+                    'sample_hanzi' => '吗',
+                    'sample_pinyin' => 'ma',
+                    'sample_meaning' => 'Apakah? (Partikel tanya)',
+                    'desc' => 'Diucapkan ringan, cepat dan tanpa tanda aksen nada di atas vokal.'
+                ]
+            ]
+        ];
+    }
+
+    private static function getChineseLexiconPool(): array
+    {
+        return [
+            ['word' => '你好', 'trans' => 'Nǐ hǎo', 'meaning' => 'Halo / Apa kabar', 'notes' => 'Salam dasar umum sapaan.'],
+            ['word' => '谢谢', 'trans' => 'Xièxie', 'meaning' => 'Terima kasih', 'notes' => 'Ungkapan rasa terima kasih sopan.'],
+            ['word' => '再见', 'trans' => 'Zàijiàn', 'meaning' => 'Selamat tinggal / Sampai jumpa', 'notes' => 'Harfiah: bertemu kembali.'],
+            ['word' => '对不起', 'trans' => 'Duìbuqǐ', 'meaning' => 'Maaf / Mohon maaf', 'notes' => 'Permintaan maaf formal & harian.'],
+            ['word' => '没关系', 'trans' => 'Méi guānxi', 'meaning' => 'Tidak apa-apa / Tak masalah', 'notes' => 'Balasan atas kata maaf.'],
+            ['word' => '不客气', 'trans' => 'Bù kèqi', 'meaning' => 'Sama-sama / Terima kasih kembali', 'notes' => 'Balasan santun atas ucapan terima kasih.'],
+            ['word' => '中国', 'trans' => 'Zhōngguó', 'meaning' => 'Tiongkok / China', 'notes' => 'Negara Tiongkok.'],
+            ['word' => '印尼', 'trans' => 'Yìnní', 'meaning' => 'Indonesia', 'notes' => 'Singkatan resmi untuk Indonesia.'],
+            ['word' => '老师', 'trans' => 'Lǎoshī', 'meaning' => 'Guru', 'notes' => 'Panggilan hormat bagi pengajar.'],
+            ['word' => '学生', 'trans' => 'Xuéshēng', 'meaning' => 'Siswa / Mahasiswa', 'notes' => 'Pelajar di sekolah atau universitas.'],
+            ['word' => '朋友', 'trans' => 'Péngyou', 'meaning' => 'Teman / Sahabat', 'notes' => 'Relasi persahabatan.'],
+            ['word' => '吃饭', 'trans' => 'Chī fàn', 'meaning' => 'Makan', 'notes' => 'Kata kerja makan nasi / makanan.'],
+            ['word' => '喝水', 'trans' => 'Hē shuǐ', 'meaning' => 'Minum air', 'notes' => 'Minum air putih.'],
+            ['word' => '茶', 'trans' => 'Chá', 'meaning' => 'Teh', 'notes' => 'Minuman teh khas Tiongkok.'],
+            ['word' => '咖啡', 'trans' => 'Kāfēi', 'meaning' => 'Kopi', 'notes' => 'Kata serapan kopi.'],
+            ['word' => '多少钱', 'trans' => 'Duōshao qián', 'meaning' => 'Berapa harganya?', 'notes' => 'Frase belanja menanyakan harga.'],
+            ['word' => '太贵了', 'trans' => 'Tài guì le', 'meaning' => 'Terlalu mahal', 'notes' => 'Ungkapan saat menawar harga.'],
+            ['word' => '便宜一点', 'trans' => 'Piányi yīdiǎn', 'meaning' => 'Bisa lebih murah sedikit?', 'notes' => 'Permintaan diskon saat berbelanja.'],
+            ['word' => '哪里', 'trans' => 'Nǎlǐ', 'meaning' => 'Di mana?', 'notes' => 'Kata tanya tempat.'],
+            ['word' => '洗手间', 'trans' => 'Xǐshǒujiān', 'meaning' => 'Toilet / Kamar kecil', 'notes' => 'Kamar mandi / toilet bersih.'],
+            ['word' => '医院', 'trans' => 'Yīyuàn', 'meaning' => 'Rumah sakit', 'notes' => 'Fasilitas kesehatan.'],
+            ['word' => '高兴', 'trans' => 'Gāoxìng', 'meaning' => 'Senang / Gembira', 'notes' => 'Perasaan bahagia saat berkenalan.'],
+            ['word' => '认识你很高兴', 'trans' => 'Rènshi nǐ hěn gāoxìng', 'meaning' => 'Senang berkenalan dengan Anda', 'notes' => 'Frase perkenalan pertama kali.'],
         ];
     }
 }

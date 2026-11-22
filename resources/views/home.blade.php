@@ -89,7 +89,7 @@
                 </p>
 
                 <!-- Quick language pills for alphabet -->
-                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-6">
+                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 mb-6">
                     <a href="{{ route('alphabet.index', 'ar') }}" class="p-3 bg-white rounded-xl border border-amber-200 text-center hover:shadow-md hover:border-amber-400 transition group">
                         <span class="text-lg font-arabic font-bold text-amber-700 block group-hover:scale-110 transition-transform">العربية</span>
                         <span class="text-[11px] font-semibold text-slate-600">28 Hijaiyah</span>
@@ -101,6 +101,10 @@
                     <a href="{{ route('alphabet.index', 'ko') }}" class="p-3 bg-white rounded-xl border border-amber-200 text-center hover:shadow-md hover:border-amber-400 transition group">
                         <span class="text-lg font-bold text-emerald-700 block group-hover:scale-110 transition-transform">한글</span>
                         <span class="text-[11px] font-semibold text-slate-600">40 Hangeul</span>
+                    </a>
+                    <a href="{{ route('alphabet.index', 'zh') }}" class="p-3 bg-white rounded-xl border border-amber-200 text-center hover:shadow-md hover:border-amber-400 transition group">
+                        <span class="text-lg font-bold text-rose-700 block group-hover:scale-110 transition-transform">拼音汉字</span>
+                        <span class="text-[11px] font-semibold text-slate-600">Pinyin & Nada</span>
                     </a>
                     <a href="{{ route('alphabet.index', 'en') }}" class="p-3 bg-white rounded-xl border border-amber-200 text-center hover:shadow-md hover:border-amber-400 transition group">
                         <span class="text-lg font-bold text-blue-700 block group-hover:scale-110 transition-transform">Aa-Zz</span>
@@ -190,7 +194,7 @@
     <div id="pairs-grid" class="mb-16">
         <div class="flex items-center justify-between mb-6">
             <div>
-                <h2 class="text-2xl font-black text-slate-900 tracking-tight">8 Jalur Pembelajaran Bahasa</h2>
+                <h2 class="text-2xl font-black text-slate-900 tracking-tight">10 Jalur Pembelajaran Bahasa</h2>
                 <p class="text-sm text-slate-600">Pilih pasangan bahasa dasar pengantar dan bahasa target yang ingin Anda pelajari.</p>
             </div>
         </div>
