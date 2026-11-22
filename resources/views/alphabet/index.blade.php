@@ -52,7 +52,8 @@
                     <span>Tabel 28 Huruf Hijaiyah, Bentuk Posisi & Terjemahan Kata Contoh Indonesia</span>
                 </h3>
 
-                <div class="overflow-x-auto bg-white rounded-2xl border border-slate-200 shadow-sm">
+                <!-- Desktop Table View (Tablet & Desktop) -->
+                <div class="hidden md:block overflow-x-auto bg-white rounded-2xl border border-slate-200 shadow-sm">
                     <table class="w-full text-left border-collapse min-w-[700px]">
                         <thead>
                             <tr class="bg-slate-50 text-[11px] font-bold text-slate-500 uppercase border-b border-slate-200">
@@ -94,6 +95,55 @@
                             @endforeach
                         </tbody>
                     </table>
+                </div>
+
+                <!-- Mobile Responsive Cards (Phone Only, No Horizontal Scroll) -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 md:hidden">
+                    @foreach($alphabetData['letters'] as $item)
+                        <div class="p-4 rounded-2xl bg-white border border-slate-200 shadow-sm flex flex-col justify-between">
+                            <div class="flex items-start justify-between mb-2">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-700 font-arabic text-3xl font-bold flex items-center justify-center">
+                                        {{ $item['char'] }}
+                                    </div>
+                                    <div>
+                                        <div class="text-sm font-bold text-slate-900">{{ $item['name'] }}</div>
+                                        <div class="text-xs text-blue-600 font-semibold">{{ $item['latin'] }}</div>
+                                    </div>
+                                </div>
+                                <button onclick="speakText('{{ addslashes($item['audio']) }}', 'ar')" class="p-2.5 rounded-xl bg-blue-50 text-blue-700 hover:bg-blue-600 hover:text-white transition shadow-sm" title="Dengarkan">
+                                    <i data-lucide="volume-2" class="w-4 h-4"></i>
+                                </button>
+                            </div>
+
+                            <div class="grid grid-cols-4 gap-1 p-2 rounded-xl bg-slate-50 border border-slate-100 text-center my-2">
+                                <div>
+                                    <div class="text-[9px] text-slate-400 font-medium">Tunggal</div>
+                                    <div class="font-arabic text-lg font-bold text-slate-800">{{ $item['isolated'] }}</div>
+                                </div>
+                                <div>
+                                    <div class="text-[9px] text-slate-400 font-medium">Awal</div>
+                                    <div class="font-arabic text-lg font-bold text-slate-800">{{ $item['initial'] }}</div>
+                                </div>
+                                <div>
+                                    <div class="text-[9px] text-slate-400 font-medium">Tengah</div>
+                                    <div class="font-arabic text-lg font-bold text-slate-800">{{ $item['medial'] }}</div>
+                                </div>
+                                <div>
+                                    <div class="text-[9px] text-slate-400 font-medium">Akhir</div>
+                                    <div class="font-arabic text-lg font-bold text-slate-800">{{ $item['final'] }}</div>
+                                </div>
+                            </div>
+
+                            <div class="p-2.5 rounded-xl bg-emerald-50/60 border border-emerald-100 flex items-center justify-between text-xs mt-1">
+                                <div>
+                                    <span class="font-arabic text-base font-bold text-slate-900">{{ $item['sample'] ?? '' }}</span>
+                                    <span class="text-slate-500 text-[11px]">({{ $item['sample_trans'] ?? '' }})</span>
+                                </div>
+                                <span class="font-bold text-emerald-800">Arti: {{ $item['sample_meaning'] ?? '' }}</span>
+                            </div>
+                        </div>
+                    @endforeach
                 </div>
             </div>
 

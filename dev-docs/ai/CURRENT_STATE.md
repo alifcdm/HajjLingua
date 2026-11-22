@@ -1,39 +1,39 @@
 # CURRENT STATE — LinguaPro Multi-Language Platform
 
 > **Last Updated:** 2026-11-22
-> **Milestone:** Milestone 1 s.d. 5 Completed — Indonesian Translations on Alphabet, Interactive Auto-Next Progression, Mobile/Tablet Responsive Dock, & Deep Contextual Learning
+> **Milestone:** Milestone 1 s.d. 6 Completed — High-Fidelity Multi-Language Voice Synthesis, Mobile-First Responsiveness, Standardized Script-to-Latin Transliterations, & Precision Indonesian Translations
 > **Quality Gate:** 100% Automated Tests Passing (14/14 tests, 71 assertions).
 
 ---
 
 ## 1. System Health
-- **Status:** Fully Operational.
+- **Status:** Fully Operational & Production-Ready.
 - **Git Branch:** `dev` inside `C:\xampp\htdocs\TEST\apps`.
 - **Database:** MySQL `lang_learning_db` on port 3306 (62 Units, 422 Lessons, 400 Drill Levels, 6,000 Drill Questions, 8 Pairs, 24 Curriculum Levels).
 - **Test Suite:** 14 Feature Tests, 71 Assertions passing 100%.
 
 ---
 
-## 2. Completed Features
+## 2. Completed Features & Polish
 
-### A. Terjemahan Bahasa Indonesia pada Seluruh Aksara & Kata Contoh
-- **Arab (العربية):** 28 Huruf Hijaiyah lengkap dengan 4 bentuk sambung, kata contoh berharakat, dan terjemahan bahasa Indonesia (misal: أَبٌ = Ayah, بَابٌ = Pintu, دَفْتَرٌ = Buku Catatan).
-- **Jepang (日本語):** 46 Hiragana, 25 Dakuon, 46 Katakana dilengkapi kata contoh dan terjemahan bahasa Indonesia (misal: あめ = Hujan, くるま = Mobil, カメラ = Kamera).
-- **Korea (한국어):** 14 Konsonan dasar, 5 konsonan ganda, 10 vokal dasar, 11 vokal diftong dilengkapi kata contoh dan terjemahan bahasa Indonesia (misal: 가방 = Tas, 꽃 = Bunga, 화장실 = Toilet).
-- **Inggris:** 26 Abjad Latin, simbol IPA, kata contoh, dan terjemahan bahasa Indonesia (misal: Apple = Apel, Book = Buku, Door = Pintu).
+### A. Mesin Pelafalan Suara (High-Fidelity Web Speech Voice Engine)
+- **Sanitasi Teks Pintar:** Otomatis membersihkan kurung transliterasi dan glosarium saat memutar audio (contoh: pada kata Jepang `ほん (本)`, mesin suara hanya mengucapkan fonem kana `ほん`, bukan membaca tanda kurung atau huruf latin).
+- **Pemilihan Voice Asli:** Deteksi asynchronous `speechSynthesis.getVoices()` yang otomatis memprioritaskan penutur asli untuk tiap kode wilayah (`ar-SA`, `ja-JP`, `ko-KR`, `en-US`, `id-ID`).
+- **Indikator Visual Mengambang (Audio Toast):** Toast visual interaktif di layar saat audio berbicara dengan status kata yang sedang diputar.
+- **Kecepatan Disesuaikan:** Kecepatan diatur 0.85x–0.88x agar artikulasi jelas bagi pembelajar pemula.
 
-### B. Alur Interaktif: Selesai Materi Otomatis Lanjut ke Materi Berikutnya
-- Saat menuntaskan kuis dan menekan tombol selesai, sistem otomatis mengarahkan ke materi berikutnya (`$nextLesson`) dalam unit yang sama atau unit berikutnya.
-- Jika materi terakhir dalam level selesai, diarahkan langsung ke halaman Ujian Kelulusan Resmi (`exam.show`).
-- Dialog modal interaktif perayaan kelulusan materi dengan animasi dan konfirmasi langsung.
+### B. Optimalisasi Tampilan Layar Responsif Ponsel & Tablet
+- **Pustaka Aksara Mobile:** Tabel Arab kini otomatis berganti menjadi kartu responsif sentuh di ponsel (`block md:hidden`), menghilangkan scroll horizontal yang melelahkan.
+- **Dock Navigasi Bawah Ponsel:** Tombol navigasi cepat jempol (Beranda, Aksara, Bahasa) pada layar smartphone.
+- **Sticky Bottom Action Bar pada Materi:** Memudahkan murid menyelesaikan materi dan melangkah ke bab berikutnya dengan satu ketukan tangan di ponsel.
+- **Hero & Card Scaling:** Proporsi tipografi fleksibel, padding aman, dan ukuran touch target memenuhi standar minimal 44px.
 
-### C. Desain Responsif Halus (Mobile & Tablet)
-- Bottom Navigation Dock khusus mobile (`sm:hidden`) untuk akses cepat ke Beranda, Aksara, dan Bahasa.
-- Sticky Floating Action Bar di bagian bawah layar HP saat belajar materi untuk mempermudah navigasi satu tangan.
-- Layout tabel dan grid fleksibel tanpa horizontal clipping pada perangkat layar kecil.
+### C. Transliterasi Simbol ke Huruf Abjad Terstandarisasi
+- **Arab:** Transliterasi ALA-LC / Kemenag RI dengan tanda vokal panjang konsisten (*Kitaabun*, *Madrasatun*, *Shabaahul khair*, *Mustasyfaa*).
+- **Jepang:** Sistem Romanisasi Hepburn resmi (*Konnichiwa*, *Arigatou gozaimasu*, *Sumimasen*, *Gakusei*, *Densha*).
+- **Korea:** Revised Romanization of Korean (RR) resmi (*Annyeonghaseyo*, *Gamsahamnida*, *Jihacheol*, *Seonsaengnim*).
+- **Inggris:** Notasi International Phonetic Alphabet (IPA) lengkap.
 
-### D. Pembelajaran Mendalam pada Setiap Materi
-- Nuansa kesopanan bahasa penutur asli (formal vs akrab).
-- Jebakan konteks (false friends) bagi pelajar Indonesia.
-- Kosakata dengan transliterasi, terjemahan Indonesia, detail penggunaan sehari-hari, dan contoh kalimat percakapan.
-- Rumus pola kalimat dan dialog dua arah.
+### D. Terjemahan Presisi Bahasa Indonesia & Detail Sehari-hari
+- Seluruh kosakata memiliki padanan kata bahasa Indonesia yang alami, tepat guna, dan komunikatif.
+- Dilengkapi detail konteks kapan dan bagaimana kata tersebut diucapkan (etiket formal, situasi ramah/santai, pantangan budaya).

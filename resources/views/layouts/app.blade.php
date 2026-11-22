@@ -59,25 +59,26 @@
 
     <!-- Top Navigation -->
     <header class="no-print bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-            <div class="flex items-center space-x-3">
+        <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-2.5 sm:space-x-3">
                 <a href="{{ route('home') }}" class="flex items-center space-x-2">
-                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center text-white shadow-md">
-                        <i data-lucide="languages" class="w-6 h-6"></i>
+                    <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center text-white shadow-md">
+                        <i data-lucide="languages" class="w-5 h-5 sm:w-6 sm:h-6"></i>
                     </div>
-                    <span class="text-xl font-bold bg-gradient-to-r from-blue-700 to-indigo-700 bg-clip-text text-transparent">LinguaPro</span>
+                    <span class="text-lg sm:text-xl font-black bg-gradient-to-r from-blue-700 to-indigo-700 bg-clip-text text-transparent">LinguaPro</span>
                 </a>
-                <span class="hidden md:inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-50 text-blue-700 border border-blue-200">
+                <span class="hidden md:inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-blue-50 text-blue-700 border border-blue-200">
                     CEFR • JLPT • TOPIK • Arabic
                 </span>
             </div>
 
-            <nav class="flex items-center space-x-4">
-                <a href="{{ route('home') }}" class="text-sm font-medium text-slate-600 hover:text-blue-600 flex items-center gap-1.5 transition">
+            <!-- Desktop Nav Links -->
+            <nav class="hidden sm:flex items-center space-x-4">
+                <a href="{{ route('home') }}" class="text-xs sm:text-sm font-semibold text-slate-600 hover:text-blue-600 flex items-center gap-1.5 transition">
                     <i data-lucide="layout-grid" class="w-4 h-4"></i>
                     <span>Pilihan Bahasa</span>
                 </a>
-                <a href="{{ route('alphabet.index', 'ar') }}" class="text-sm font-medium text-slate-600 hover:text-blue-600 flex items-center gap-1.5 transition">
+                <a href="{{ route('alphabet.index', 'ar') }}" class="text-xs sm:text-sm font-semibold text-slate-600 hover:text-blue-600 flex items-center gap-1.5 transition">
                     <i data-lucide="type" class="w-4 h-4"></i>
                     <span>Aksara Lengkap</span>
                 </a>
@@ -89,6 +90,17 @@
                     </span>
                 </div>
             </nav>
+
+            <!-- Mobile Quick Header Badge -->
+            <div class="flex sm:hidden items-center gap-2">
+                <a href="{{ route('alphabet.index', 'ar') }}" class="p-2 rounded-xl bg-slate-100 text-slate-700 hover:text-blue-600 transition" title="Aksara">
+                    <i data-lucide="type" class="w-4 h-4"></i>
+                </a>
+                <span class="inline-flex items-center px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-700 text-[10px] font-bold border border-emerald-200">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1 animate-pulse"></span>
+                    Online
+                </span>
+            </div>
         </div>
     </header>
 
@@ -136,18 +148,67 @@
         </a>
     </nav>
 
-    <!-- Web Speech API Universal Pronunciation Engine -->
+    <!-- Audio Speaking Toast Indicator -->
+    <div id="audioSpeakingToast" class="fixed top-20 left-1/2 -translate-x-1/2 z-50 px-4 py-2 rounded-full bg-slate-900/90 text-white text-xs font-semibold backdrop-blur-md shadow-xl flex items-center gap-2 transition-all duration-300 opacity-0 pointer-events-none translate-y-[-10px]">
+        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+        <i data-lucide="volume-2" class="w-4 h-4 text-blue-400"></i>
+        <span id="audioSpeakingLabel">Pelafalan Audio Aktif</span>
+    </div>
+
+    <!-- Web Speech API Universal Pronunciation Engine (High-Fidelity) -->
     <script>
+        let availableVoices = [];
+
+        function initVoices() {
+            if ('speechSynthesis' in window) {
+                availableVoices = window.speechSynthesis.getVoices();
+            }
+        }
+
+        initVoices();
+        if ('speechSynthesis' in window && window.speechSynthesis.onvoiceschanged !== undefined) {
+            window.speechSynthesis.onvoiceschanged = initVoices;
+        }
+
+        // Sanitasi teks agar penutur asli tidak membaca kurung transliterasi/latin
+        function sanitizeTextForSpeech(text, langCode) {
+            if (!text) return '';
+            let cleaned = text.trim();
+
+            if (langCode === 'ja') {
+                // Untuk Jepang: jika ada kurung latin seperti 'アイス (Aisu)', hapus latin
+                cleaned = cleaned.replace(/\([a-zA-Z\s\/\-]+\)/g, '');
+                // Jika ada format 'ほん (本)', ambil kana 'ほん' agar pelafalannya akurat
+                if (cleaned.includes('(')) {
+                    const parts = cleaned.split('(');
+                    if (parts[0].trim().length > 0) cleaned = parts[0].trim();
+                }
+            } else if (langCode === 'ar') {
+                // Untuk Arab: buang kurung latin seperti '(Abun)'
+                cleaned = cleaned.replace(/\([a-zA-Z\s\/\-\'\`]+\)/g, '').trim();
+            } else if (langCode === 'ko') {
+                // Untuk Korea: buang kurung romaja seperti '(Gabang)'
+                cleaned = cleaned.replace(/\([a-zA-Z\s\/\-]+\)/g, '').trim();
+            } else if (langCode === 'en') {
+                // Untuk Inggris: buang simbol fonetik slash atau kurung
+                cleaned = cleaned.replace(/\/.*?\//g, '').replace(/\(.*?\)/g, '').trim();
+            }
+
+            return cleaned.trim() || text;
+        }
+
         function speakText(text, langCode) {
             if (!('speechSynthesis' in window)) {
-                alert('Browser Anda tidak mendukung Text-To-Speech Web Speech API.');
+                alert('Browser Anda belum mendukung Text-To-Speech Web Speech API.');
                 return;
             }
-            window.speechSynthesis.cancel(); // stop current audio
 
-            const utterance = new SpeechSynthesisUtterance(text);
+            window.speechSynthesis.cancel(); // Hentikan audio sebelumnya
+
+            const cleanScript = sanitizeTextForSpeech(text, langCode);
+            const utterance = new SpeechSynthesisUtterance(cleanScript);
             
-            // Map Language Codes
+            // Map Language Codes ke standar BCP 47
             const langMap = {
                 'ar': 'ar-SA',
                 'ja': 'ja-JP',
@@ -156,8 +217,44 @@
                 'id': 'id-ID'
             };
 
-            utterance.lang = langMap[langCode] || langCode;
-            utterance.rate = 0.85; // Slightly slower for language learners
+            const targetLocale = langMap[langCode] || langCode;
+            utterance.lang = targetLocale;
+
+            // Pilih voice asli jika tersedia di sistem klien
+            if (availableVoices.length === 0) {
+                availableVoices = window.speechSynthesis.getVoices();
+            }
+
+            const matchedVoice = availableVoices.find(v => v.lang === targetLocale || v.lang.startsWith(langCode));
+            if (matchedVoice) {
+                utterance.voice = matchedVoice;
+            }
+
+            // Atur kecepatan agar jernih dan ramah bagi pelajar bahasa
+            utterance.rate = (langCode === 'ja' || langCode === 'ko') ? 0.85 : 0.88;
+            utterance.pitch = 1.0;
+
+            // Tampilkan visual toast
+            const toast = document.getElementById('audioSpeakingToast');
+            const label = document.getElementById('audioSpeakingLabel');
+            if (toast && label) {
+                label.innerText = 'Memutar: ' + cleanScript;
+                toast.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-[-10px]');
+                toast.classList.add('opacity-100', 'translate-y-0');
+            }
+
+            utterance.onend = () => {
+                if (toast) {
+                    toast.classList.add('opacity-0', 'pointer-events-none', 'translate-y-[-10px]');
+                    toast.classList.remove('opacity-100', 'translate-y-0');
+                }
+            };
+
+            utterance.onerror = () => {
+                if (toast) {
+                    toast.classList.add('opacity-0', 'pointer-events-none', 'translate-y-[-10px]');
+                }
+            };
 
             window.speechSynthesis.speak(utterance);
         }

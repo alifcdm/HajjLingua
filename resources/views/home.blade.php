@@ -1,30 +1,30 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
+<div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 pt-4 sm:pt-8 pb-12">
 
-    <!-- Hero Banner -->
-    <div class="rounded-3xl bg-gradient-to-r from-blue-700 via-indigo-700 to-purple-800 text-white p-8 md:p-12 shadow-xl relative overflow-hidden mb-12">
+    <!-- Hero Banner (Mobile-Optimized) -->
+    <div class="rounded-3xl bg-gradient-to-r from-blue-700 via-indigo-700 to-purple-800 text-white p-6 sm:p-8 md:p-12 shadow-xl relative overflow-hidden mb-8 sm:mb-12">
         <div class="absolute -right-10 -bottom-10 opacity-10 pointer-events-none">
             <i data-lucide="award" class="w-96 h-96"></i>
         </div>
         <div class="relative z-10 max-w-3xl">
-            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md text-xs font-semibold mb-4 border border-white/20">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md text-[11px] sm:text-xs font-semibold mb-3 sm:mb-4 border border-white/20">
                 <i data-lucide="sparkles" class="w-3.5 h-3.5 text-yellow-300"></i>
-                Pembelajaran Terstruktur dari Dasar hingga Profesional
+                <span>Pembelajaran Terstruktur dari Dasar hingga Profesional</span>
             </div>
-            <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight leading-tight mb-4">
+            <h1 class="text-2xl sm:text-4xl md:text-5xl font-black tracking-tight leading-tight mb-3 sm:mb-4">
                 Kuasai Bahasa Dunia dengan Standar Internasional Resmi.
             </h1>
-            <p class="text-base sm:text-lg text-blue-100 mb-8 leading-relaxed">
+            <p class="text-xs sm:text-base md:text-lg text-blue-100 mb-6 sm:mb-8 leading-relaxed">
                 Kurikulum terstandarisasi untuk <strong>English (CEFR A1–C2)</strong>, <strong>Jepang (JLPT N5–N1)</strong>, <strong>Korea (TOPIK 1–6)</strong>, dan <strong>Arab (3 Tahapan & CEFR)</strong>. Lengkap dengan placement test, audio speech pronunciation, dan sertifikat kelulusan digital.
             </p>
-            <div class="flex flex-wrap gap-4 items-center">
-                <a href="#pairs-grid" class="px-6 py-3.5 rounded-xl bg-white text-blue-700 font-bold hover:bg-blue-50 transition shadow-lg flex items-center gap-2">
+            <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 items-stretch sm:items-center">
+                <a href="#pairs-grid" class="px-6 py-3.5 rounded-xl bg-white text-blue-700 font-bold hover:bg-blue-50 transition shadow-lg flex items-center justify-center gap-2 text-xs sm:text-sm">
                     <span>Pilih Pasangan Bahasa</span>
                     <i data-lucide="arrow-down" class="w-4 h-4"></i>
                 </a>
-                <a href="{{ route('alphabet.index', 'ar') }}" class="px-6 py-3.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/30 text-white font-bold transition flex items-center gap-2 backdrop-blur-sm">
+                <a href="{{ route('alphabet.index', 'ar') }}" class="px-6 py-3.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/30 text-white font-bold transition flex items-center justify-center gap-2 backdrop-blur-sm text-xs sm:text-sm">
                     <i data-lucide="languages" class="w-4 h-4 text-amber-300"></i>
                     <span>Aksara & Huruf Lengkap (Zero to Hero)</span>
                 </a>
@@ -32,14 +32,14 @@
         </div>
     </div>
 
-    <!-- Curriculum Standards Summary Pills -->
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
+    <!-- Curriculum Standards Summary Pills (Mobile 1 Col -> 2 Col -> 4 Col) -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-8 sm:mb-12">
         <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm hover:border-blue-400 transition">
             <div class="flex items-center justify-between mb-2">
                 <span class="text-xs font-bold uppercase tracking-wider text-blue-600">English Standard</span>
                 <span class="px-2 py-0.5 rounded bg-blue-50 text-blue-700 text-xs font-bold">CEFR</span>
             </div>
-            <h3 class="text-lg font-bold text-slate-800">A1 - A2 - B1 - B2 - C1 - C2</h3>
+            <h3 class="text-base sm:text-lg font-bold text-slate-800">A1 - A2 - B1 - B2 - C1 - C2</h3>
             <p class="text-xs text-slate-500 mt-1">Pemula dasar hingga fasih bisnis profesional.</p>
         </div>
 
@@ -48,7 +48,7 @@
                 <span class="text-xs font-bold uppercase tracking-wider text-purple-600">Japanese Standard</span>
                 <span class="px-2 py-0.5 rounded bg-purple-50 text-purple-700 text-xs font-bold">JLPT</span>
             </div>
-            <h3 class="text-lg font-bold text-slate-800">N5 - N4 - N3 - N2 - N1</h3>
+            <h3 class="text-base sm:text-lg font-bold text-slate-800">N5 - N4 - N3 - N2 - N1</h3>
             <p class="text-xs text-slate-500 mt-1">Hiragana, Katakana, Kanji & etiket Keigo.</p>
         </div>
 
@@ -57,7 +57,19 @@
                 <span class="text-xs font-bold uppercase tracking-wider text-emerald-600">Korean Standard</span>
                 <span class="px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 text-xs font-bold">TOPIK</span>
             </div>
-            <h3 class="text-lg font-bold text-slate-800">Basic s.d. Level 6</h3>
+            <h3 class="text-base sm:text-lg font-bold text-slate-800">Basic s.d. Level 6</h3>
+            <p class="text-xs text-slate-500 mt-1">Hangeul, pemula harian hingga riset bisnis.</p>
+        </div>
+
+        <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm hover:border-amber-400 transition">
+            <div class="flex items-center justify-between mb-2">
+                <span class="text-xs font-bold uppercase tracking-wider text-amber-600">Arabic Standard</span>
+                <span class="px-2 py-0.5 rounded bg-amber-50 text-amber-700 text-xs font-bold">3 Tahap + CEFR</span>
+            </div>
+            <h3 class="text-base sm:text-lg font-bold text-slate-800">Mubtadi' - Mutawassith - Mutaqaddim</h3>
+            <p class="text-xs text-slate-500 mt-1">Hijaiyah, teks gundul, nahwu shorof & CEFR A1-C2.</p>
+        </div>
+    </div>
             <p class="text-xs text-slate-500 mt-1">Hangeul, pemula harian hingga riset bisnis.</p>
         </div>
 
