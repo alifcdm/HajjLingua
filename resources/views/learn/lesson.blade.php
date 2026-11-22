@@ -166,6 +166,10 @@
                                     <div class="space-y-3">
                                         <div class="text-[11px] font-bold uppercase tracking-wider text-indigo-800">Contoh Kalimat Terapan & Bedah Suku Kata:</div>
                                         @foreach($rule['examples'] as $examp)
+                                            @php
+                                                $sentenceTrans = \App\Services\LinguisticBreakdownService::getSentenceTransliteration($lesson->unit->level->language->code, $examp['target'], $examp['trans'] ?? null);
+                                                $breakdown = $examp['breakdown'] ?? \App\Services\LinguisticBreakdownService::getBreakdown($lesson->unit->level->language->code, $examp['target'], $sentenceTrans, $examp['meaning'] ?? null);
+                                            @endphp
                                             <div class="p-4 rounded-2xl bg-white border border-slate-200 shadow-sm">
                                                 <div class="flex items-start justify-between gap-3 mb-2">
                                                     <div>
@@ -173,7 +177,7 @@
                                                             {{ $examp['target'] }}
                                                         </div>
                                                         <div class="text-xs text-indigo-600 font-semibold mt-0.5">
-                                                            Pelafalan Abjad: {{ $examp['trans'] ?? '' }}
+                                                            Pelafalan Abjad: {{ $sentenceTrans }}
                                                         </div>
                                                         <div class="text-xs text-slate-700 font-medium mt-1">
                                                             Arti Kalimat: {{ $examp['meaning'] }}
@@ -184,9 +188,6 @@
                                                     </button>
                                                 </div>
 
-                                                @php
-                                                    $breakdown = $examp['breakdown'] ?? \App\Services\LinguisticBreakdownService::getBreakdown($lesson->unit->level->language->code, $examp['target'], $examp['trans'] ?? null, $examp['meaning'] ?? null);
-                                                @endphp
                                                 @if(!empty($breakdown))
                                                     <div class="mt-2.5 pt-2 border-t border-slate-100">
                                                         <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1.5">Bedah Suku Kata & Terjemahan Kata per Kata:</span>
@@ -220,6 +221,10 @@
                     </h3>
                     <div class="space-y-3">
                         @foreach($lesson->content_body['dialogues'] as $dia)
+                            @php
+                                $diaTrans = \App\Services\LinguisticBreakdownService::getSentenceTransliteration($lesson->unit->level->language->code, $dia['line'], $dia['trans'] ?? null);
+                                $diaBreakdown = $dia['breakdown'] ?? \App\Services\LinguisticBreakdownService::getBreakdown($lesson->unit->level->language->code, $dia['line'], $diaTrans, $dia['meaning'] ?? null);
+                            @endphp
                             <div class="p-4 sm:p-5 rounded-2xl border border-slate-200 bg-slate-50 hover:bg-white transition shadow-sm">
                                 <div class="flex items-start justify-between gap-3 mb-2">
                                     <div class="flex items-start gap-3">
@@ -231,7 +236,7 @@
                                             <div class="text-base sm:text-lg font-bold text-slate-900 {{ $lesson->unit->level->language->code === 'ar' ? 'font-arabic text-xl sm:text-2xl' : '' }}">
                                                 {{ $dia['line'] }}
                                             </div>
-                                            <div class="text-xs text-emerald-600 font-semibold mt-0.5">Pelafalan Abjad: {{ $dia['trans'] ?? '' }}</div>
+                                            <div class="text-xs text-emerald-600 font-semibold mt-0.5">Pelafalan Abjad: {{ $diaTrans }}</div>
                                             <div class="text-xs text-slate-600 mt-1">Arti: {{ $dia['meaning'] }}</div>
                                         </div>
                                     </div>
@@ -240,9 +245,6 @@
                                     </button>
                                 </div>
 
-                                @php
-                                    $diaBreakdown = $dia['breakdown'] ?? \App\Services\LinguisticBreakdownService::getBreakdown($lesson->unit->level->language->code, $dia['line'], $dia['trans'] ?? null, $dia['meaning'] ?? null);
-                                @endphp
                                 @if(!empty($diaBreakdown))
                                     <div class="mt-2.5 pt-2 border-t border-slate-200">
                                         <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1.5">Bedah Suku Kata & Terjemahan Kata per Kata:</span>

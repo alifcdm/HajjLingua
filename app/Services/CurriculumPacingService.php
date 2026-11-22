@@ -77,7 +77,7 @@ class CurriculumPacingService
                                     'examples' => [
                                         [
                                             'target' => $primaryWord['example'] ?? $primaryWord['word'],
-                                            'trans' => $primaryWord['trans'] ?? '',
+                                            'trans' => LinguisticBreakdownService::getSentenceTransliteration($langCode, $primaryWord['example'] ?? $primaryWord['word'], $primaryWord['trans'] ?? null),
                                             'meaning' => $primaryWord['example_trans'] ?? $primaryWord['meaning'],
                                             'audio' => $primaryWord['word'],
                                         ]
@@ -88,14 +88,14 @@ class CurriculumPacingService
                                 [
                                     'speaker' => 'Penutur A',
                                     'line' => $primaryWord['word'] . '?',
-                                    'trans' => $primaryWord['trans'] ?? '',
+                                    'trans' => ($primaryWord['trans'] ?? '') . '?',
                                     'meaning' => "Apakah ini terkait dengan {$primaryWord['meaning']}?",
                                     'audio' => $primaryWord['word'],
                                 ],
                                 [
                                     'speaker' => 'Penutur B',
                                     'line' => ($primaryWord['example'] ?? $primaryWord['word']),
-                                    'trans' => $primaryWord['trans'] ?? '',
+                                    'trans' => LinguisticBreakdownService::getSentenceTransliteration($langCode, $primaryWord['example'] ?? $primaryWord['word'], $primaryWord['trans'] ?? null),
                                     'meaning' => ($primaryWord['example_trans'] ?? $primaryWord['meaning']),
                                     'audio' => $primaryWord['word'],
                                 ],

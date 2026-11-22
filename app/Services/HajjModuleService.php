@@ -15,6 +15,7 @@ class HajjModuleService
             'fiqh' => self::getFiqhData(),
             'prayers' => self::getPrayersData(),
             'regulations' => self::getRegulationsData(),
+            'officers_portal' => self::getOfficersPortalData(),
             'videos' => self::getVideoData(),
             'quiz' => self::getQuizData(),
         ];
@@ -24,7 +25,7 @@ class HajjModuleService
     {
         return [
             'title' => 'Modul Panduan & Manasik Ibadah Haji Terpadu',
-            'subtitle' => 'Panduan Komprehensif Berdasarkan Al-Qur\'an, Sunnah Shahihah, Fiqih 4 Mazhab, & Regulasi Resmi Terkini',
+            'subtitle' => 'Panduan Komprehensif Berdasarkan Al-Qur\'an, Sunnah Shahihah, Fiqih 4 Mazhab, & Regulasi Resmi Kementerian Haji dan Umrah RI',
             'dalil_quran' => [
                 'surah' => 'QS. Ali \'Imran : 97',
                 'arabic' => 'وَلِلَّهِ عَلَى النَّاسِ حِجُّ الْبَيْتِ مَنِ اسْتَطَاعَ إِلَيْهِ سَبِيلًا',
@@ -41,7 +42,7 @@ class HajjModuleService
                 ['name' => '6 Rukun Haji', 'desc' => 'Wajib dikerjakan, tidak sah haji jika tertinggal, tidak bisa diganti Dam.'],
                 ['name' => '6 Wajib Haji', 'desc' => 'Wajib dikerjakan, jika tertinggal haji tetap sah namun wajib bayar Dam.'],
                 ['name' => '16 Doa Manasik', 'desc' => 'Teks Arab, transliterasi huruf abjad latin, arti bahasa Indonesia & audio asli.'],
-                ['name' => 'Regulasi RI & Saudi', 'desc' => 'Aturan Kemenag RI, UU 8/2019, Smart Card Nusuk, dan regulasi Masyair.'],
+                ['name' => 'Regulasi Kemenhaj RI', 'desc' => 'Perpres 92/2025, UU 8/2019 jo UU 14/2025, Siskohatkes, Bipih & Smart Card Nusuk.'],
             ]
         ];
     }
@@ -94,7 +95,7 @@ class HajjModuleService
                     'Shalat Maghrib (3 rakaat) dan Isya (2 rakaat di-Qashar) secara Jamak Ta\'khir begitu tiba di Muzdalifah.',
                     'Mabit (bermalam) di alam terbuka Muzdalifah hingga melewati tengah malam (atau hingga waktu Subuh bagi yang mampu).',
                     'Mengambil batu kerikil sebesar biji kacang (kacang arab) sebanyak 7 butir untuk Jumrah Aqabah, atau 49-70 butir untuk hari tasyrik.',
-                    'Bagi lansia, risti (risiko tinggi), dan wanita diperbolehkan melakukan murur (melintas di Muzdalifah di dalam bus) atas dasar fatwa kemaslahatan fiqih.',
+                    'Bagi lansia, risti (risiko tinggi), dan wanita diperbolehkan melakukan murur (melintas di Muzdalifah di dalam bus) sesuai regulasi Kementerian Haji dan Umrah RI demi kemaslahatan jiwa.',
                 ],
                 'doa' => 'رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً وَفِي الآخِرَةِ حَسَنَةً وَقِنَا عَذَابَ النَّارِ',
                 'doa_meaning' => 'Ya Tuhan kami, berilah kami kebaikan di dunia dan kebaikan di akhirat, dan lindungilah kami dari siksa api neraka.'
@@ -102,68 +103,62 @@ class HajjModuleService
             [
                 'day' => 'Hari 3',
                 'date' => '10 Dzulhijjah (Hari Nahr / Idul Adha)',
-                'location' => 'Mina & Masjidil Haram (Makkah)',
-                'title' => 'Lempar Jumrah Aqabah, Hadyu, Tahallul & Tawaf Ifadhah',
-                'badge' => 'Hari Paling Padat Amalan',
-                'description' => 'Pagi hari 10 Dzulhijjah, jemaah dari Muzdalifah menuju Mina untuk melontar Jumrah Aqabah, menyembelih hewan dam/hadyu, bercukur (Tahallul Awwal), lalu ke Makkah untuk Tawaf Ifadhah dan Sa\'i (Tahallul Tsani).',
+                'location' => 'Mina & Makkah (Masjidil Haram)',
+                'title' => 'Melontar Jumrah Aqabah, Tahallul Awwal & Tawaf Ifadhah',
+                'badge' => 'RUKUN & WAJIB HAJI',
+                'description' => 'Hari tersibuk dalam haji. Jemaah melontar Jumrah Aqabah dengan 7 kerikil, menyembelih hewan dam (bagi haji Tamattu\'), bercukur (Tahallul Awwal), lalu berangkat ke Masjidil Haram untuk Tawaf Ifadhah dan Sa\'i (Tahallul Tsani).',
                 'activities' => [
-                    'Melontar Jumrah Aqabah (Kubra) dengan 7 batu kerikil secara bertahap sambil membaca: "Bismillāhi Allāhu Akbar" setiap lemparan. Hentikan talbiyah saat lontaran pertama.',
-                    'Membayar/menyembelih hewan Dam Hadyu (bagi haji Tamattu\' dan Qiran) melalui lembaga resmi Adahi Kerajaan Arab Saudi.',
-                    'Tahallul Awwal: Mencukur rambut (pria disunnahkan gundul/halq atau memendekkan/taqshir; wanita memotong ujung rambut sepanjang 2 cm). Seluruh larangan ihram gugur KECUALI hubungan suami-istri.',
-                    'Menuju Masjidil Haram untuk melaksanakan Tawaf Ifadhah (7 putaran mengelilingi Ka\'bah) dan Sa\'i (7 kali dari bukit Shafa ke Marwah).',
-                    'Tahallul Tsani: Setelah selesai Tawaf Ifadhah dan Sa\'i, seluruh larangan ihram halal kembali secara sempurna termasuk hubungan suami-istri.',
+                    'Melontar Jumrah Aqabah 7 kali lemparan, membaca takbir "Allāhu Akbar" pada setiap lemparan.',
+                    'Membayar / menyembelih hewan Dam Tamattu\' melalui perbankan resmi Al-Adahi atau BPIH yang ditunjuk kementerian.',
+                    'Tahallul Awwal: Mencukur gundul (halq - lebih afdhal) atau memendekkan rambut (taqshir) minimal 3 helai bagi pria; memotong sepanjang ujung jari bagi wanita.',
+                    'Setelah Tahallul Awwal, seluruh larangan ihram gugur KECUALI hubungan suami-istri.',
+                    'Meluncur ke Makkah untuk Tawaf Ifadhah 7 putaran dan Sa\'i 7 putaran Shafa-Marwah (Tahallul Tsani / Kubra - seluruh larangan halal kembali).',
                 ],
-                'doa' => 'بِسْمِ اللَّهِ، اللَّهُ أَكْبَرُ، رَجْمًا لِلشَّيَاطِينِ وَرِضًا لِلرَّحْمَنِ',
-                'doa_meaning' => 'Dengan nama Allah, Allah Maha Besar. Kutukan bagi setan dan keridhaan bagi Dzat Yang Maha Pengasih.'
+                'doa' => 'بِسْمِ اللَّهِ، اللَّهُ أَكْبَرُ، رَجْمًا لِلشَّيْطَانِ وَرِضًا لِلرَّحْمَنِ',
+                'doa_meaning' => 'Dengan nama Allah, Allah Maha Besar, kutukan bagi setan dan mencari keridhaan Dzat Yang Maha Pengasih.'
             ],
             [
-                'day' => 'Hari 4-6',
-                'date' => '11, 12, dan 13 Dzulhijjah (Hari Tasyrik)',
+                'day' => 'Hari 4-5',
+                'date' => '11 & 12 Dzulhijjah (Hari Tasyrik & Nafar Awwal)',
                 'location' => 'Mina (Jamarat)',
-                'title' => 'Mabit di Mina & Melontar Tiga Jumrah (Ula, Wustha, Aqabah)',
+                'title' => 'Mabit di Mina & Melontar 3 Jumrah (Ula, Wustha, Aqabah)',
                 'badge' => 'WAJIB HAJI',
-                'description' => 'Jemaah tinggal di tenda Mina untuk bermalam dan melontar 3 jumrah setiap siang setelah tergelincir matahari (ba\'da zawal). Jemaah dapat memilih menyelesaikan pada 12 Dzulhijjah (Nafar Awwal) atau 13 Dzulhijjah (Nafar Tsani).',
+                'description' => 'Bermalam di Mina pada malam 11 dan 12 Dzulhijjah. Setiap hari setelah matahari tergelincir (masuk Zhuhur), jemaah melontar 3 jumrah secara berurutan: Jumrah Ula (Sughra), Wustha, dan Aqabah (Kubra), masing-masing 7 kerikil.',
                 'activities' => [
-                    'Mabit di Mina pada malam 11 dan 12 Dzulhijjah (serta malam 13 bagi Nafar Tsani).',
-                    'Melontar 3 Jumrah berurutan setelah waktu Zhuhur: 1) Jumrah Ula (7 batu), lalu berdoa; 2) Jumrah Wustha (7 batu), lalu berdoa; 3) Jumrah Aqabah (7 batu), langsung pergi tanpa berdoa di tempat.',
-                    'Nafar Awwal: Meninggalkan Mina menuju Makkah pada 12 Dzulhijjah sebelum matahari terbenam (total melontar 49 kerikil).',
-                    'Nafar Tsani: Tetap tinggal semalam lagi di Mina dan melontar pada 13 Dzulhijjah sebelum pulang (total melontar 70 kerikil - amalan lebih utama).',
+                    'Mabit di tenda Mina pada sebagian besar malam (lebih dari separuh malam).',
+                    'Melontar Jumrah Ula (7 butir) -> Berhenti menghadap kiblat dan berdoa panjang.',
+                    'Melontar Jumrah Wustha (7 butir) -> Berhenti menghadap kiblat dan berdoa panjang.',
+                    'Melontar Jumrah Aqabah (7 butir) -> Langsung berlalu tanpa berhenti berdoa.',
+                    'Nafar Awwal: Jemaah yang ingin menyelesaikan mabit lebih cepat dapat keluar dari Mina sebelum matahari terbenam pada 12 Dzulhijjah.',
                 ],
                 'doa' => 'اللَّهُمَّ اجْعَلْهُ حَجًّا مَبْرُورًا وَذَنْبًا مَغْفُورًا وَسَعْيًا مَشْكُورًا',
                 'doa_meaning' => 'Ya Allah, jadikanlah hajiku ini haji yang mabrur, dosa yang diampuni, dan usaha yang disyukuri.'
             ],
             [
-                'day' => 'Penutup',
-                'date' => 'Sebelum Pulang ke Tanah Air / ke Madinah',
-                'location' => 'Masjidil Haram (Ka\'bah)',
-                'title' => 'Tawaf Wada\' (Tawaf Perpisahan)',
-                'badge' => 'WAJIB HAJI',
-                'description' => 'Tawaf 7 putaran mengelilingi Ka\'bah sebagai penghormatan terakhir sebelum meninggalkan kota suci Makkah. Tidak ada ibadah sa\'i setelah Tawaf Wada\'.',
+                'day' => 'Hari 6',
+                'date' => '13 Dzulhijjah (Nafar Tsani) & Tawaf Wada\'',
+                'location' => 'Mina & Makkah (Masjidil Haram)',
+                'title' => 'Nafar Tsani & Tawaf Perpisahan (Tawaf Wada\')',
+                'badge' => 'WAJIB HAJI (Penutup)',
+                'description' => 'Bagi jemaah yang mengambil Nafar Tsani (bertahan hingga 13 Dzulhijjah), melontar kembali ketiga jumrah setelah zhuhur. Sebelum meninggalkan kota Makkah kembali ke tanah air atau ke Madinah, seluruh jemaah wajib melaksanakan Tawaf Wada\' (kecuali wanita haid/nifas).',
                 'activities' => [
-                    'Dilakukan saat semua barang bawaan telah dikemas dan jemaah siap berangkat meninggalkan Makkah.',
-                    'Melaksanakan tawaf 7 putaran mengitari Ka\'bah dengan penuh khusyuk.',
-                    'Shalat sunnah tawaf 2 rakaat di belakang Maqam Ibrahim.',
-                    'Wanita yang sedang haid atau nifas GUGUR kewajiban Tawaf Wada\'-nya dan tidak dikenakan denda/dam apapun sesuai sabda Rasulullah SAW.',
+                    'Menyelesaikan lontar 3 jumrah pada hari ke-13 Dzulhijjah (total 70 kerikil untuk Nafar Tsani, atau 49 kerikil untuk Nafar Awwal).',
+                    'Kembali ke hotel pemondokan di Makkah dan mengepak barang bawaan.',
+                    'Melakukan Tawaf Wada\' (7 putaran mengelilingi Ka\'bah tanpa sa\'i) sesaat sebelum naik bus menuju bandara/Madinah.',
+                    'Bagi wanita yang berhalangan syar\'i (haid atau nifas), gugur kewajiban Tawaf Wada\' dan tidak dikenakan denda Dam apapun sesuai sunnah Nabi SAW.',
                 ],
                 'doa' => 'اللَّهُمَّ لَا تَجْعَلْ هَذَا آخِرَ الْعَهْدِ بِبَيْتِكَ الْحَرَامِ',
                 'doa_meaning' => 'Ya Allah, janganlah Engkau jadikan kunjungan ini sebagai saat terakhir bagiku dengan Baitullah yang mulia.'
-            ]
+            ],
         ];
     }
 
     private static function getFiqhData(): array
     {
         return [
-            'syarat' => [
-                ['title' => 'Islam', 'desc' => 'Haji tidak sah dan tidak wajib bagi orang non-muslim.'],
-                ['title' => 'Baligh (Dewasa)', 'desc' => 'Telah mencapai usia dewasa. Anak kecil yang berhaji tetap mendapat pahala, namun wajib mengulang haji saat dewasa.'],
-                ['title' => 'Berakal Sehat', 'desc' => 'Tidak wajib bagi orang yang mengalami gangguan kejiwaan/hilang ingatan.'],
-                ['title' => 'Merdeka', 'desc' => 'Bebas bukan sebagai budak.'],
-                ['title' => 'Istitha\'ah (Mampu)', 'desc' => 'Mampu secara finansial (ongkos berangkat & nafkah keluarga yang ditinggalkan), fisik sehat (istitha\'ah kesehatan), aman dalam perjalanan, dan memiliki kuota/visa haji resmi.'],
-            ],
             'rukun' => [
-                ['num' => '1', 'name' => 'Niat Ihram', 'desc' => 'Berniat masuk ke dalam rangkaian ibadah haji di dalam hati disertai ucapan lisan.'],
-                ['num' => '2', 'name' => 'Wukuf di Arafah', 'desc' => 'Hadir di padang Arafah pada waktu wukuf (9 Dzulhijjah Zhuhur s.d. Fajar 10 Dzulhijjah).'],
+                ['num' => '1', 'name' => 'Niat Ihram', 'desc' => 'Berniat ihram dari miqat yang sah secara syar\'i untuk memulai manasik haji.'],
+                ['num' => '2', 'name' => 'Wukuf di Arafah', 'desc' => 'Hadir di padang Arafah pada waktu zawal 9 Dzulhijjah hingga terbit fajar 10 Dzulhijjah (Inti ibadah haji).'],
                 ['num' => '3', 'name' => 'Tawaf Ifadhah', 'desc' => 'Mengelilingi Ka\'bah sebanyak 7 putaran berlawanan arah jarum jam dalam keadaan suci dari hadats.'],
                 ['num' => '4', 'name' => 'Sa\'i', 'desc' => 'Berjalan bolak-balik 7 kali antara bukit Shafa dan bukit Marwah.'],
                 ['num' => '5', 'name' => 'Tahallul', 'desc' => 'Mencukur atau memotong rambut minimal 3 helai rambut kepala.'],
@@ -175,7 +170,7 @@ class HajjModuleService
                 ['num' => '3', 'name' => 'Mabit di Mina', 'desc' => 'Bermalam di Mina pada malam-malam hari Tasyrik (11, 12, dan 13 Dzulhijjah).'],
                 ['num' => '4', 'name' => 'Melontar Jumrah', 'desc' => 'Melontar Jumrah Aqabah pada 10 Dzulhijjah dan 3 Jumrah (Ula, Wustha, Aqabah) pada hari Tasyrik.'],
                 ['num' => '5', 'name' => 'Menghindari Larangan Ihram', 'desc' => 'Menjauhi pakaian berjahit (bagi pria), wewangian, potong kuku/rambut, dan hubungan suami istri.'],
-                ['num' => '6', 'name' => 'Tawaf Wada\'', 'desc' => 'Tawaf perpisahan sebelum meninggalkan Makkah al-Mukarramah.'],
+                ['num' => '6', 'name' => 'Tawaf Wada\'', 'desc' => 'Tawaf perpisahan sebelum meninggalkan Makkah al-Mukarramah (gugur bagi wanita haid).'],
             ],
             'types' => [
                 [
@@ -210,21 +205,21 @@ class HajjModuleService
         return [
             [
                 'id' => 'p1',
-                'title' => 'Niat Ihram Haji',
-                'occasion' => 'Diucapkan saat berada di Miqat sebelum melewati batas tanah halal',
-                'arabic' => 'لَبَّيْكَ اللَّهُمَّ حَجًّا، نَوَيْتُ الْحَجَّ وَأَحْرَمْتُ بِهِ لِلَّهِ تَعَالَى',
-                'trans' => 'Labbaikallāhumma ḥajjan, nawaitul-ḥajja wa aḥramtu bihī lillāhi ta‘ālā',
-                'meaning' => 'Aku penuhi panggilan-Mu ya Allah untuk berhaji. Aku niat berhaji dan berihram karena Allah Ta\'ala.',
-                'audio' => 'Labbaika Allahumma hajjan'
+                'title' => 'Niat Ihram Haji (Haji Tamattu\')',
+                'occasion' => 'Dibaca di hotel pemondokan Makkah pada 8 Dzulhijjah sebelum berangkat ke Mina',
+                'arabic' => 'لَبَّيْكَ اللَّهُمَّ حَجًّا',
+                'trans' => 'Labbaikallāhumma ḥajjan',
+                'meaning' => 'Aku penuhi panggilan-Mu, ya Allah, untuk berhaji.',
+                'audio' => 'Labbaikallahumma hajjan'
             ],
             [
                 'id' => 'p2',
                 'title' => 'Bacaan Talbiyah Lengkap',
-                'occasion' => 'Dilantunkan terus-menerus sejak berihram hingga melontar Jumrah Aqabah 10 Dzulhijjah',
+                'occasion' => 'Dikumandangkan terus-menerus sejak ihram hingga melontar Jumrah Aqabah 10 Dzulhijjah',
                 'arabic' => 'لَبَّيْكَ اللَّهُمَّ لَبَّيْكَ، لَبَّيْكَ لَا شَرِيكَ لَكَ لَبَّيْكَ، إِنَّ الْحَمْدَ وَالنِّعْمَةَ لَكَ وَالْمُلْكَ، لَا شَرِيكَ لَكَ',
                 'trans' => 'Labbaikallāhumma labbaīk, labbaīka lā syarīka laka labbaīk, innal-ḥamda wan-ni‘mata laka wal-mulk, lā syarīka lak',
-                'meaning' => 'Aku penuhi panggilan-Mu ya Allah, aku penuhi panggilan-Mu. Aku penuhi panggilan-Mu, tiada sekutu bagi-Mu, aku penuhi panggilan-Mu. Sesungguhnya segala puji, nikmat, dan kerajaan adalah milik-Mu, tiada sekutu bagi-Mu.',
-                'audio' => 'Labbaika Allahumma labbaik, labbaika laa syariika laka labbaik'
+                'meaning' => 'Aku penuhi panggilan-Mu ya Allah, aku penuhi panggilan-Mu. Tiada sekutu bagi-Mu, aku penuhi panggilan-Mu. Sesungguhnya segala puji, nikmat, dan kerajaan adalah milik-Mu, tiada sekutu bagi-Mu.',
+                'audio' => 'Labbaikallahumma labbaik, labbaika la syarika laka labbaik'
             ],
             [
                 'id' => 'p3',
@@ -323,56 +318,119 @@ class HajjModuleService
     {
         return [
             'indonesia' => [
-                'authority' => 'Kementerian Agama Republik Indonesia (Kemenag RI) & BPKH',
-                'legal_basis' => 'Undang-Undang Nomor 8 Tahun 2019 tentang Penyelenggaraan Ibadah Haji dan Umrah',
+                'authority' => 'Kementerian Haji dan Umrah Republik Indonesia (Kemenhaj RI) & BPKH',
+                'official_portal' => 'https://haji.go.id/regulasi',
+                'legal_basis' => 'Perpres No. 92 Tahun 2025 & UU No. 8 Tahun 2019 jo. UU No. 14 Tahun 2025 tentang Penyelenggaraan Ibadah Haji dan Umrah',
                 'rules' => [
                     [
-                        'topic' => 'Biaya Haji (BPIH & Bipih)',
-                        'detail' => 'Biaya Penyelenggaraan Ibadah Haji (BPIH) terdiri dari Bipih (biaya yang dibayar langsung oleh jemaah) dan nilai manfaat dari pengelolaan dana haji oleh BPKH yang menanggung subsidi operasional pemondokan, konsumsi, dan tiket pesawat.'
+                        'topic' => 'Kelembagaan Kementerian Haji dan Umrah RI (Kemenhaj)',
+                        'badge' => 'Perpres 92/2025',
+                        'detail' => 'Berdasarkan Peraturan Presiden Republik Indonesia No. 92 Tahun 2025, urusan penyelenggaraan ibadah haji dan umrah dikelola secara mandiri dan berfokus penuh di bawah Kementerian Haji dan Umrah Republik Indonesia, mencakup regulasi kebijakan, pengawasan akreditasi PPIU/PIHK, operasional Siskohat, serta diplomasi kuota internasional dengan Kementerian Haji Arab Saudi.'
                     ],
                     [
-                        'topic' => 'Istitha\'ah Kesehatan (Syarat Mutlak Pelunasan)',
-                        'detail' => 'Jemaah haji wajib dinyatakan lulus pemeriksaan kesehatan (Medical Check Up) oleh Dinas Kesehatan sebelum dapat melakukan pelunasan Bipih. Jemaah berstatus Penyakit Kronis stadium lanjut / gagal ginjal cuci darah / demensia berat tidak dapat diberangkatkan demi keselamatan jiwa.'
+                        'topic' => '4 Kategori Status Istitha\'ah Kesehatan (Siskohatkes)',
+                        'badge' => 'Syarat Mutlak Pelunasan',
+                        'detail' => 'Sesuai regulasi terbaru Kemenhaj RI dan Kemenkes RI, penetapan status istitha\'ah kesehatan dilakukan sebelum pembukaan pelunasan Bipih melalui Siskohatkes dengan 4 kategori: (1) Memenuhi Syarat Istitha\'ah, (2) Memenuhi Syarat dengan Pendampingan, (3) Tidak Memenuhi Syarat Sementara (pengobatan berjalan), dan (4) Tidak Memenuhi Syarat Tetap/Permanen (gagal organ stadium akhir, demensia berat, psikotik berat).'
                     ],
                     [
-                        'topic' => 'Pembagian Gelombang Keberangkatan',
-                        'detail' => 'Gelombang I: Terbang dari embarkasi Indonesia mendarat di Bandara Amir Muhammad bin Abdul Aziz (AMAA) Madinah. Tinggal 8-9 hari untuk shalat Arbain dan ziarah, lalu berihram dari Bir Ali menuju Makkah. Gelombang II: Mendarat di Bandara Internasional King Abdulaziz (KAIA) Jeddah langsung mengenakan ihram dari embarkasi/pesawat di atas Yalamlam, melaksanakan haji di Makkah lebih dulu, baru ke Madinah setelah prosesi haji selesai.'
+                        'topic' => 'Biaya Haji Terpadu (BPIH & Bipih)',
+                        'badge' => 'PMHU No. 3/2025',
+                        'detail' => 'Biaya Penyelenggaraan Ibadah Haji (BPIH) terbagi menjadi Bipih (biaya yang disetor langsung jemaah ke Bank Penerima Setoran) dan Alokasi Nilai Manfaat yang dikelola oleh Badan Pengelola Keuangan Haji (BPKH). Nilai manfaat menyubsidi komponen akomodasi, katering Masyair, dan operasional penerbangan.'
                     ],
                     [
-                        'topic' => 'Struktur Kloter & Petugas Pendamping',
-                        'detail' => 'Setiap kloter didampingi oleh: TPHI (Ketua Kloter administrasi), TPIHI (Pembimbing Ibadah), 3 Tenaga Medis TKHI (1 Dokter, 2 Perawat), serta didukung penuh oleh Panitia Penyelenggara Ibadah Haji (PPIH) Arab Saudi di sektor Makkah, Madinah, dan Armuzna.'
+                        'topic' => 'Pelimpahan Nomor Porsi Jemaah Wafat / Sakit Permanen',
+                        'badge' => 'Kepmenhaj RI',
+                        'detail' => 'Nomor porsi jemaah yang telah masuk alokasi kuota keberangkatan tahun berjalan namun wafat atau mengalami sakit permanen dapat dilimpahkan 1 (satu) kali kepada: suami, istri, ayah, ibu, anak kandung, atau saudara kandung yang ditunjuk melalui surat kuasa bermaterai dan penetapan waris yang sah.'
                     ],
                     [
-                        'topic' => 'Gelang Logam Identitas Jemaah',
-                        'detail' => 'Setiap jemaah RI wajib memakai gelang logam anti-karat berukir logo Garuda, nomor paspor, nama jemaah, nomor kloter, dan asal embarkasi. Gelang ini tahan api dan air, tidak boleh dilepas selama berada di tanah suci.'
+                        'topic' => 'Petugas Haji Terpadu: PPIH Kloter & PPIH Arab Saudi',
+                        'badge' => 'Bimtek Terintegrasi',
+                        'detail' => 'Penyelenggaraan didukung oleh Petugas Penyelenggara Ibadah Haji (PPIH) yang melalui tahapan seleksi CAT dan Bimbingan Teknis (Bimtek) Terintegrasi mencakup Kelas Besar, Kelas Tusi (Tugas dan Fungsi Layanan), serta Bina Fisik/Jasmani bersama instruktur TNI/Polri.'
+                    ],
+                    [
+                        'topic' => 'Gelang Logam Identitas Jemaah Indonesia',
+                        'badge' => 'SOP Wajib Lapangan',
+                        'detail' => 'Setiap jemaah RI wajib memakai gelang logam anti-karat berukir lambang Garuda, nomor paspor, nama jemaah, nomor porsi, nomor kloter, dan asal embarkasi. Gelang ini tahan api dan tahan air serta tidak boleh dilepaskan selama di Arab Saudi.'
                     ]
                 ]
             ],
             'saudi' => [
                 'authority' => 'Kementerian Haji dan Umrah Kerajaan Arab Saudi (Ministry of Hajj & Umrah KSA)',
-                'legal_basis' => 'Peraturan Keselamatan & Sistem Digital Pelayanan Duyufurrahman (Tamu Allah)',
+                'legal_basis' => 'Sistem Regulasi Digital Pelayanan Duyufurrahman (Tamu Allah)',
                 'rules' => [
                     [
                         'topic' => 'Kartu Pintar Nusuk (Nusuk Smart Card)',
+                        'badge' => 'Wajib Akses Armuzna',
                         'detail' => 'Kartu fisik berteknologi chip RFID & barcode resmi dari Pemerintah Saudi yang wajib dikalungkan setiap jemaah. Berisi data visa haji resmi, nomor maktab, lokasi tenda di Mina/Arafah, serta menjadi kartu akses masuk wajib di pos pemeriksaan (checkpoint) Armuzna. Tanpa kartu Nusuk, jemaah dilarang memasuki area Masyair.'
                     ],
                     [
                         'topic' => 'Larangan Tegas Visa Non-Haji & Sanksi Berat',
+                        'badge' => 'Denda 10.000 - 50.000 SAR',
                         'detail' => 'Kerajaan Arab Saudi melarang keras melaksanakan haji menggunakan visa ziarah, visa turis, visa pekerja, atau visa umrah. Sanksi hukum bagi pelanggar: denda 10.000 hingga 50.000 Riyal Saudi, penahanan, deportasi seketika, dan cekal masuk Arab Saudi selama 10 tahun.'
                     ],
                     [
                         'topic' => 'Sistem Jadwal Ketat Lontar Jamarat',
+                        'badge' => 'Crowd Control Masyair',
                         'detail' => 'Demi keselamatan dan pencegahan penumpukan jemaah (crowd control), lontar jumrah di Jamarat diatur dengan jadwal ketat per maktab. Jemaah dilarang melontar pada jam-jam puncak kepadatan (waktu terik siang 10 Dzulhijjah) dan wajib mematuhi pemandu jalur.'
                     ],
                     [
                         'topic' => 'Transportasi Bus Shalawat & Kereta Masyair',
+                        'badge' => 'Operasional 24 Jam',
                         'detail' => 'Saudi menyediakan layanan Bus Shalawat 24 jam berstiker bendera negara yang menghubungkan hotel jemaah di Makkah ke Terminal Masjidil Haram (Syib Amir, Jiad, Kudai), serta Mashaaer Railway (Kereta Cepat Masyair) antara Arafah-Muzdalifah-Mina.'
                     ],
                     [
                         'topic' => 'Ketentuan Bagasi & Larangan Air Zamzam di Koper',
+                        'badge' => 'GACA Aviation Rules',
                         'detail' => 'Koper bagasi maksimal 32 kg per jemaah dan tas kabin 7 kg. Maskapai penerbangan internasional dan otoritas GACA melarang keras memasukkan air zamzam ke dalam koper bagasi karena risiko rembes/bocor. Setiap jemaah resmi mendapat jatah 5 liter air zamzam gratis di bandara debarkasi kepulangan.'
                     ]
                 ]
+            ]
+        ];
+    }
+
+    /**
+     * Portal Pelatihan & Presensi Petugas Haji (PPIH) Kementerian Haji dan Umrah RI
+     */
+    private static function getOfficersPortalData(): array
+    {
+        return [
+            'institution' => 'Kementerian Haji dan Umrah',
+            'country' => 'REPUBLIK INDONESIA',
+            'program_title' => 'Bimbingan Teknis (Bimtek) Terintegrasi Petugas Haji PPIH',
+            'sample_officer' => [
+                'registration_id' => '4858941',
+                'name' => 'Alif Chandramaya',
+                'officer_type' => 'PPIH Arab Saudi / PPIH Kloter Terintegrasi',
+                'service_type' => 'Layanan Konsumsi & Akomodasi Masyair',
+                'date' => '22-11-2026 · 10:25 WIB',
+                'attendance_summary' => '2 dari 4 Sesi',
+                'attended_sessions' => ['Sesi 1', 'Sesi 2'],
+                'sessions_schedule' => [
+                    ['session' => 'Sesi 1', 'class' => 'Kelas Besar', 'status' => 'ditutup 08:00', 'color' => 'bg-rose-950/70 text-rose-300 border-rose-800'],
+                    ['session' => 'Sesi 2', 'class' => 'Kelas Besar', 'status' => 'ditutup 09:30', 'color' => 'bg-rose-950/70 text-rose-300 border-rose-800'],
+                    ['session' => 'Sesi 3', 'class' => 'Kelas Besar', 'status' => 'buka 16:00', 'color' => 'bg-amber-950/70 text-amber-300 border-amber-800'],
+                    ['session' => 'Sesi 4', 'class' => 'Kelas Tusi', 'status' => 'buka 19:30', 'color' => 'bg-amber-950/70 text-amber-300 border-amber-800'],
+                ],
+                'current_detail' => [
+                    'session_title' => 'Sesi 1 (04:00-08:00)',
+                    'subject' => 'Pendidikan Jasmani & Ketahanan Fisik Lapangan',
+                    'class_name' => 'Kelas Besar',
+                    'speaker' => 'Kolonel (Purn.) Muftiono',
+                    'moderator' => 'Letkol (Purn.) Tulus Widodo',
+                    'competencies' => [
+                        'Bina fisik ketahanan cuaca ekstrem tanah suci (suhu 45°C - 50°C)',
+                        'Protokol evakuasi jemaah tersesat dan crowd emergency di Mina-Jamarat',
+                        'Kerjasama tim terintegrasi antar seksi tusi akomodasi, katering, dan linjam'
+                    ]
+                ]
+            ],
+            'tusi_categories' => [
+                ['name' => 'Layanan Akomodasi', 'desc' => 'Penempatan hotel Makkah & Madinah, distribusi kunci, dan kelaikan fasilitas sanitasi.'],
+                ['name' => 'Layanan Konsumsi', 'desc' => 'Standar higienitas 3x makan sehari bercita rasa nusantara & distribusi katering Armuzna.'],
+                ['name' => 'Layanan Transportasi', 'desc' => 'Bus antarkota (Madinah-Makkah), Bus Shalawat 24 jam, dan armada feeder Masyair.'],
+                ['name' => 'Bimbingan Ibadah (Bimbad)', 'desc' => 'Konsultasi manasik, safari wukuf lansia risti, dan penanganan kasus fiqih khusus.'],
+                ['name' => 'Perlindungan Jemaah (Linjam)', 'desc' => 'Pengamanan sektor, sweeping jemaah terpisah, koordinasi Askar Saudi dan Maktab.'],
+                ['name' => 'Layanan Lansia & Disabilitas', 'desc' => 'Pendampingan khusus kursi roda, tenda prioritas Arafah-Mina, dan skema murur.'],
             ]
         ];
     }
@@ -388,8 +446,8 @@ class HajjModuleService
                 'desc' => 'Animasi 3D resmi resolusi tinggi yang menggambarkan pergerakan jemaah dari Miqat, Mina (Tarwiyah), wukuf di Arafah, mabit Muzdalifah, melempar jumrah Jamarat, hingga Tawaf Ifadhah di Masjidil Haram.'
             ],
             [
-                'title' => 'Panduan Manasik Haji Lengkap Kementerian Agama RI',
-                'source' => 'Ditjen PHU Kemenag RI',
+                'title' => 'Panduan Manasik Haji Lengkap Kementerian Haji dan Umrah RI',
+                'source' => 'Kementerian Haji dan Umrah Republik Indonesia',
                 'embed_url' => 'https://www.youtube.com/embed/WJ_c7q2y-hU',
                 'duration' => '25 Menit',
                 'desc' => 'Video peragaan langsung tata cara ihram, niat, bacaan talbiyah, rukun & wajib haji, serta tips kesehatan bagi jemaah haji Indonesia.'
@@ -428,10 +486,15 @@ class HajjModuleService
             ],
             [
                 'id' => 3,
-                'question' => 'Jenis haji yang paling banyak dilaksanakan jemaah Indonesia karena mendahulukan Umrah baru kemudian berhaji adalah:',
-                'options' => ['Haji Tamattu\'', 'Haji Ifrad', 'Haji Qiran', 'Haji Badal'],
-                'correct' => 'Haji Tamattu\'',
-                'explanation' => 'Haji Tamattu\' adalah mengerjakan Umrah di bulan haji lalu bertahallul bebas, kemudian pada 8 Dzulhijjah berihram haji. Pelakunya dikenakan Dam Nusuk.'
+                'question' => 'Berdasarkan regulasi resmi Kementerian Haji dan Umrah RI, syarat mutlak sebelum jemaah dapat melakukan pelunasan Biaya Perjalanan Ibadah Haji (Bipih) adalah:',
+                'options' => [
+                    'Lulus verifikasi dan dinyatakan Memenuhi Syarat Istitha\'ah Kesehatan di Siskohatkes',
+                    'Mengikuti bimbingan manasik minimal 20 kali',
+                    'Memiliki paspor dengan masa berlaku minimal 3 bulan',
+                    'Membayar asuransi penerbangan mandiri'
+                ],
+                'correct' => 'Lulus verifikasi dan dinyatakan Memenuhi Syarat Istitha\'ah Kesehatan di Siskohatkes',
+                'explanation' => 'Sesuai regulasi Kemenhaj RI, status istitha\'ah kesehatan yang diterbitkan Dinas Kesehatan via Siskohatkes merupakan syarat mutlak sebelum pelunasan Bipih di bank persepsi.'
             ],
             [
                 'id' => 4,

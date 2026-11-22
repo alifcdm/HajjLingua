@@ -316,7 +316,11 @@
                 return;
             }
 
-            window.speechSynthesis.cancel(); // Hentikan audio sebelumnya
+            // Pastikan antrean audio direset dan mesin aktif (anti-freeze di Chrome/Edge)
+            window.speechSynthesis.cancel();
+            if (window.speechSynthesis.paused) {
+                window.speechSynthesis.resume();
+            }
 
             const cleanScript = sanitizeTextForSpeech(text, langCode);
             if (!cleanScript) return;
@@ -330,39 +334,23 @@
                 'id': 'Bahasa Indonesia'
             };
 
+            const fallbackMap = {
+                'en': 'en-US',
+                'id': 'id-ID',
+                'ar': 'ar-SA',
+                'ja': 'ja-JP',
+                'ko': 'ko-KR'
+            };
+
             const targetVoice = findNativeVoice(langCode);
-
-            // Jika bahasa non-Inggris tetapi tidak ada voice lokal, streaming via Google Translate TTS
-            if (!targetVoice && langCode !== 'en' && langCode !== 'id') {
-                const langLabel = langNames[langCode] || langCode.toUpperCase();
-                const googleTtsUrl = 'https://translate.google.com/translate_tts?ie=UTF-8&tl=' + encodeURIComponent(langCode) + '&client=tw-ob&q=' + encodeURIComponent(cleanScript);
-                const gAudio = new Audio(googleTtsUrl);
-                
-                showAudioToast(`Pelafalan Google Voice: ${cleanScript}`);
-                gAudio.play().then(() => {
-                    gAudio.onended = () => hideAudioToast();
-                }).catch(() => {
-                    showAudioToast(`⚠️ Suara asli ${langLabel} belum terpasang di perangkat. Pasang paket suara ${langLabel} di pengaturan sistem/browser.`, true);
-                    setTimeout(hideAudioToast, 4500);
-                });
-                return;
-            }
-
             if (targetVoice) {
                 utterance.voice = targetVoice;
                 utterance.lang = targetVoice.lang;
             } else {
-                const fallbackMap = {
-                    'en': 'en-US',
-                    'id': 'id-ID',
-                    'ar': 'ar-SA',
-                    'ja': 'ja-JP',
-                    'ko': 'ko-KR'
-                };
-                utterance.lang = fallbackMap[langCode] || langCode;
+                utterance.lang = fallbackMap[langCode] || (langCode.includes('-') ? langCode : 'en-US');
             }
 
-            // Atur kecepatan standar Google Translate Voice (0.88 - 0.90x)
+            // Kecepatan natural ideal untuk pembelajar bahasa asing
             utterance.rate = 0.88;
             utterance.pitch = 1.0;
 
@@ -374,11 +362,17 @@
             };
 
             utterance.onerror = (e) => {
-                console.warn('SpeechSynthesis error:', e);
+                console.warn('SpeechSynthesis event:', e);
                 hideAudioToast();
             };
 
             window.speechSynthesis.speak(utterance);
+            // Panggil resume lagi untuk memastikan Chrome Windows tidak menahan utterance
+            setTimeout(() => {
+                if (window.speechSynthesis.paused) {
+                    window.speechSynthesis.resume();
+                }
+            }, 100);
         }
 
         // Initialize Lucide icons

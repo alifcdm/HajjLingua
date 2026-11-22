@@ -47,9 +47,17 @@ class HajjModuleAndLinguisticBreakdownTest extends TestCase
         $response->assertSee('Bacaan Talbiyah Lengkap');
         $response->assertSee('Labbaikallāhumma labbaīk', false);
 
-        // Regulasi RI & Saudi
-        $response->assertSee('Undang-Undang Nomor 8 Tahun 2019');
+        // Regulasi Kemenhaj RI & Saudi
+        $response->assertSee('Kementerian Haji dan Umrah');
+        $response->assertSee('Perpres No. 92 Tahun 2025');
         $response->assertSee('Kartu Pintar Nusuk');
+        $response->assertSee('Istitha', false);
+
+        // Portal Petugas PPIH (Bimtek)
+        $response->assertSee('Presensi Petugas');
+        $response->assertSee('Alif Chandramaya');
+        $response->assertSee('Pendidikan Jasmani');
+        $response->assertSee('Kelas Tusi');
 
         // Video & Kuis
         $response->assertSee('Simulasi Visual 3D');
@@ -104,7 +112,8 @@ class HajjModuleAndLinguisticBreakdownTest extends TestCase
         $response->assertSee('/hajj');
         $response->assertSee('Modul Haji');
 
-        // Google Translate Voice priority
-        $response->assertSee('translate.google.com/translate_tts');
+        // Web Speech API Voice Engine
+        $response->assertSee('findNativeVoice');
+        $response->assertSee('speechSynthesis');
     }
 }
