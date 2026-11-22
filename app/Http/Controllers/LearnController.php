@@ -32,7 +32,11 @@ class LearnController extends Controller
             $selectedLevel->load(['units.lessons.progresses']);
         }
 
-        $levelOneVocabs = CurriculumPacingService::getLevelOneVocabularyBank($pair->targetLanguage->code);
+        // Ambil 1000++ kosakata yang spesifik sesuai level yang dipilih
+        $levelOneVocabs = CurriculumPacingService::getVocabularyBankForLevel(
+            $pair->targetLanguage->code,
+            $selectedLevel?->code ?? 'A1'
+        );
         $totalLessons = $selectedLevel ? $selectedLevel->units->sum(fn($u) => $u->lessons->count()) : 0;
         $totalHours = max(20, round($totalLessons * 12 / 60));
 
@@ -75,9 +79,15 @@ class LearnController extends Controller
             $nextLesson = $nextUnit?->lessons()->orderBy('sort_order')->first();
         }
 
-        // Pastikan materi memiliki minimal 100 pembelajaran interaktif komunikasi 2 orang atau lebih
+        // Pastikan materi memiliki minimal 100 pembelajaran interaktif komunikasi 2 orang atau lebih yang murni autentik
         $body = $lesson->content_body;
-        if (empty($body['interactive_dialogues']) || count($body['interactive_dialogues']) < 100) {
+        $dialogues = $body['interactive_dialogues'] ?? [];
+        $needsRefresh = empty($dialogues) || count($dialogues) < 100;
+        if (!$needsRefresh && isset($dialogues[0]['turns'][0]['text']) && str_contains($dialogues[0]['turns'][0]['text'], 'Menyapa Rekan Baru')) {
+            $needsRefresh = true;
+        }
+
+        if ($needsRefresh) {
             $body['interactive_dialogues'] = \App\Services\InteractiveDialogueService::generate100Dialogues(
                 $lesson->unit->level->language->code,
                 $body['vocabularies'] ?? [],

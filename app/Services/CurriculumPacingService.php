@@ -25,7 +25,7 @@ class CurriculumPacingService
         }
 
         $langCode = $level->language->code;
-        $vocabPool = self::getLevelOneVocabularyBank($langCode);
+        $vocabPool = self::getVocabularyBankForLevel($langCode, $level->code);
         $unitsTemplate = self::getThematicUnitsTemplate($langCode, $level->code);
 
         DB::beginTransaction();
@@ -403,6 +403,31 @@ class CurriculumPacingService
                 ]
             ],
         ];
+    }
+
+    /**
+     * Bank 1000++ Kosakata Berjenjang Sesuai Level Pembelajaran Bahasa
+     */
+    public static function getVocabularyBankForLevel(string $langCode, string $levelCode): array
+    {
+        $safeCode = str_replace(['/', '\\'], '_', $levelCode);
+        $candidates = [
+            database_path("data/vocabularies/{$langCode}_{$safeCode}.json"),
+            database_path("data/vocabularies/{$langCode}_" . str_replace(' ', '', $safeCode) . ".json"),
+            database_path("data/vocabularies/{$langCode}_level1.json"),
+        ];
+
+        foreach ($candidates as $filePath) {
+            if (file_exists($filePath)) {
+                $json = file_get_contents($filePath);
+                $decoded = json_decode($json, true);
+                if (is_array($decoded) && count($decoded) >= 100) {
+                    return $decoded;
+                }
+            }
+        }
+
+        return self::getLevelOneVocabularyBank($langCode);
     }
 
     /**

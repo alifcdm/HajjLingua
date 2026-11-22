@@ -164,10 +164,10 @@
                 <div>
                     <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2">
                         <i data-lucide="book-marked" class="w-5 h-5 text-amber-500"></i>
-                        <span>Pusat Kosakata Inti Level 1 (1000++ Kosakata Terjemahan Bahasa Indonesia & Penggunaan Sehari-hari)</span>
+                        <span>Pusat Kosakata Inti Level 1 ({{ $selectedLevel->code ?? 'A1' }}) (1000++ Kosakata Berjenjang Terjemahan Bahasa Indonesia & Penggunaan Sehari-hari)</span>
                     </h3>
                     <p class="text-xs sm:text-sm text-slate-500 mt-1">
-                        Bank 1000++ kosakata esensial frekuensi tinggi yang wajib dikuasai pembelajar bahasa. Dilengkapi audio pengucapan penutur asli, pelafalan huruf abjad/transliterasi, arti resmi bahasa Indonesia, dan contoh situasi penggunaannya dalam percakapan sehari-hari.
+                        Bank 1000++ kosakata esensial frekuensi tinggi tingkat {{ $selectedLevel->code ?? '1' }} yang disesuaikan dengan kurikulum resmi {{ $pair->targetLanguage->name }}. Dilengkapi audio pengucapan penutur asli, pelafalan huruf abjad/transliterasi, arti resmi bahasa Indonesia, dan contoh situasi penggunaannya dalam percakapan sehari-hari.
                     </p>
                 </div>
                 <span class="px-3.5 py-1.5 rounded-full bg-blue-100 text-blue-800 text-xs font-bold border border-blue-200 shadow-2xs">

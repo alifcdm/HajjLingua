@@ -41,6 +41,19 @@ class InteractiveCommunicationAndVocabExpansionTest extends TestCase
         $response->assertStatus(200);
         $response->assertSee('1000++ Kosakata');
         $response->assertSee('Kosakata Tersedia');
+
+        // Verify multiple levels have differentiated 1000+ vocabularies
+        $a1Vocabs = CurriculumPacingService::getVocabularyBankForLevel('ar', 'A1');
+        $a2Vocabs = CurriculumPacingService::getVocabularyBankForLevel('ar', 'A2');
+        $this->assertGreaterThanOrEqual(1000, count($a1Vocabs));
+        $this->assertGreaterThanOrEqual(1000, count($a2Vocabs));
+        $this->assertNotEquals($a1Vocabs[0]['word'], $a2Vocabs[0]['word']);
+
+        $n5Vocabs = CurriculumPacingService::getVocabularyBankForLevel('ja', 'N5');
+        $n4Vocabs = CurriculumPacingService::getVocabularyBankForLevel('ja', 'N4');
+        $this->assertGreaterThanOrEqual(1000, count($n5Vocabs));
+        $this->assertGreaterThanOrEqual(1000, count($n4Vocabs));
+        $this->assertNotEquals($n5Vocabs[0]['word'], $n4Vocabs[0]['word']);
     }
 
     public function test_lesson_renders_100_interactive_dialogues_with_multi_speakers(): void
@@ -64,6 +77,12 @@ class InteractiveCommunicationAndVocabExpansionTest extends TestCase
         $this->assertNotEmpty($fresh->content_body['interactive_dialogues']);
         $this->assertCount(100, $fresh->content_body['interactive_dialogues']);
         $this->assertGreaterThanOrEqual(2, $fresh->content_body['interactive_dialogues'][0]['participant_count']);
+
+        // Verify pure native script with zero mixed Indonesian strings
+        $firstTurn = $fresh->content_body['interactive_dialogues'][0]['turns'][0];
+        $this->assertStringNotContainsString('Menyapa Rekan Baru', $firstTurn['text']);
+        $this->assertStringNotContainsString('Menyapa Rekan Baru', $firstTurn['trans']);
+        $this->assertStringNotContainsString('Menyapa Rekan Baru', $firstTurn['audio']);
     }
 
     public function test_lesson_navigation_includes_previous_lesson_button(): void

@@ -10,6 +10,15 @@ class InteractiveDialogueService
      */
     public static function generate100Dialogues(string $langCode, array $vocabs = [], array $uData = [], int $lessonOrder = 1): array
     {
+        $filePath = database_path("data/dialogues/{$langCode}_dialogues.json");
+        if (file_exists($filePath)) {
+            $json = file_get_contents($filePath);
+            $decoded = json_decode($json, true);
+            if (is_array($decoded) && count($decoded) >= 100) {
+                return $decoded;
+            }
+        }
+
         $categories = [
             'Salam & Perkenalan' => [
                 'icon' => 'user-check',
