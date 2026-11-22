@@ -70,18 +70,6 @@
             <p class="text-xs text-slate-500 mt-1">Hijaiyah, teks gundul, nahwu shorof & CEFR A1-C2.</p>
         </div>
     </div>
-            <p class="text-xs text-slate-500 mt-1">Hangeul, pemula harian hingga riset bisnis.</p>
-        </div>
-
-        <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm hover:border-amber-400 transition">
-            <div class="flex items-center justify-between mb-2">
-                <span class="text-xs font-bold uppercase tracking-wider text-amber-600">Arabic Standard</span>
-                <span class="px-2 py-0.5 rounded bg-amber-50 text-amber-700 text-xs font-bold">3 Tahap + CEFR</span>
-            </div>
-            <h3 class="text-lg font-bold text-slate-800">Mubtadi' - Mutawassith - Mutaqaddim</h3>
-            <p class="text-xs text-slate-500 mt-1">Hijaiyah, teks gundul, nahwu shorof & CEFR A1-C2.</p>
-        </div>
-    </div>
 
     <!-- Feature Showcase: Zero to Hero Alphabet Explorer & 100-Stage Drill Arena -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-14">
@@ -170,7 +158,7 @@
             </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
             @foreach($pairs as $pair)
                 <div class="bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-md hover:border-blue-500 transition-all flex flex-col justify-between overflow-hidden group">
                     <div class="p-6">

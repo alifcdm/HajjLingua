@@ -79,7 +79,7 @@ class MemoryDrillGeneratorService
 
             DrillQuestion::create([
                 'drill_level_id' => $drillLevel->id,
-                'question_text' => "Pilihlah arti bahasa Indonesia yang paling tepat dari kata berikut:",
+                'question_text' => "Pilihlah arti bahasa Indonesia yang paling tepat dari kata '{$item['word']}' ({$item['trans']}):",
                 'prompt_script' => $item['word'],
                 'audio_text' => $item['word'],
                 'options_json' => $options,

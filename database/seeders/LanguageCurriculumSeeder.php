@@ -394,7 +394,7 @@ class LanguageCurriculumSeeder extends Seeder
 
         LessonExercise::create([
             'lesson_id' => $lesson1->id,
-            'question_text' => 'Manakah kata bahasa Arab yang bermakna "Rumah"?',
+            'question_text' => 'Manakah kata bahasa Arab yang bermakna "Rumah" (Baitun)?',
             'prompt_script' => 'بَيْتٌ',
             'options_json' => ['بَيْتٌ (Baitun)', 'أَبٌ (Abun)', 'تَاجِرٌ (Taajirun)', 'مَسْجِدٌ (Masjidun)'],
             'correct_answer' => 'بَيْتٌ (Baitun)',

@@ -243,26 +243,48 @@
                 <div class="pt-6 border-t border-slate-200">
                     <h3 class="text-sm font-bold uppercase tracking-wider text-slate-500 mb-4 flex items-center gap-2">
                         <i data-lucide="check-square" class="w-4 h-4 text-emerald-600"></i>
-                        <span>Latihan Evaluasi Interaktif</span>
+                        <span>Latihan Evaluasi Interaktif (Terjemahan Indonesia & Abjad Latin)</span>
                     </h3>
 
                     @foreach($lesson->exercises as $ex)
-                        <div class="p-5 rounded-2xl bg-emerald-50/50 border border-emerald-200 mb-4" id="exercise-box-{{ $ex->id }}">
-                            <p class="text-sm font-bold text-slate-800 mb-3">{{ $ex->question_text }}</p>
+                        <div class="p-5 sm:p-6 rounded-2xl bg-emerald-50/60 border border-emerald-200 mb-5 shadow-sm" id="exercise-box-{{ $ex->id }}">
+                            <p class="text-sm sm:text-base font-bold text-slate-900 mb-3">{{ $ex->question_text }}</p>
                             @if($ex->prompt_script)
-                                <div class="text-2xl font-bold text-slate-900 mb-3 {{ $lesson->unit->level->language->code === 'ar' ? 'font-arabic text-3xl' : '' }}">
-                                    {{ $ex->prompt_script }}
+                                <div class="p-4 rounded-xl bg-white border border-slate-200 mb-4 flex items-center justify-between shadow-sm">
+                                    <div>
+                                        <div class="text-2xl sm:text-3xl font-extrabold text-slate-900 {{ $lesson->unit->level->language->code === 'ar' ? 'font-arabic text-3xl sm:text-4xl' : ($lesson->unit->level->language->code === 'ja' ? 'font-japanese' : ($lesson->unit->level->language->code === 'ko' ? 'font-korean' : '')) }}">
+                                            {{ $ex->prompt_script }}
+                                        </div>
+                                        @php
+                                            $transcription = null;
+                                            if (preg_match('/\((.*?)\)/', $ex->question_text, $match)) {
+                                                $transcription = $match[1];
+                                            } elseif (preg_match('/\((.*?)\)/', $ex->explanation, $match)) {
+                                                $transcription = $match[1];
+                                            } elseif (preg_match('/\((.*?)\)/', $ex->correct_answer, $match)) {
+                                                $transcription = $match[1];
+                                            }
+                                        @endphp
+                                        @if($transcription)
+                                            <div class="text-xs text-blue-600 font-semibold mt-1">
+                                                Pelafalan Abjad: {{ $transcription }}
+                                            </div>
+                                        @endif
+                                    </div>
+                                    <button type="button" onclick="speakText('{{ addslashes($ex->prompt_script) }}', '{{ $lesson->unit->level->language->code }}')" class="p-3 rounded-xl bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white transition shadow-sm ml-3 flex-shrink-0" title="Dengarkan pengucapan penutur asli">
+                                        <i data-lucide="volume-2" class="w-5 h-5"></i>
+                                    </button>
                                 </div>
                             @endif
 
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 mb-3">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3 mb-3">
                                 @foreach($ex->options_json as $opt)
-                                    <button type="button" onclick="checkAnswer('{{ $ex->id }}', '{{ addslashes($opt) }}', '{{ addslashes($ex->correct_answer) }}', '{{ addslashes($ex->explanation) }}')" class="exercise-opt-{{ $ex->id }} text-left p-3.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-xs font-semibold text-slate-700 transition">
-                                        {{ $opt }}
+                                    <button type="button" onclick="checkAnswer('{{ $ex->id }}', '{{ addslashes($opt) }}', '{{ addslashes($ex->correct_answer) }}', '{{ addslashes($ex->explanation) }}')" class="exercise-opt-{{ $ex->id }} text-left p-4 rounded-xl border border-slate-200 bg-white hover:bg-emerald-50 hover:border-emerald-400 text-xs sm:text-sm font-semibold text-slate-700 transition min-h-[48px] flex items-center shadow-sm">
+                                        <span>{{ $opt }}</span>
                                     </button>
                                 @endforeach
                             </div>
-                            <div id="feedback-{{ $ex->id }}" class="hidden text-xs font-semibold p-3 rounded-xl mt-2 leading-relaxed"></div>
+                            <div id="feedback-{{ $ex->id }}" class="hidden text-xs sm:text-sm font-semibold p-4 rounded-xl mt-3 leading-relaxed border"></div>
                         </div>
                     @endforeach
                 </div>

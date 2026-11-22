@@ -45,28 +45,45 @@
                         </span>
                     </div>
 
-                    <!-- Prompt Character/Word with Audio Button -->
+                    <!-- Prompt Character/Word with Audio Button & Latin Transliteration -->
                     @if($q->prompt_script)
-                        <div class="my-3 p-4 rounded-xl bg-white border border-slate-200 flex items-center justify-between shadow-sm {{ $drillLevel->level->language->direction === 'rtl' ? 'flex-row-reverse text-right' : '' }}">
-                            <span class="text-2xl font-black text-slate-900 tracking-wide {{ $drillLevel->level->language->code === 'ar' ? 'font-arabic text-3xl' : ($drillLevel->level->language->code === 'ja' ? 'font-japanese' : ($drillLevel->level->language->code === 'ko' ? 'font-korean' : '')) }}">
-                                {{ $q->prompt_script }}
-                            </span>
+                        <div class="my-3 p-4 sm:p-5 rounded-2xl bg-white border border-slate-200 flex items-center justify-between shadow-sm">
+                            <div>
+                                <span class="text-2xl sm:text-3xl font-black text-slate-900 tracking-wide block {{ $drillLevel->level->language->code === 'ar' ? 'font-arabic text-3xl sm:text-4xl' : ($drillLevel->level->language->code === 'ja' ? 'font-japanese' : ($drillLevel->level->language->code === 'ko' ? 'font-korean' : '')) }}">
+                                    {{ $q->prompt_script }}
+                                </span>
+                                @php
+                                    $transcription = null;
+                                    if (preg_match('/\((.*?)\)/', $q->question_text, $match)) {
+                                        $transcription = $match[1];
+                                    } elseif (preg_match('/\((.*?)\)/', $q->explanation, $match)) {
+                                        $transcription = $match[1];
+                                    } elseif (preg_match('/\((.*?)\)/', $q->correct_answer, $match)) {
+                                        $transcription = $match[1];
+                                    }
+                                @endphp
+                                @if($transcription)
+                                    <span class="text-xs text-blue-600 font-semibold block mt-1">
+                                        Pelafalan Abjad: {{ $transcription }}
+                                    </span>
+                                @endif
+                            </div>
                             @if($q->audio_text)
-                                <button type="button" onclick="speakText('{{ addslashes($q->audio_text) }}', '{{ $drillLevel->level->language->code }}')" class="p-2.5 rounded-full bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white transition shadow-sm ml-2">
-                                    <i data-lucide="volume-2" class="w-4 h-4"></i>
+                                <button type="button" onclick="speakText('{{ addslashes($q->audio_text) }}', '{{ $drillLevel->level->language->code }}')" class="p-3 rounded-xl bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white transition shadow-sm ml-3 flex-shrink-0" title="Dengarkan pengucapan penutur asli">
+                                    <i data-lucide="volume-2" class="w-5 h-5"></i>
                                 </button>
                             @endif
                         </div>
                     @endif
 
-                    <p class="text-sm font-bold text-slate-800 mb-3">{{ $q->question_text }}</p>
+                    <p class="text-sm sm:text-base font-bold text-slate-800 mb-3">{{ $q->question_text }}</p>
 
-                    <!-- 4 Multiple Choice Options -->
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                    <!-- 4 Multiple Choice Options (Touch-Friendly Mobile & Tablet) -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         @foreach($q->options_json as $opt)
-                            <label class="flex items-center p-3 rounded-xl border border-slate-200 bg-white hover:border-blue-500 hover:bg-blue-50/50 cursor-pointer transition">
-                                <input type="radio" name="answers[{{ $q->id }}]" value="{{ $opt }}" required class="w-4 h-4 text-blue-600 focus:ring-blue-500 border-slate-300 mr-2.5">
-                                <span class="text-xs font-semibold text-slate-700">{{ $opt }}</span>
+                            <label class="flex items-center p-3.5 sm:p-4 rounded-xl border border-slate-200 bg-white hover:border-blue-500 hover:bg-blue-50/50 cursor-pointer transition min-h-[48px] shadow-sm">
+                                <input type="radio" name="answers[{{ $q->id }}]" value="{{ $opt }}" required class="w-4 h-4 text-blue-600 focus:ring-blue-500 border-slate-300 mr-3 flex-shrink-0">
+                                <span class="text-xs sm:text-sm font-semibold text-slate-700 leading-snug">{{ $opt }}</span>
                             </label>
                         @endforeach
                     </div>

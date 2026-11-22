@@ -112,7 +112,7 @@ class CurriculumPacingService
 
                         LessonExercise::create([
                             'lesson_id' => $lesson->id,
-                            'question_text' => "Apakah terjemahan bahasa Indonesia yang tepat dari kata '{$primaryWord['word']}'?",
+                            'question_text' => "Apakah terjemahan bahasa Indonesia yang tepat dari kata '{$primaryWord['word']}' ({$primaryWord['trans']})?",
                             'prompt_script' => $primaryWord['word'],
                             'options_json' => $options,
                             'correct_answer' => $primaryWord['meaning'],

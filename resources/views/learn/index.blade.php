@@ -121,32 +121,32 @@
                             @php
                                 $isDone = $lesson->progresses->where('is_completed', true)->isNotEmpty();
                             @endphp
-                            <div class="p-4 sm:p-5 flex items-center justify-between hover:bg-slate-50 transition">
-                                <div class="flex items-center space-x-3.5">
-                                    <div class="w-9 h-9 rounded-xl {{ $isDone ? 'bg-emerald-100 text-emerald-600' : 'bg-slate-100 text-slate-600' }} flex items-center justify-center font-bold text-xs flex-shrink-0">
+                            <div class="p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3.5 hover:bg-slate-50 transition">
+                                <div class="flex items-start sm:items-center space-x-3.5 min-w-0">
+                                    <div class="w-9 h-9 rounded-xl {{ $isDone ? 'bg-emerald-100 text-emerald-600' : 'bg-slate-100 text-slate-600' }} flex items-center justify-center font-bold text-xs flex-shrink-0 mt-0.5 sm:mt-0">
                                         @if($isDone)
                                             <i data-lucide="check" class="w-4 h-4"></i>
                                         @else
                                             {{ $lesson->sort_order }}
                                         @endif
                                     </div>
-                                    <div>
-                                        <div class="flex items-center gap-2 mb-0.5">
-                                            <h4 class="text-sm font-bold text-slate-800">{{ $lesson->title }}</h4>
-                                            <span class="text-[10px] font-semibold px-2 py-0.5 rounded bg-blue-50 text-blue-600">12 Menit</span>
+                                    <div class="min-w-0 flex-1">
+                                        <div class="flex flex-wrap items-center gap-2 mb-1">
+                                            <h4 class="text-sm font-bold text-slate-800 break-words">{{ $lesson->title }}</h4>
+                                            <span class="text-[10px] font-semibold px-2 py-0.5 rounded bg-blue-50 text-blue-600 flex-shrink-0">12 Menit</span>
                                         </div>
-                                        <div class="flex items-center gap-2 text-[11px] text-slate-500">
+                                        <div class="flex flex-wrap items-center gap-1.5 sm:gap-2 text-[11px] text-slate-500">
                                             <span class="capitalize">{{ $lesson->content_type }}</span>
                                             <span>•</span>
                                             <span>Terjemahan Indonesia Lengkap</span>
-                                            <span>•</span>
-                                            <span>Detail Penggunaan Sehari-hari</span>
+                                            <span class="hidden sm:inline">•</span>
+                                            <span class="hidden sm:inline">Detail Penggunaan Sehari-hari</span>
                                         </div>
                                     </div>
                                 </div>
 
-                                <a href="{{ route('lesson.show', $lesson->id) }}" class="px-4 py-2 rounded-xl {{ $isDone ? 'bg-slate-100 text-slate-700 hover:bg-slate-200' : 'bg-blue-600 text-white hover:bg-blue-700' }} text-xs font-semibold transition flex items-center gap-1.5 shadow-sm">
-                                    <span>{{ $isDone ? 'Ulangi' : 'Mulai Belajar' }}</span>
+                                <a href="{{ route('lesson.show', $lesson->id) }}" class="w-full sm:w-auto px-4 py-2.5 sm:py-2 rounded-xl {{ $isDone ? 'bg-slate-100 text-slate-700 hover:bg-slate-200' : 'bg-blue-600 text-white hover:bg-blue-700' }} text-xs font-semibold transition flex items-center justify-center gap-1.5 shadow-sm flex-shrink-0">
+                                    <span>{{ $isDone ? 'Ulangi Pelajaran' : 'Mulai Belajar' }}</span>
                                     <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
                                 </a>
                             </div>

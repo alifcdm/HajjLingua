@@ -149,10 +149,10 @@
     </nav>
 
     <!-- Audio Speaking Toast Indicator -->
-    <div id="audioSpeakingToast" class="fixed top-20 left-1/2 -translate-x-1/2 z-50 px-4 py-2 rounded-full bg-slate-900/90 text-white text-xs font-semibold backdrop-blur-md shadow-xl flex items-center gap-2 transition-all duration-300 opacity-0 pointer-events-none translate-y-[-10px]">
-        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
-        <i data-lucide="volume-2" class="w-4 h-4 text-blue-400"></i>
-        <span id="audioSpeakingLabel">Pelafalan Audio Aktif</span>
+    <div id="audioSpeakingToast" class="fixed top-20 left-1/2 -translate-x-1/2 z-50 max-w-md w-[90%] sm:w-auto px-4 py-2.5 rounded-2xl bg-slate-900/95 text-white text-xs font-semibold backdrop-blur-md shadow-2xl flex items-center gap-2.5 transition-all duration-300 opacity-0 pointer-events-none translate-y-[-10px]">
+        <span id="audioSpeakingDot" class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping flex-shrink-0"></span>
+        <i id="audioSpeakingIcon" data-lucide="volume-2" class="w-4 h-4 text-blue-400 flex-shrink-0"></i>
+        <span id="audioSpeakingLabel" class="truncate">Pelafalan Audio Aktif</span>
     </div>
 
     <!-- Web Speech API Universal Pronunciation Engine (High-Fidelity) -->
@@ -176,25 +176,117 @@
             let cleaned = text.trim();
 
             if (langCode === 'ja') {
-                // Untuk Jepang: jika ada kurung latin seperti 'アイス (Aisu)', hapus latin
                 cleaned = cleaned.replace(/\([a-zA-Z\s\/\-]+\)/g, '');
-                // Jika ada format 'ほん (本)', ambil kana 'ほん' agar pelafalannya akurat
                 if (cleaned.includes('(')) {
                     const parts = cleaned.split('(');
                     if (parts[0].trim().length > 0) cleaned = parts[0].trim();
                 }
             } else if (langCode === 'ar') {
-                // Untuk Arab: buang kurung latin seperti '(Abun)'
                 cleaned = cleaned.replace(/\([a-zA-Z\s\/\-\'\`]+\)/g, '').trim();
             } else if (langCode === 'ko') {
-                // Untuk Korea: buang kurung romaja seperti '(Gabang)'
                 cleaned = cleaned.replace(/\([a-zA-Z\s\/\-]+\)/g, '').trim();
             } else if (langCode === 'en') {
-                // Untuk Inggris: buang simbol fonetik slash atau kurung
                 cleaned = cleaned.replace(/\/.*?\//g, '').replace(/\(.*?\)/g, '').trim();
             }
 
             return cleaned.trim() || text;
+        }
+
+        function showAudioToast(message, isWarning = false) {
+            const toast = document.getElementById('audioSpeakingToast');
+            const label = document.getElementById('audioSpeakingLabel');
+            const dot = document.getElementById('audioSpeakingDot');
+            const icon = document.getElementById('audioSpeakingIcon');
+            if (toast && label) {
+                label.innerText = message;
+                if (isWarning) {
+                    toast.classList.remove('bg-slate-900/95');
+                    toast.classList.add('bg-amber-900/95', 'border', 'border-amber-500/50');
+                    if (dot) dot.classList.replace('bg-emerald-400', 'bg-amber-400');
+                    if (icon) icon.classList.replace('text-blue-400', 'text-amber-300');
+                } else {
+                    toast.classList.remove('bg-amber-900/95', 'border', 'border-amber-500/50');
+                    toast.classList.add('bg-slate-900/95');
+                    if (dot) dot.classList.replace('bg-amber-400', 'bg-emerald-400');
+                    if (icon) icon.classList.replace('text-amber-300', 'text-blue-400');
+                }
+                toast.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-[-10px]');
+                toast.classList.add('opacity-100', 'translate-y-0');
+            }
+        }
+
+        function hideAudioToast() {
+            const toast = document.getElementById('audioSpeakingToast');
+            if (toast) {
+                toast.classList.add('opacity-0', 'pointer-events-none', 'translate-y-[-10px]');
+                toast.classList.remove('opacity-100', 'translate-y-0');
+            }
+        }
+
+        function findNativeVoice(langCode) {
+            if (availableVoices.length === 0 && 'speechSynthesis' in window) {
+                availableVoices = window.speechSynthesis.getVoices();
+            }
+
+            const lang = (langCode || '').toLowerCase();
+            const langRules = {
+                'ar': {
+                    prefixes: ['ar-', 'ar_'],
+                    exact: ['ar', 'ar-sa', 'ar-eg', 'ar-ae', 'ar-kw', 'ar-qa'],
+                    keywords: ['arabic', 'العربية', 'hoda', 'naayf', 'salma', 'shakir', 'zariyah', 'maged', 'tarik']
+                },
+                'ja': {
+                    prefixes: ['ja-', 'ja_'],
+                    exact: ['ja', 'ja-jp'],
+                    keywords: ['japanese', '日本語', 'nanami', 'keita', 'ayumi', 'haruka', 'ichiro', 'sayaka', 'otoya']
+                },
+                'ko': {
+                    prefixes: ['ko-', 'ko_'],
+                    exact: ['ko', 'ko-kr'],
+                    keywords: ['korean', '한국어', 'sunhi', 'injoon', 'heami']
+                },
+                'en': {
+                    prefixes: ['en-', 'en_'],
+                    exact: ['en', 'en-us', 'en-gb', 'en-au', 'en-ca'],
+                    keywords: ['english', 'david', 'mark', 'zira', 'george', 'samantha']
+                },
+                'id': {
+                    prefixes: ['id-', 'id_'],
+                    exact: ['id', 'id-id'],
+                    keywords: ['indonesian', 'bahasa', 'gadis', 'ardi']
+                }
+            };
+
+            const rule = langRules[lang];
+            if (!rule) {
+                return availableVoices.find(v => v.lang.toLowerCase().startsWith(lang));
+            }
+
+            // 1. Prioritaskan exact locale match
+            for (const v of availableVoices) {
+                const voiceLang = v.lang.toLowerCase().replace('_', '-');
+                if (rule.exact.includes(voiceLang)) {
+                    return v;
+                }
+            }
+
+            // 2. Prefix match
+            for (const v of availableVoices) {
+                const voiceLang = v.lang.toLowerCase();
+                if (rule.prefixes.some(p => voiceLang.startsWith(p))) {
+                    return v;
+                }
+            }
+
+            // 3. Name keywords match
+            for (const v of availableVoices) {
+                const voiceName = v.name.toLowerCase();
+                if (rule.keywords.some(k => voiceName.includes(k))) {
+                    return v;
+                }
+            }
+
+            return null;
         }
 
         function speakText(text, langCode) {
@@ -206,54 +298,56 @@
             window.speechSynthesis.cancel(); // Hentikan audio sebelumnya
 
             const cleanScript = sanitizeTextForSpeech(text, langCode);
+            if (!cleanScript) return;
+
             const utterance = new SpeechSynthesisUtterance(cleanScript);
-            
-            // Map Language Codes ke standar BCP 47
-            const langMap = {
-                'ar': 'ar-SA',
-                'ja': 'ja-JP',
-                'ko': 'ko-KR',
-                'en': 'en-US',
-                'id': 'id-ID'
+            const langNames = {
+                'ar': 'Bahasa Arab',
+                'ja': 'Bahasa Jepang',
+                'ko': 'Bahasa Korea',
+                'en': 'Bahasa Inggris',
+                'id': 'Bahasa Indonesia'
             };
 
-            const targetLocale = langMap[langCode] || langCode;
-            utterance.lang = targetLocale;
+            const targetVoice = findNativeVoice(langCode);
 
-            // Pilih voice asli jika tersedia di sistem klien
-            if (availableVoices.length === 0) {
-                availableVoices = window.speechSynthesis.getVoices();
+            // Jika bahasa non-Inggris tetapi tidak ada voice penutur asli yang cocok,
+            // JANGAN pernah gunakan voice bahasa Inggris (karena akan membunyikan logat rusak/salah).
+            if (!targetVoice && langCode !== 'en' && langCode !== 'id') {
+                const langLabel = langNames[langCode] || langCode.toUpperCase();
+                showAudioToast(`⚠️ Suara asli ${langLabel} belum terpasang di perangkat. Pasang paket suara ${langLabel} di pengaturan sistem/browser.`, true);
+                setTimeout(hideAudioToast, 4500);
+                return;
             }
 
-            const matchedVoice = availableVoices.find(v => v.lang === targetLocale || v.lang.startsWith(langCode));
-            if (matchedVoice) {
-                utterance.voice = matchedVoice;
+            if (targetVoice) {
+                utterance.voice = targetVoice;
+                utterance.lang = targetVoice.lang;
+            } else {
+                const fallbackMap = {
+                    'en': 'en-US',
+                    'id': 'id-ID',
+                    'ar': 'ar-SA',
+                    'ja': 'ja-JP',
+                    'ko': 'ko-KR'
+                };
+                utterance.lang = fallbackMap[langCode] || langCode;
             }
 
             // Atur kecepatan agar jernih dan ramah bagi pelajar bahasa
-            utterance.rate = (langCode === 'ja' || langCode === 'ko') ? 0.85 : 0.88;
+            utterance.rate = (langCode === 'ja' || langCode === 'ko') ? 0.82 : 0.86;
             utterance.pitch = 1.0;
 
-            // Tampilkan visual toast
-            const toast = document.getElementById('audioSpeakingToast');
-            const label = document.getElementById('audioSpeakingLabel');
-            if (toast && label) {
-                label.innerText = 'Memutar: ' + cleanScript;
-                toast.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-[-10px]');
-                toast.classList.add('opacity-100', 'translate-y-0');
-            }
+            const langTitle = langNames[langCode] || langCode.toUpperCase();
+            showAudioToast(`Pelafalan ${langTitle}: ${cleanScript}`);
 
             utterance.onend = () => {
-                if (toast) {
-                    toast.classList.add('opacity-0', 'pointer-events-none', 'translate-y-[-10px]');
-                    toast.classList.remove('opacity-100', 'translate-y-0');
-                }
+                hideAudioToast();
             };
 
-            utterance.onerror = () => {
-                if (toast) {
-                    toast.classList.add('opacity-0', 'pointer-events-none', 'translate-y-[-10px]');
-                }
+            utterance.onerror = (e) => {
+                console.warn('SpeechSynthesis error:', e);
+                hideAudioToast();
             };
 
             window.speechSynthesis.speak(utterance);
