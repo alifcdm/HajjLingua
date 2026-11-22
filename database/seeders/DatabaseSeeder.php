@@ -13,6 +13,10 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             LanguageCurriculumSeeder::class,
+            ArabicCurriculumContentSeeder::class,
+            JapaneseCurriculumContentSeeder::class,
+            KoreanCurriculumContentSeeder::class,
+            EnglishCurriculumContentSeeder::class,
         ]);
     }
 }
