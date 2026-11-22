@@ -6,6 +6,7 @@ use App\Models\LanguagePair;
 use App\Models\Level;
 use App\Models\Lesson;
 use App\Models\UserLessonProgress;
+use App\Services\CurriculumPacingService;
 use Illuminate\Http\Request;
 
 class LearnController extends Controller
@@ -24,7 +25,18 @@ class LearnController extends Controller
         $activeLevelCode = $request->query('level', $levels->first()?->code);
         $selectedLevel = $levels->firstWhere('code', $activeLevelCode) ?? $levels->first();
 
-        return view('learn.index', compact('pair', 'levels', 'selectedLevel'));
+        // Pastikan level aktif memiliki minimal 100 materi (20 Jam Pembelajaran)
+        if ($selectedLevel && $selectedLevel->units->sum(fn($u) => $u->lessons->count()) < 100) {
+            CurriculumPacingService::ensure100CurriculumLessonsForLevel($selectedLevel);
+            // Refresh level with loaded relations
+            $selectedLevel->load(['units.lessons.progresses']);
+        }
+
+        $levelOneVocabs = CurriculumPacingService::getLevelOneVocabularyBank($pair->targetLanguage->code);
+        $totalLessons = $selectedLevel ? $selectedLevel->units->sum(fn($u) => $u->lessons->count()) : 0;
+        $totalHours = max(20, round($totalLessons * 12 / 60));
+
+        return view('learn.index', compact('pair', 'levels', 'selectedLevel', 'levelOneVocabs', 'totalLessons', 'totalHours'));
     }
 
     public function showLesson($id)

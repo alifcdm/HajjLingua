@@ -19,9 +19,12 @@
         
         <!-- Header -->
         <div class="p-6 sm:p-8 bg-gradient-to-r from-slate-900 to-indigo-950 text-white">
-            <div class="flex items-center gap-2 mb-2">
+            <div class="flex flex-wrap items-center gap-2 mb-2">
                 <span class="px-2.5 py-0.5 rounded bg-blue-500/20 text-blue-300 text-xs font-bold border border-blue-400/30">
                     {{ strtoupper($lesson->content_type) }}
+                </span>
+                <span class="px-2.5 py-0.5 rounded bg-amber-500/20 text-amber-300 text-xs font-bold border border-amber-400/30">
+                    {{ $lesson->content_body['pacing_badge'] ?? '12 Menit • Silabus 20 Jam' }}
                 </span>
                 <span class="text-xs text-slate-400">
                     {{ $lesson->unit->level->language->name }} • Level {{ $lesson->unit->level->code }}
@@ -131,21 +134,44 @@
                     </h3>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         @foreach($lesson->content_body['vocabularies'] as $voc)
-                            <div class="p-4 rounded-2xl border border-slate-200 bg-white hover:border-blue-400 transition flex items-center justify-between shadow-sm">
+                            <div class="p-5 rounded-2xl border border-slate-200 bg-white hover:border-blue-400 hover:shadow-md transition flex flex-col justify-between shadow-sm">
                                 <div>
-                                    <div class="text-xl font-bold text-slate-900 {{ $lesson->unit->level->language->code === 'ar' ? 'font-arabic text-2xl' : ($lesson->unit->level->language->code === 'ja' ? 'font-japanese' : 'font-korean') }}">
-                                        {{ $voc['arabic'] ?? ($voc['kanji_kana'] ?? ($voc['hangeul'] ?? ($voc['word'] ?? ''))) }}
+                                    <div class="flex items-start justify-between mb-2">
+                                        <div class="text-2xl font-bold text-slate-900 {{ $lesson->unit->level->language->code === 'ar' ? 'font-arabic text-3xl' : ($lesson->unit->level->language->code === 'ja' ? 'font-japanese' : 'font-korean') }}">
+                                            {{ $voc['arabic'] ?? ($voc['kanji_kana'] ?? ($voc['hangeul'] ?? ($voc['word'] ?? ''))) }}
+                                        </div>
+                                        <button type="button" onclick="speakText('{{ addslashes($voc['audio'] ?? ($voc['arabic'] ?? ($voc['kanji_kana'] ?? ($voc['hangeul'] ?? ($voc['word'] ?? ''))))) }}', '{{ $lesson->unit->level->language->code }}')" class="w-9 h-9 rounded-xl bg-blue-50 text-blue-700 hover:bg-blue-600 hover:text-white transition flex items-center justify-center flex-shrink-0 shadow-sm ml-2">
+                                            <i data-lucide="volume-2" class="w-4 h-4"></i>
+                                        </button>
                                     </div>
-                                    <div class="text-xs text-blue-600 font-medium">
+                                    <div class="text-xs text-blue-600 font-semibold mb-2">
                                         {{ $voc['trans'] ?? ($voc['romaji'] ?? ($voc['romaja'] ?? '')) }}
                                     </div>
-                                    <div class="text-xs text-slate-600 mt-1 font-semibold">
-                                        {{ $voc['meaning'] }}
+                                    <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-100 mb-3">
+                                        <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Arti Bahasa Indonesia:</div>
+                                        <div class="text-sm font-bold text-slate-900 mt-0.5">
+                                            {{ $voc['meaning'] }}
+                                        </div>
                                     </div>
+
+                                    @if(!empty($voc['daily_usage']))
+                                        <div class="text-xs text-slate-600 leading-relaxed mb-3">
+                                            <span class="font-bold text-slate-700">Detail Penggunaan Sehari-hari:</span>
+                                            {{ $voc['daily_usage'] }}
+                                        </div>
+                                    @endif
                                 </div>
-                                <button type="button" onclick="speakText('{{ addslashes($voc['audio'] ?? ($voc['arabic'] ?? ($voc['kanji_kana'] ?? ($voc['hangeul'] ?? ($voc['word'] ?? ''))))) }}', '{{ $lesson->unit->level->language->code }}')" class="w-10 h-10 rounded-xl bg-blue-50 text-blue-700 hover:bg-blue-600 hover:text-white transition flex items-center justify-center flex-shrink-0 shadow-sm ml-3">
-                                    <i data-lucide="volume-2" class="w-5 h-5"></i>
-                                </button>
+
+                                @if(!empty($voc['example']))
+                                    <div class="p-3 rounded-xl bg-blue-50/50 border border-blue-100 text-xs mt-2">
+                                        <div class="font-bold text-slate-900 {{ $lesson->unit->level->language->code === 'ar' ? 'font-arabic text-base' : '' }}">
+                                            {{ $voc['example'] }}
+                                        </div>
+                                        <div class="text-slate-600 font-medium mt-1">
+                                            {{ $voc['example_trans'] ?? '' }}
+                                        </div>
+                                    </div>
+                                @endif
                             </div>
                         @endforeach
                     </div>
