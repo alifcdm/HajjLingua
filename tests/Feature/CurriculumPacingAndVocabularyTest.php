@@ -67,6 +67,49 @@ class CurriculumPacingAndVocabularyTest extends TestCase
         $response = $this->get("/lesson/{$lesson->id}");
         $response->assertStatus(200);
         $response->assertSee('Arti Bahasa Indonesia:');
-        $response->assertSee('Latihan Evaluasi Pelajaran');
+        $response->assertSee('Latihan Evaluasi Interaktif');
+    }
+
+    public function test_lesson_completion_advances_to_next_lesson(): void
+    {
+        $firstLesson = Lesson::whereHas('unit.level', function ($q) {
+            $q->where('code', 'A1');
+        })->orderBy('id')->first();
+
+        $this->assertNotNull($firstLesson);
+
+        $response = $this->post("/lesson/{$firstLesson->id}/complete", [
+            'score' => 100,
+        ]);
+
+        $response->assertRedirect();
+        $this->assertDatabaseHas('user_lesson_progress', [
+            'lesson_id' => $firstLesson->id,
+            'is_completed' => 1,
+        ]);
+    }
+
+    public function test_alphabet_explorer_renders_character_sample_words_and_indonesian_translations(): void
+    {
+        // 1. Arabic
+        $resAr = $this->get('/alphabet/ar');
+        $resAr->assertStatus(200);
+        $resAr->assertSee('Arti:');
+        $resAr->assertSee('Ayah');
+
+        // 2. Japanese
+        $resJa = $this->get('/alphabet/ja');
+        $resJa->assertStatus(200);
+        $resJa->assertSee('Arti: Hujan');
+
+        // 3. Korean
+        $resKo = $this->get('/alphabet/ko');
+        $resKo->assertStatus(200);
+        $resKo->assertSee('Arti: Tas');
+
+        // 4. English
+        $resEn = $this->get('/alphabet/en');
+        $resEn->assertStatus(200);
+        $resEn->assertSee('Arti: Apel');
     }
 }

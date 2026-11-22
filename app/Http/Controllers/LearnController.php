@@ -66,7 +66,7 @@ class LearnController extends Controller
 
     public function completeLesson(Request $request, $id)
     {
-        $lesson = Lesson::findOrFail($id);
+        $lesson = Lesson::with('unit.level')->findOrFail($id);
         $score = (int) $request->input('score', 100);
 
         UserLessonProgress::updateOrCreate(
@@ -81,10 +81,42 @@ class LearnController extends Controller
             ]
         );
 
-        if ($request->wantsJson()) {
-            return response()->json(['success' => true, 'score' => $score]);
+        // Cari pelajaran berikutnya dalam unit yang sama atau unit selanjutnya
+        $nextLesson = Lesson::where('unit_id', $lesson->unit_id)
+            ->where('sort_order', '>', $lesson->sort_order)
+            ->orderBy('sort_order')
+            ->first();
+
+        if (!$nextLesson) {
+            $nextUnit = $lesson->unit->level->units()
+                ->where('sort_order', '>', $lesson->unit->sort_order)
+                ->orderBy('sort_order')
+                ->first();
+            $nextLesson = $nextUnit?->lessons()->orderBy('sort_order')->first();
         }
 
-        return back()->with('success', 'Pelajaran berhasil diselesaikan!');
+        $nextUrl = $nextLesson 
+            ? route('lesson.show', $nextLesson->id) 
+            : route('exam.show', $lesson->unit->level_id);
+
+        if ($request->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'score' => $score,
+                'next_url' => $nextUrl,
+                'is_last' => $nextLesson === null,
+                'message' => $nextLesson 
+                    ? "Hebat! Materi {$lesson->title} selesai. Bersiap melanjutkan ke materi berikutnya!"
+                    : "Luar biasa! Seluruh materi level ini selesai. Anda diarahkan ke Ujian Kelulusan!"
+            ]);
+        }
+
+        if ($nextLesson) {
+            return redirect()->route('lesson.show', $nextLesson->id)
+                ->with('success', "Hebat! Materi '{$lesson->title}' selesai. Berlanjut ke materi berikutnya!");
+        }
+
+        return redirect()->route('exam.show', $lesson->unit->level_id)
+            ->with('success', 'Luar biasa! Seluruh materi level ini tuntas. Bersiap untuk Ujian Sertifikasi!');
     }
 }

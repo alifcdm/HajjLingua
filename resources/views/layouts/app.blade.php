@@ -114,11 +114,27 @@
     </main>
 
     <!-- Footer -->
-    <footer class="no-print bg-white border-t border-slate-200 py-6 text-center text-xs text-slate-500">
+    <footer class="no-print bg-white border-t border-slate-200 py-6 text-center text-xs text-slate-500 mb-14 sm:mb-0">
         <div class="max-w-7xl mx-auto px-4">
             <p>LinguaPro Multi-Language Structured Learning Platform &copy; {{ date('Y') }}. Dibangun sesuai standar AI Rules & Kontrak AGENTS.md.</p>
         </div>
     </footer>
+
+    <!-- Mobile Global Bottom Navigation Dock (Responsive Mobile App Experience) -->
+    <nav class="sm:hidden fixed bottom-0 left-0 right-0 h-14 bg-white/95 backdrop-blur-md border-t border-slate-200 z-40 flex items-center justify-around px-2 shadow-lg no-print">
+        <a href="{{ route('home') }}" class="flex flex-col items-center justify-center text-[10px] font-bold {{ request()->routeIs('home') ? 'text-blue-600' : 'text-slate-500' }}">
+            <i data-lucide="home" class="w-5 h-5 mb-0.5"></i>
+            <span>Beranda</span>
+        </a>
+        <a href="{{ route('alphabet.index', 'ar') }}" class="flex flex-col items-center justify-center text-[10px] font-bold {{ request()->routeIs('alphabet.*') ? 'text-blue-600' : 'text-slate-500' }}">
+            <i data-lucide="type" class="w-5 h-5 mb-0.5"></i>
+            <span>Aksara</span>
+        </a>
+        <a href="{{ route('home') }}#pairs-grid" class="flex flex-col items-center justify-center text-[10px] font-bold text-slate-500 hover:text-blue-600">
+            <i data-lucide="languages" class="w-5 h-5 mb-0.5"></i>
+            <span>Bahasa</span>
+        </a>
+    </nav>
 
     <!-- Web Speech API Universal Pronunciation Engine -->
     <script>
