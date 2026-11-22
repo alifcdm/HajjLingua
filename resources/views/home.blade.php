@@ -24,6 +24,10 @@
                     <span>Pilih Pasangan Bahasa</span>
                     <i data-lucide="arrow-down" class="w-4 h-4"></i>
                 </a>
+                <a href="{{ route('alphabet.index', 'ar') }}" class="px-6 py-3.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/30 text-white font-bold transition flex items-center gap-2 backdrop-blur-sm">
+                    <i data-lucide="languages" class="w-4 h-4 text-amber-300"></i>
+                    <span>Aksara & Huruf Lengkap (Zero to Hero)</span>
+                </a>
             </div>
         </div>
     </div>
@@ -67,7 +71,85 @@
         </div>
     </div>
 
-    <!-- 8 Language Pairs Grid -->
+    <!-- Feature Showcase: Zero to Hero Alphabet Explorer & 100-Stage Drill Arena -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-14">
+        <!-- Card 1: Zero to Hero Alphabet Master -->
+        <div class="p-6 md:p-8 rounded-3xl bg-gradient-to-br from-amber-500/10 via-amber-500/5 to-orange-500/10 border border-amber-200/80 shadow-sm relative overflow-hidden flex flex-col justify-between">
+            <div>
+                <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-100 text-amber-800 text-xs font-bold mb-3">
+                    <i data-lucide="sparkles" class="w-3.5 h-3.5 text-amber-600"></i>
+                    Fondasi Utama: Zero to Hero
+                </div>
+                <h3 class="text-xl md:text-2xl font-black text-slate-900 mb-2">
+                    Eksplorasi Seluruh Huruf & Aksara Dunia
+                </h3>
+                <p class="text-xs sm:text-sm text-slate-600 mb-6 leading-relaxed">
+                    Kuasai bentuk huruf terisolasi, awal, tengah, akhir, harakat Arab, Hiragana & Katakana Jepang, 40 Hangeul & Batchim Korea, serta 44 Fonem IPA Bahasa Inggris dengan audio pelafalan asli.
+                </p>
+
+                <!-- Quick language pills for alphabet -->
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-6">
+                    <a href="{{ route('alphabet.index', 'ar') }}" class="p-3 bg-white rounded-xl border border-amber-200 text-center hover:shadow-md hover:border-amber-400 transition group">
+                        <span class="text-lg font-arabic font-bold text-amber-700 block group-hover:scale-110 transition-transform">العربية</span>
+                        <span class="text-[11px] font-semibold text-slate-600">28 Hijaiyah</span>
+                    </a>
+                    <a href="{{ route('alphabet.index', 'ja') }}" class="p-3 bg-white rounded-xl border border-amber-200 text-center hover:shadow-md hover:border-amber-400 transition group">
+                        <span class="text-lg font-bold text-purple-700 block group-hover:scale-110 transition-transform">かな</span>
+                        <span class="text-[11px] font-semibold text-slate-600">Hiragana/Kata</span>
+                    </a>
+                    <a href="{{ route('alphabet.index', 'ko') }}" class="p-3 bg-white rounded-xl border border-amber-200 text-center hover:shadow-md hover:border-amber-400 transition group">
+                        <span class="text-lg font-bold text-emerald-700 block group-hover:scale-110 transition-transform">한글</span>
+                        <span class="text-[11px] font-semibold text-slate-600">40 Hangeul</span>
+                    </a>
+                    <a href="{{ route('alphabet.index', 'en') }}" class="p-3 bg-white rounded-xl border border-amber-200 text-center hover:shadow-md hover:border-amber-400 transition group">
+                        <span class="text-lg font-bold text-blue-700 block group-hover:scale-110 transition-transform">Aa-Zz</span>
+                        <span class="text-[11px] font-semibold text-slate-600">26 + 44 IPA</span>
+                    </a>
+                </div>
+            </div>
+
+            <a href="{{ route('alphabet.index', 'ar') }}" class="inline-flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-amber-600 text-white font-bold text-xs hover:bg-amber-700 transition shadow-sm">
+                <span>Buka Pustaka Aksara Lengkap</span>
+                <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            </a>
+        </div>
+
+        <!-- Card 2: 100-Stage Memory Reinforcement Arena -->
+        <div class="p-6 md:p-8 rounded-3xl bg-gradient-to-br from-indigo-500/10 via-indigo-500/5 to-purple-500/10 border border-indigo-200/80 shadow-sm relative overflow-hidden flex flex-col justify-between">
+            <div>
+                <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-100 text-indigo-800 text-xs font-bold mb-3">
+                    <i data-lucide="zap" class="w-3.5 h-3.5 text-indigo-600"></i>
+                    Penguat Ingatan Permanen
+                </div>
+                <h3 class="text-xl md:text-2xl font-black text-slate-900 mb-2">
+                    Arena 100 Level Drill (1.500 Soal / Level)
+                </h3>
+                <p class="text-xs sm:text-sm text-slate-600 mb-6 leading-relaxed">
+                    Setiap stage berisi 15 soal cepat dengan distractor cerdas dan ulasan komprehensif. Didesain untuk mengunci ingatan tata bahasa, idiom, partikel, dan kosakata tanpa lupa.
+                </p>
+
+                <div class="grid grid-cols-3 gap-3 mb-6">
+                    <div class="bg-white p-3 rounded-xl border border-indigo-100 text-center">
+                        <div class="text-xl font-black text-indigo-600">100</div>
+                        <div class="text-[11px] text-slate-500 font-medium">Stage Per Level</div>
+                    </div>
+                    <div class="bg-white p-3 rounded-xl border border-indigo-100 text-center">
+                        <div class="text-xl font-black text-indigo-600">15</div>
+                        <div class="text-[11px] text-slate-500 font-medium">Soal Per Stage</div>
+                    </div>
+                    <div class="bg-white p-3 rounded-xl border border-indigo-100 text-center">
+                        <div class="text-xl font-black text-indigo-600">1.500+</div>
+                        <div class="text-[11px] text-slate-500 font-medium">Soal & Analisis</div>
+                    </div>
+                </div>
+            </div>
+
+            <a href="#pairs-grid" class="inline-flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-indigo-600 text-white font-bold text-xs hover:bg-indigo-700 transition shadow-sm">
+                <span>Pilih Bahasa & Mulai Drill 100 Level</span>
+                <i data-lucide="arrow-down" class="w-4 h-4"></i>
+            </a>
+        </div>
+    </div>
     <div id="pairs-grid" class="mb-16">
         <div class="flex items-center justify-between mb-6">
             <div>

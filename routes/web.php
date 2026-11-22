@@ -6,9 +6,19 @@ use App\Http\Controllers\PlacementController;
 use App\Http\Controllers\LearnController;
 use App\Http\Controllers\ExamController;
 use App\Http\Controllers\CertificateController;
+use App\Http\Controllers\AlphabetController;
+use App\Http\Controllers\DrillController;
 
 // Dashboard & Home
 Route::get('/', [HomeController::class, 'index'])->name('home');
+
+// Complete Alphabet & Master Syllabary Explorer (Zero to Hero)
+Route::get('/alphabet/{langCode?}', [AlphabetController::class, 'index'])->name('alphabet.index');
+
+// 100-Stage Memory Drill Arena (Penguat Ingatan - 15 Soal per Stage)
+Route::get('/drills/{level_id}', [DrillController::class, 'index'])->name('drill.index');
+Route::get('/drills/stage/{stage_id}', [DrillController::class, 'showStage'])->name('drill.stage');
+Route::post('/drills/stage/{stage_id}/submit', [DrillController::class, 'submitStage'])->name('drill.submit');
 
 // Placement Test
 Route::get('/placement/{slug}', [PlacementController::class, 'show'])->name('placement.show');

@@ -77,6 +77,10 @@
                     <i data-lucide="layout-grid" class="w-4 h-4"></i>
                     <span>Pilihan Bahasa</span>
                 </a>
+                <a href="{{ route('alphabet.index', 'ar') }}" class="text-sm font-medium text-slate-600 hover:text-blue-600 flex items-center gap-1.5 transition">
+                    <i data-lucide="type" class="w-4 h-4"></i>
+                    <span>Aksara Lengkap</span>
+                </a>
                 <div class="h-4 w-px bg-slate-200"></div>
                 <div class="flex items-center gap-2">
                     <span class="inline-flex items-center px-2 py-1 rounded-md bg-emerald-50 text-emerald-700 text-xs font-semibold border border-emerald-200">

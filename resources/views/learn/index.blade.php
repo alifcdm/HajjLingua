@@ -53,8 +53,12 @@
             </p>
         </div>
 
-        <div class="w-full md:w-auto flex-shrink-0">
-            <a href="{{ route('exam.show', $selectedLevel->id) }}" class="w-full md:w-auto px-6 py-3.5 rounded-2xl bg-gradient-to-r from-amber-500 to-amber-600 text-white font-bold text-xs sm:text-sm hover:opacity-95 transition shadow-lg flex items-center justify-center gap-2">
+        <div class="w-full md:w-auto flex-shrink-0 flex flex-col sm:flex-row md:flex-col gap-2.5">
+            <a href="{{ route('drill.index', $selectedLevel->id) }}" class="w-full px-5 py-3 rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold text-xs sm:text-sm hover:opacity-95 transition shadow-md flex items-center justify-center gap-2">
+                <i data-lucide="zap" class="w-4 h-4 text-yellow-300"></i>
+                <span>100 Level Drill Memori (1.500 Soal)</span>
+            </a>
+            <a href="{{ route('exam.show', $selectedLevel->id) }}" class="w-full px-5 py-3 rounded-2xl bg-gradient-to-r from-amber-500 to-amber-600 text-white font-bold text-xs sm:text-sm hover:opacity-95 transition shadow-md flex items-center justify-center gap-2">
                 <i data-lucide="award" class="w-4 h-4"></i>
                 <span>Ujian Akhir Level & Sertifikasi</span>
             </a>
