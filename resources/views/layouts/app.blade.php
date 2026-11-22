@@ -82,6 +82,10 @@
                     <i data-lucide="type" class="w-4 h-4"></i>
                     <span>Aksara Lengkap</span>
                 </a>
+                <a href="{{ route('hajj.index') }}" class="text-xs sm:text-sm font-bold {{ request()->routeIs('hajj.*') ? 'text-emerald-700 bg-emerald-50 px-3 py-1.5 rounded-xl border border-emerald-200' : 'text-slate-600 hover:text-emerald-700' }} flex items-center gap-1.5 transition">
+                    <i data-lucide="compass" class="w-4 h-4 text-emerald-600"></i>
+                    <span>Modul Haji</span>
+                </a>
                 <div class="h-4 w-px bg-slate-200"></div>
                 <div class="flex items-center gap-2">
                     <span class="inline-flex items-center px-2 py-1 rounded-md bg-emerald-50 text-emerald-700 text-xs font-semibold border border-emerald-200">
@@ -93,6 +97,9 @@
 
             <!-- Mobile Quick Header Badge -->
             <div class="flex sm:hidden items-center gap-2">
+                <a href="{{ route('hajj.index') }}" class="p-2 rounded-xl bg-emerald-50 text-emerald-700 hover:text-emerald-800 transition" title="Modul Haji">
+                    <i data-lucide="compass" class="w-4 h-4"></i>
+                </a>
                 <a href="{{ route('alphabet.index', 'ar') }}" class="p-2 rounded-xl bg-slate-100 text-slate-700 hover:text-blue-600 transition" title="Aksara">
                     <i data-lucide="type" class="w-4 h-4"></i>
                 </a>
@@ -141,6 +148,10 @@
         <a href="{{ route('alphabet.index', 'ar') }}" class="flex flex-col items-center justify-center text-[10px] font-bold {{ request()->routeIs('alphabet.*') ? 'text-blue-600' : 'text-slate-500' }}">
             <i data-lucide="type" class="w-5 h-5 mb-0.5"></i>
             <span>Aksara</span>
+        </a>
+        <a href="{{ route('hajj.index') }}" class="flex flex-col items-center justify-center text-[10px] font-bold {{ request()->routeIs('hajj.*') ? 'text-emerald-600' : 'text-slate-500' }}">
+            <i data-lucide="compass" class="w-5 h-5 mb-0.5"></i>
+            <span>Haji</span>
         </a>
         <a href="{{ route('home') }}#pairs-grid" class="flex flex-col items-center justify-center text-[10px] font-bold text-slate-500 hover:text-blue-600">
             <i data-lucide="languages" class="w-5 h-5 mb-0.5"></i>
@@ -233,27 +244,27 @@
                 'ar': {
                     prefixes: ['ar-', 'ar_'],
                     exact: ['ar', 'ar-sa', 'ar-eg', 'ar-ae', 'ar-kw', 'ar-qa'],
-                    keywords: ['arabic', 'العربية', 'hoda', 'naayf', 'salma', 'shakir', 'zariyah', 'maged', 'tarik']
+                    keywords: ['google', 'natural', 'arabic', 'العربية', 'hoda', 'naayf', 'salma', 'shakir', 'zariyah', 'maged', 'tarik']
                 },
                 'ja': {
                     prefixes: ['ja-', 'ja_'],
                     exact: ['ja', 'ja-jp'],
-                    keywords: ['japanese', '日本語', 'nanami', 'keita', 'ayumi', 'haruka', 'ichiro', 'sayaka', 'otoya']
+                    keywords: ['google', 'natural', 'japanese', '日本語', 'nanami', 'keita', 'ayumi', 'haruka', 'ichiro', 'sayaka', 'otoya']
                 },
                 'ko': {
                     prefixes: ['ko-', 'ko_'],
                     exact: ['ko', 'ko-kr'],
-                    keywords: ['korean', '한국어', 'sunhi', 'injoon', 'heami']
+                    keywords: ['google', 'natural', 'korean', '한국어', 'sunhi', 'injoon', 'heami']
                 },
                 'en': {
                     prefixes: ['en-', 'en_'],
                     exact: ['en', 'en-us', 'en-gb', 'en-au', 'en-ca'],
-                    keywords: ['english', 'david', 'mark', 'zira', 'george', 'samantha']
+                    keywords: ['google', 'natural', 'english', 'david', 'mark', 'zira', 'george', 'samantha']
                 },
                 'id': {
                     prefixes: ['id-', 'id_'],
                     exact: ['id', 'id-id'],
-                    keywords: ['indonesian', 'bahasa', 'gadis', 'ardi']
+                    keywords: ['google', 'natural', 'indonesian', 'bahasa', 'gadis', 'ardi']
                 }
             };
 
@@ -262,7 +273,17 @@
                 return availableVoices.find(v => v.lang.toLowerCase().startsWith(lang));
             }
 
-            // 1. Prioritaskan exact locale match
+            // 1. Prioritas Tertinggi: Google Voice & Natural Neural Voices
+            for (const v of availableVoices) {
+                const voiceLang = v.lang.toLowerCase().replace('_', '-');
+                const voiceName = v.name.toLowerCase();
+                const isLangMatch = rule.exact.includes(voiceLang) || rule.prefixes.some(p => voiceLang.startsWith(p));
+                if (isLangMatch && (voiceName.includes('google') || voiceName.includes('natural') || voiceName.includes('online'))) {
+                    return v;
+                }
+            }
+
+            // 2. Exact locale match
             for (const v of availableVoices) {
                 const voiceLang = v.lang.toLowerCase().replace('_', '-');
                 if (rule.exact.includes(voiceLang)) {
@@ -270,7 +291,7 @@
                 }
             }
 
-            // 2. Prefix match
+            // 3. Prefix match
             for (const v of availableVoices) {
                 const voiceLang = v.lang.toLowerCase();
                 if (rule.prefixes.some(p => voiceLang.startsWith(p))) {
@@ -278,7 +299,7 @@
                 }
             }
 
-            // 3. Name keywords match
+            // 4. Name keywords match
             for (const v of availableVoices) {
                 const voiceName = v.name.toLowerCase();
                 if (rule.keywords.some(k => voiceName.includes(k))) {
@@ -311,12 +332,19 @@
 
             const targetVoice = findNativeVoice(langCode);
 
-            // Jika bahasa non-Inggris tetapi tidak ada voice penutur asli yang cocok,
-            // JANGAN pernah gunakan voice bahasa Inggris (karena akan membunyikan logat rusak/salah).
+            // Jika bahasa non-Inggris tetapi tidak ada voice lokal, streaming via Google Translate TTS
             if (!targetVoice && langCode !== 'en' && langCode !== 'id') {
                 const langLabel = langNames[langCode] || langCode.toUpperCase();
-                showAudioToast(`⚠️ Suara asli ${langLabel} belum terpasang di perangkat. Pasang paket suara ${langLabel} di pengaturan sistem/browser.`, true);
-                setTimeout(hideAudioToast, 4500);
+                const googleTtsUrl = 'https://translate.google.com/translate_tts?ie=UTF-8&tl=' + encodeURIComponent(langCode) + '&client=tw-ob&q=' + encodeURIComponent(cleanScript);
+                const gAudio = new Audio(googleTtsUrl);
+                
+                showAudioToast(`Pelafalan Google Voice: ${cleanScript}`);
+                gAudio.play().then(() => {
+                    gAudio.onended = () => hideAudioToast();
+                }).catch(() => {
+                    showAudioToast(`⚠️ Suara asli ${langLabel} belum terpasang di perangkat. Pasang paket suara ${langLabel} di pengaturan sistem/browser.`, true);
+                    setTimeout(hideAudioToast, 4500);
+                });
                 return;
             }
 
@@ -334,8 +362,8 @@
                 utterance.lang = fallbackMap[langCode] || langCode;
             }
 
-            // Atur kecepatan agar jernih dan ramah bagi pelajar bahasa
-            utterance.rate = (langCode === 'ja' || langCode === 'ko') ? 0.82 : 0.86;
+            // Atur kecepatan standar Google Translate Voice (0.88 - 0.90x)
+            utterance.rate = 0.88;
             utterance.pitch = 1.0;
 
             const langTitle = langNames[langCode] || langCode.toUpperCase();

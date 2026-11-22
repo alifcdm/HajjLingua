@@ -163,20 +163,44 @@
                                 @endif
 
                                 @if(!empty($rule['examples']))
-                                    <div class="space-y-2.5">
-                                        <div class="text-[11px] font-bold uppercase tracking-wider text-indigo-800">Contoh Kalimat Terapan:</div>
+                                    <div class="space-y-3">
+                                        <div class="text-[11px] font-bold uppercase tracking-wider text-indigo-800">Contoh Kalimat Terapan & Bedah Suku Kata:</div>
                                         @foreach($rule['examples'] as $examp)
-                                            <div class="p-3 rounded-xl bg-white border border-slate-200 flex items-center justify-between">
-                                                <div>
-                                                    <div class="text-base font-bold text-slate-900 {{ $lesson->unit->level->language->code === 'ar' ? 'font-arabic text-xl' : '' }}">
-                                                        {{ $examp['target'] }}
+                                            <div class="p-4 rounded-2xl bg-white border border-slate-200 shadow-sm">
+                                                <div class="flex items-start justify-between gap-3 mb-2">
+                                                    <div>
+                                                        <div class="text-base sm:text-lg font-bold text-slate-900 {{ $lesson->unit->level->language->code === 'ar' ? 'font-arabic text-xl sm:text-2xl' : '' }}">
+                                                            {{ $examp['target'] }}
+                                                        </div>
+                                                        <div class="text-xs text-indigo-600 font-semibold mt-0.5">
+                                                            Pelafalan Abjad: {{ $examp['trans'] ?? '' }}
+                                                        </div>
+                                                        <div class="text-xs text-slate-700 font-medium mt-1">
+                                                            Arti Kalimat: {{ $examp['meaning'] }}
+                                                        </div>
                                                     </div>
-                                                    <div class="text-xs text-indigo-600 font-medium">{{ $examp['trans'] ?? '' }}</div>
-                                                    <div class="text-xs text-slate-600 mt-0.5 font-semibold">{{ $examp['meaning'] }}</div>
+                                                    <button type="button" onclick="speakText('{{ addslashes($examp['audio'] ?? $examp['target']) }}', '{{ $lesson->unit->level->language->code }}')" class="p-2.5 rounded-xl bg-indigo-50 text-indigo-700 hover:bg-indigo-600 hover:text-white transition shadow-sm flex-shrink-0" title="Dengarkan pengucapan penutur asli">
+                                                        <i data-lucide="volume-2" class="w-4 h-4"></i>
+                                                    </button>
                                                 </div>
-                                                <button type="button" onclick="speakText('{{ addslashes($examp['audio'] ?? $examp['target']) }}', '{{ $lesson->unit->level->language->code }}')" class="p-2 rounded-lg bg-indigo-50 text-indigo-700 hover:bg-indigo-600 hover:text-white transition shadow-sm ml-2">
-                                                    <i data-lucide="volume-2" class="w-4 h-4"></i>
-                                                </button>
+
+                                                @php
+                                                    $breakdown = $examp['breakdown'] ?? \App\Services\LinguisticBreakdownService::getBreakdown($lesson->unit->level->language->code, $examp['target'], $examp['trans'] ?? null, $examp['meaning'] ?? null);
+                                                @endphp
+                                                @if(!empty($breakdown))
+                                                    <div class="mt-2.5 pt-2 border-t border-slate-100">
+                                                        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1.5">Bedah Suku Kata & Terjemahan Kata per Kata:</span>
+                                                        <div class="flex flex-wrap gap-1.5">
+                                                            @foreach($breakdown as $item)
+                                                                <div class="inline-flex flex-col items-center bg-slate-50 hover:bg-indigo-50 border border-slate-200 hover:border-indigo-300 rounded-lg px-2.5 py-1 text-center transition cursor-pointer" onclick="speakText('{{ addslashes($item['token']) }}', '{{ $lesson->unit->level->language->code }}')" title="Klik untuk dengarkan pelafalan suku kata">
+                                                                    <span class="font-bold text-xs text-slate-800 {{ $lesson->unit->level->language->code === 'ar' ? 'font-arabic text-base' : '' }}">{{ $item['token'] }}</span>
+                                                                    <span class="text-[10px] text-indigo-600 font-semibold">[{{ $item['syllables'] }}]</span>
+                                                                    <span class="text-[9px] text-slate-500 font-semibold">{{ $item['meaning'] }}</span>
+                                                                </div>
+                                                            @endforeach
+                                                        </div>
+                                                    </div>
+                                                @endif
                                             </div>
                                         @endforeach
                                     </div>
@@ -192,27 +216,47 @@
                 <div>
                     <h3 class="text-sm font-bold uppercase tracking-wider text-slate-500 mb-4 flex items-center gap-2">
                         <i data-lucide="users" class="w-4 h-4 text-emerald-600"></i>
-                        <span>Simulasi Percakapan Situasional (Dialogue)</span>
+                        <span>Simulasi Percakapan Situasional & Bedah Suku Kata</span>
                     </h3>
                     <div class="space-y-3">
                         @foreach($lesson->content_body['dialogues'] as $dia)
-                            <div class="p-4 rounded-2xl border border-slate-200 bg-slate-50 flex items-start justify-between">
-                                <div class="flex items-start gap-3">
-                                    <div class="w-8 h-8 rounded-full bg-slate-200 text-slate-700 font-bold text-xs flex items-center justify-center flex-shrink-0 mt-0.5">
-                                        {{ substr($dia['speaker'], 0, 1) }}
-                                    </div>
-                                    <div>
-                                        <div class="text-[11px] font-bold text-slate-500 uppercase">{{ $dia['speaker'] }}</div>
-                                        <div class="text-base font-bold text-slate-900 {{ $lesson->unit->level->language->code === 'ar' ? 'font-arabic text-xl' : '' }}">
-                                            {{ $dia['line'] }}
+                            <div class="p-4 sm:p-5 rounded-2xl border border-slate-200 bg-slate-50 hover:bg-white transition shadow-sm">
+                                <div class="flex items-start justify-between gap-3 mb-2">
+                                    <div class="flex items-start gap-3">
+                                        <div class="w-8 h-8 rounded-full bg-emerald-100 text-emerald-700 font-bold text-xs flex items-center justify-center flex-shrink-0 mt-0.5">
+                                            {{ substr($dia['speaker'], 0, 1) }}
                                         </div>
-                                        <div class="text-xs text-blue-600 font-medium">{{ $dia['trans'] ?? '' }}</div>
-                                        <div class="text-xs text-slate-600 mt-0.5">{{ $dia['meaning'] }}</div>
+                                        <div>
+                                            <div class="text-[11px] font-bold text-emerald-700 uppercase tracking-wider">{{ $dia['speaker'] }}</div>
+                                            <div class="text-base sm:text-lg font-bold text-slate-900 {{ $lesson->unit->level->language->code === 'ar' ? 'font-arabic text-xl sm:text-2xl' : '' }}">
+                                                {{ $dia['line'] }}
+                                            </div>
+                                            <div class="text-xs text-emerald-600 font-semibold mt-0.5">Pelafalan Abjad: {{ $dia['trans'] ?? '' }}</div>
+                                            <div class="text-xs text-slate-600 mt-1">Arti: {{ $dia['meaning'] }}</div>
+                                        </div>
                                     </div>
+                                    <button type="button" onclick="speakText('{{ addslashes($dia['audio'] ?? $dia['line']) }}', '{{ $lesson->unit->level->language->code }}')" class="p-2.5 rounded-xl bg-emerald-100 text-emerald-700 hover:bg-emerald-600 hover:text-white transition shadow-sm flex-shrink-0" title="Dengarkan percakapan">
+                                        <i data-lucide="volume-2" class="w-4 h-4"></i>
+                                    </button>
                                 </div>
-                                <button type="button" onclick="speakText('{{ addslashes($dia['audio'] ?? $dia['line']) }}', '{{ $lesson->unit->level->language->code }}')" class="p-2 rounded-lg bg-emerald-100 text-emerald-700 hover:bg-emerald-600 hover:text-white transition shadow-sm ml-2">
-                                    <i data-lucide="volume-2" class="w-4 h-4"></i>
-                                </button>
+
+                                @php
+                                    $diaBreakdown = $dia['breakdown'] ?? \App\Services\LinguisticBreakdownService::getBreakdown($lesson->unit->level->language->code, $dia['line'], $dia['trans'] ?? null, $dia['meaning'] ?? null);
+                                @endphp
+                                @if(!empty($diaBreakdown))
+                                    <div class="mt-2.5 pt-2 border-t border-slate-200">
+                                        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1.5">Bedah Suku Kata & Terjemahan Kata per Kata:</span>
+                                        <div class="flex flex-wrap gap-1.5">
+                                            @foreach($diaBreakdown as $b)
+                                                <div class="inline-flex flex-col items-center bg-white hover:bg-emerald-50 border border-slate-200 hover:border-emerald-300 rounded-lg px-2 py-1 text-center transition cursor-pointer shadow-2xs" onclick="speakText('{{ addslashes($b['token']) }}', '{{ $lesson->unit->level->language->code }}')" title="Klik untuk dengarkan pelafalan suku kata">
+                                                    <span class="font-bold text-xs text-slate-800 {{ $lesson->unit->level->language->code === 'ar' ? 'font-arabic text-base' : '' }}">{{ $b['token'] }}</span>
+                                                    <span class="text-[10px] text-emerald-600 font-semibold">[{{ $b['syllables'] }}]</span>
+                                                    <span class="text-[9px] text-slate-500 font-semibold">{{ $b['meaning'] }}</span>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                @endif
                             </div>
                         @endforeach
                     </div>

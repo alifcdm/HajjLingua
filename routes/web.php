@@ -8,9 +8,13 @@ use App\Http\Controllers\ExamController;
 use App\Http\Controllers\CertificateController;
 use App\Http\Controllers\AlphabetController;
 use App\Http\Controllers\DrillController;
+use App\Http\Controllers\HajjController;
 
 // Dashboard & Home
 Route::get('/', [HomeController::class, 'index'])->name('home');
+
+// Modul Pembelajaran Ibadah Haji Terpadu (Panduan Lengkap, Fiqih, Doa, Video & Regulasi)
+Route::get('/hajj', [HajjController::class, 'index'])->name('hajj.index');
 
 // Complete Alphabet & Master Syllabary Explorer (Zero to Hero)
 Route::get('/alphabet/{langCode?}', [AlphabetController::class, 'index'])->name('alphabet.index');

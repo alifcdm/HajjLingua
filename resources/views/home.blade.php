@@ -72,7 +72,8 @@
     </div>
 
     <!-- Feature Showcase: Zero to Hero Alphabet Explorer & 100-Stage Drill Arena -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-14">
+    <!-- Feature Showcase: Zero to Hero Alphabet, 100-Stage Drill Arena & Modul Haji Terpadu -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-14">
         <!-- Card 1: Zero to Hero Alphabet Master -->
         <div class="p-6 md:p-8 rounded-3xl bg-gradient-to-br from-amber-500/10 via-amber-500/5 to-orange-500/10 border border-amber-200/80 shadow-sm relative overflow-hidden flex flex-col justify-between">
             <div>
@@ -122,31 +123,67 @@
                     Penguat Ingatan Permanen
                 </div>
                 <h3 class="text-xl md:text-2xl font-black text-slate-900 mb-2">
-                    Arena 100 Level Drill (1.500 Soal / Level)
+                    Arena 100 Level Drill (1.500 Soal)
                 </h3>
                 <p class="text-xs sm:text-sm text-slate-600 mb-6 leading-relaxed">
-                    Setiap stage berisi 15 soal cepat dengan distractor cerdas dan ulasan komprehensif. Didesain untuk mengunci ingatan tata bahasa, idiom, partikel, dan kosakata tanpa lupa.
+                    Setiap stage berisi 15 soal cepat dengan distractor cerdas dan ulasan komprehensif. Didesain untuk mengunci ingatan tata bahasa, partikel, dan kosakata.
                 </p>
 
-                <div class="grid grid-cols-3 gap-3 mb-6">
+                <div class="grid grid-cols-3 gap-2 mb-6">
                     <div class="bg-white p-3 rounded-xl border border-indigo-100 text-center">
-                        <div class="text-xl font-black text-indigo-600">100</div>
-                        <div class="text-[11px] text-slate-500 font-medium">Stage Per Level</div>
+                        <div class="text-lg font-black text-indigo-600">100</div>
+                        <div class="text-[10px] text-slate-500 font-medium">Stage Level</div>
                     </div>
                     <div class="bg-white p-3 rounded-xl border border-indigo-100 text-center">
-                        <div class="text-xl font-black text-indigo-600">15</div>
-                        <div class="text-[11px] text-slate-500 font-medium">Soal Per Stage</div>
+                        <div class="text-lg font-black text-indigo-600">15</div>
+                        <div class="text-[10px] text-slate-500 font-medium">Soal/Stage</div>
                     </div>
                     <div class="bg-white p-3 rounded-xl border border-indigo-100 text-center">
-                        <div class="text-xl font-black text-indigo-600">1.500+</div>
-                        <div class="text-[11px] text-slate-500 font-medium">Soal & Analisis</div>
+                        <div class="text-lg font-black text-indigo-600">1.500+</div>
+                        <div class="text-[10px] text-slate-500 font-medium">Soal & Analisis</div>
                     </div>
                 </div>
             </div>
 
             <a href="#pairs-grid" class="inline-flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-indigo-600 text-white font-bold text-xs hover:bg-indigo-700 transition shadow-sm">
-                <span>Pilih Bahasa & Mulai Drill 100 Level</span>
+                <span>Pilih Bahasa & Mulai Drill</span>
                 <i data-lucide="arrow-down" class="w-4 h-4"></i>
+            </a>
+        </div>
+
+        <!-- Card 3: Modul Panduan & Manasik Haji Terpadu -->
+        <div class="p-6 md:p-8 rounded-3xl bg-gradient-to-br from-emerald-500/10 via-teal-500/5 to-emerald-500/10 border border-emerald-200/80 shadow-sm relative overflow-hidden flex flex-col justify-between">
+            <div>
+                <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 text-xs font-bold mb-3">
+                    <i data-lucide="compass" class="w-3.5 h-3.5 text-emerald-600"></i>
+                    Modul Spesial: Haji & Umrah
+                </div>
+                <h3 class="text-xl md:text-2xl font-black text-slate-900 mb-2">
+                    Panduan & Manasik Ibadah Haji
+                </h3>
+                <p class="text-xs sm:text-sm text-slate-600 mb-6 leading-relaxed">
+                    Riset komprehensif seluruh alur 8-13 Dzulhijjah, rukun & wajib, fiqih dam, 16 doa berharakat dengan audio penutur asli, aturan Kemenag RI, dan regulasi Nusuk Arab Saudi.
+                </p>
+
+                <div class="grid grid-cols-3 gap-2 mb-6">
+                    <div class="bg-white p-3 rounded-xl border border-emerald-100 text-center">
+                        <div class="text-lg font-black text-emerald-700">8-13</div>
+                        <div class="text-[10px] text-slate-500 font-medium">Dzulhijjah</div>
+                    </div>
+                    <div class="bg-white p-3 rounded-xl border border-emerald-100 text-center">
+                        <div class="text-lg font-black text-emerald-700">16</div>
+                        <div class="text-[10px] text-slate-500 font-medium">Doa & Audio</div>
+                    </div>
+                    <div class="bg-white p-3 rounded-xl border border-emerald-100 text-center">
+                        <div class="text-lg font-black text-emerald-700">3D</div>
+                        <div class="text-[10px] text-slate-500 font-medium">Simulasi Video</div>
+                    </div>
+                </div>
+            </div>
+
+            <a href="{{ route('hajj.index') }}" class="inline-flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-emerald-700 text-white font-bold text-xs hover:bg-emerald-800 transition shadow-sm">
+                <span>Pelajari Modul Materi Haji</span>
+                <i data-lucide="arrow-right" class="w-4 h-4"></i>
             </a>
         </div>
     </div>
