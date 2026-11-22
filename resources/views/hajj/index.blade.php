@@ -88,17 +88,13 @@
             <i data-lucide="shield-alert" class="w-4 h-4 text-blue-600"></i>
             <span>4. Regulasi Kemenhaj RI & Saudi</span>
         </button>
-        <button onclick="switchHajjTab('officers')" id="tab-btn-officers" class="hajj-tab-btn px-4 py-2.5 rounded-xl text-xs font-bold whitespace-nowrap transition flex items-center gap-2 bg-white border border-slate-200 text-slate-700 hover:border-emerald-500">
-            <i data-lucide="user-check" class="w-4 h-4 text-amber-500"></i>
-            <span>5. Presensi Petugas PPIH (Bimtek)</span>
-        </button>
         <button onclick="switchHajjTab('videos')" id="tab-btn-videos" class="hajj-tab-btn px-4 py-2.5 rounded-xl text-xs font-bold whitespace-nowrap transition flex items-center gap-2 bg-white border border-slate-200 text-slate-700 hover:border-emerald-500">
             <i data-lucide="video" class="w-4 h-4 text-rose-500"></i>
-            <span>6. Video Simulasi 3D & Manasik</span>
+            <span>5. Video Simulasi 3D & Manasik</span>
         </button>
         <button onclick="switchHajjTab('quiz')" id="tab-btn-quiz" class="hajj-tab-btn px-4 py-2.5 rounded-xl text-xs font-bold whitespace-nowrap transition flex items-center gap-2 bg-white border border-slate-200 text-slate-700 hover:border-emerald-500">
             <i data-lucide="check-square" class="w-4 h-4 text-purple-600"></i>
-            <span>7. Checklist & Kuis Evaluasi</span>
+            <span>6. Checklist & Kuis Evaluasi</span>
         </button>
     </div>
 
@@ -370,6 +366,40 @@
             </div>
         </div>
 
+        <!-- KETENTUAN 4 MACAM FIQIH DAM (DENDA PELANGGARAN HAJI) -->
+        <div class="bg-white rounded-3xl border border-rose-200 p-6 sm:p-8 shadow-sm">
+            <div class="flex items-center gap-2 mb-2">
+                <span class="w-8 h-8 rounded-xl bg-rose-100 text-rose-700 flex items-center justify-center font-bold text-sm">
+                    <i data-lucide="scale" class="w-4 h-4"></i>
+                </span>
+                <h3 class="text-xl font-bold text-slate-900">Ketentuan 4 Macam Fiqih Dam (Denda Pelanggaran Haji)</h3>
+            </div>
+            <p class="text-xs sm:text-sm text-slate-500 mb-6">
+                Berdasarkan Fiqih Mazhab Syafi'i dan Pedoman Manasik Kementerian Agama & Kementerian Haji dan Umrah RI, Dam terbagi ke dalam 4 klasifikasi hukum:
+            </p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                @foreach($hajj['fiqh']['dam_categories'] as $dam)
+                    <div class="p-5 rounded-2xl bg-rose-50/40 border border-rose-200 hover:border-rose-400 transition flex flex-col justify-between shadow-2xs">
+                        <div>
+                            <h4 class="text-sm font-bold text-rose-950 mb-2 flex items-center gap-1.5">
+                                <i data-lucide="alert-triangle" class="w-4 h-4 text-rose-600 flex-shrink-0"></i>
+                                <span>{{ $dam['name'] }}</span>
+                            </h4>
+                            <div class="text-xs text-slate-700 leading-relaxed mb-3">
+                                <span class="font-bold text-slate-900 block mb-0.5">Sebab Denda:</span>
+                                {{ $dam['cause'] }}
+                            </div>
+                        </div>
+                        <div class="p-3 rounded-xl bg-white border border-rose-200 text-xs">
+                            <span class="font-bold text-rose-700 block mb-0.5">Ketentuan Pembayaran Denda:</span>
+                            <span class="text-slate-800 leading-relaxed">{{ $dam['penalty'] }}</span>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+
         <!-- PANDUAN FIQIH KHUSUS PETUGAS HAJI (KEMENHAJ & KEMENAG RI) -->
         <div class="bg-gradient-to-br from-amber-500/10 via-slate-50 to-emerald-500/10 rounded-3xl border border-amber-300 p-6 sm:p-8 shadow-sm">
             <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 pb-6 border-b border-amber-200 mb-6">
@@ -577,155 +607,6 @@
         </div>
     </div>
 
-    <!-- TAB 5: PORTAL PRESENSI PETUGAS PPIH (BIMTEK KEMENHAJ RI) -->
-    <div id="tab-officers" class="hajj-tab-pane hidden space-y-6">
-        <div class="bg-slate-950 text-white rounded-3xl border border-slate-800 p-6 sm:p-8 shadow-2xl relative overflow-hidden">
-            <!-- Header Portal Kementerian Haji dan Umrah RI -->
-            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 pb-6 border-b border-slate-800">
-                <div class="flex items-center gap-3">
-                    <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-amber-600 to-yellow-400 text-slate-950 flex items-center justify-center font-black shadow-lg">
-                        <i data-lucide="shield-check" class="w-7 h-7"></i>
-                    </div>
-                    <div>
-                        <div class="text-base sm:text-lg font-black tracking-wide text-amber-400 uppercase">
-                            {{ $hajj['officers_portal']['institution'] }}
-                        </div>
-                        <div class="text-xs font-bold text-slate-400 tracking-wider">
-                            {{ $hajj['officers_portal']['country'] }}
-                        </div>
-                    </div>
-                </div>
-
-                <div class="flex items-center gap-2 text-xs font-semibold">
-                    <span class="px-3 py-1.5 rounded-xl bg-slate-900 text-slate-400 hover:text-white cursor-pointer">Biodata</span>
-                    <span class="px-3.5 py-1.5 rounded-xl bg-amber-500/20 text-amber-300 border border-amber-500/40 font-bold">Presensi</span>
-                    <span class="px-3 py-1.5 rounded-xl bg-slate-900 text-slate-400 hover:text-white cursor-pointer flex items-center gap-1.5">
-                        <i data-lucide="layout-dashboard" class="w-3.5 h-3.5 text-blue-400"></i>
-                        <span>Dashboard</span>
-                    </span>
-                </div>
-            </div>
-
-            <!-- Title & Search Area -->
-            <div class="py-6 max-w-2xl mx-auto text-center">
-                <h2 class="text-xl sm:text-2xl font-black text-white tracking-wider mb-2 uppercase">
-                    Presensi Petugas
-                </h2>
-                <p class="text-xs text-slate-400 mb-6">
-                    Sistem Terintegrasi Presensi Digital Bimbingan Teknis (Bimtek) Petugas Penyelenggara Ibadah Haji (PPIH).
-                </p>
-
-                <!-- Search Input matching User's uploaded screenshot -->
-                <div class="flex items-center gap-2 bg-slate-900 p-2 rounded-2xl border border-slate-800 shadow-inner">
-                    <input type="text" id="officerSearchInput" value="{{ $hajj['officers_portal']['sample_officer']['registration_id'] }}" placeholder="Masukkan Nomor Registrasi Petugas..." class="w-full bg-transparent px-4 py-2.5 text-sm font-mono text-white focus:outline-none">
-                    <button type="button" onclick="performOfficerSearch()" class="px-6 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-bold text-xs flex items-center gap-1.5 transition shadow-md flex-shrink-0">
-                        <i data-lucide="search" class="w-4 h-4"></i>
-                        <span>Cari</span>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Officer Profile Card -->
-            <div id="officerProfileCard" class="max-w-3xl mx-auto rounded-3xl bg-slate-900/90 border border-slate-800 p-6 sm:p-8 backdrop-blur-md shadow-xl">
-                <!-- Status Badge -->
-                <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-xs font-bold mb-6">
-                    <i data-lucide="check-circle" class="w-3.5 h-3.5"></i>
-                    <span>Data ditemukan</span>
-                </div>
-
-                <!-- Info Table Rows -->
-                <div class="space-y-4 text-xs sm:text-sm">
-                    <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-slate-800/80 gap-1">
-                        <span class="text-slate-400 font-medium">Nama</span>
-                        <span class="font-bold text-white text-base">{{ $hajj['officers_portal']['sample_officer']['name'] }}</span>
-                    </div>
-
-                    <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-slate-800/80 gap-1">
-                        <span class="text-slate-400 font-medium">Jenis Petugas</span>
-                        <span class="font-semibold text-slate-200">{{ $hajj['officers_portal']['sample_officer']['officer_type'] }}</span>
-                    </div>
-
-                    <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-slate-800/80 gap-1">
-                        <span class="text-slate-400 font-medium">Jenis Layanan</span>
-                        <span class="font-semibold text-slate-200">{{ $hajj['officers_portal']['sample_officer']['service_type'] }}</span>
-                    </div>
-
-                    <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-slate-800/80 gap-1">
-                        <span class="text-slate-400 font-medium">Tanggal</span>
-                        <span class="font-semibold text-slate-300 font-mono">{{ $hajj['officers_portal']['sample_officer']['date'] }}</span>
-                    </div>
-
-                    <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-slate-800/80 gap-1">
-                        <span class="text-slate-400 font-medium">Presensi hari ini</span>
-                        <span class="font-bold text-amber-300">{{ $hajj['officers_portal']['sample_officer']['attendance_summary'] }}</span>
-                    </div>
-
-                    <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-slate-800/80 gap-2">
-                        <span class="text-slate-400 font-medium">Sesi sudah presensi</span>
-                        <div class="flex items-center gap-2">
-                            @foreach($hajj['officers_portal']['sample_officer']['attended_sessions'] as $sess)
-                                <span class="px-3 py-1 rounded-full bg-emerald-950/80 text-emerald-300 border border-emerald-600/50 text-xs font-bold">
-                                    {{ $sess }}
-                                </span>
-                            @endforeach
-                        </div>
-                    </div>
-
-                    <!-- Jadwal Sesi Hari Ini (Pills) -->
-                    <div class="py-2">
-                        <span class="text-slate-400 font-medium block mb-2">Jadwal sesi hari ini</span>
-                        <div class="flex flex-wrap gap-2">
-                            @foreach($hajj['officers_portal']['sample_officer']['sessions_schedule'] as $sched)
-                                <span class="px-3 py-1.5 rounded-full border text-xs font-semibold {{ $sched['color'] }}">
-                                    {{ $sched['session'] }} • {{ $sched['class'] }} • {{ $sched['status'] }}
-                                </span>
-                            @endforeach
-                        </div>
-                    </div>
-
-                    <!-- Detail Materi, Kelas, Narasumber & Moderator -->
-                    <div class="p-4 rounded-2xl bg-slate-950/80 border border-slate-800 space-y-2 mt-4">
-                        <div class="flex items-center justify-between text-xs font-bold text-amber-400 mb-1">
-                            <span>Materi, Kelas, Narasumber & Moderator</span>
-                            <span>{{ $hajj['officers_portal']['sample_officer']['current_detail']['session_title'] }}</span>
-                        </div>
-                        <div class="text-sm font-bold text-white">
-                            Materi: {{ $hajj['officers_portal']['sample_officer']['current_detail']['subject'] }}
-                        </div>
-                        <div class="text-xs text-slate-300">
-                            Kelas: {{ $hajj['officers_portal']['sample_officer']['current_detail']['class_name'] }}
-                        </div>
-                        <div class="text-xs text-slate-300">
-                            Narasumber: <span class="text-amber-200 font-semibold">{{ $hajj['officers_portal']['sample_officer']['current_detail']['speaker'] }}</span>
-                        </div>
-                        <div class="text-xs text-slate-300">
-                            Moderator: <span class="text-slate-200 font-semibold">{{ $hajj['officers_portal']['sample_officer']['current_detail']['moderator'] }}</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 6 Pilar Bidang Layanan Tusi Petugas PPIH -->
-            <div class="mt-8 pt-8 border-t border-slate-800">
-                <h3 class="text-sm font-bold text-slate-300 uppercase tracking-wider mb-4 flex items-center gap-2">
-                    <i data-lucide="users-round" class="w-4 h-4 text-amber-400"></i>
-                    <span>Tugas dan Fungsi (Tusi) Layanan Petugas Haji Kementerian Haji dan Umrah RI</span>
-                </h3>
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                    @foreach($hajj['officers_portal']['tusi_categories'] as $tusi)
-                        <div class="p-3.5 rounded-2xl bg-slate-900 border border-slate-800 text-xs">
-                            <div class="font-bold text-amber-300 mb-1 flex items-center gap-1.5">
-                                <i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400"></i>
-                                <span>{{ $tusi['name'] }}</span>
-                            </div>
-                            <div class="text-slate-400 leading-relaxed">{{ $tusi['desc'] }}</div>
-                        </div>
-                    @endforeach
-                </div>
-            </div>
-        </div>
-    </div>
-
     <!-- TAB 5: VIDEO SIMULASI 3D & MANASIK -->
     <div id="tab-videos" class="hajj-tab-pane hidden space-y-6">
         <div class="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-sm">
@@ -905,25 +786,6 @@
             });
             updateChecklistProgress();
         } catch(e) {}
-    }
-
-    function performOfficerSearch() {
-        const input = document.getElementById('officerSearchInput');
-        const val = input ? input.value.trim() : '';
-        const card = document.getElementById('officerProfileCard');
-        if (!val) {
-            alert('Silakan masukkan nomor registrasi petugas.');
-            return;
-        }
-
-        if (card) {
-            card.classList.add('animate-pulse', 'border-amber-400');
-            setTimeout(() => {
-                card.classList.remove('animate-pulse');
-            }, 600);
-        }
-
-        showAudioToast(`Data Petugas Terverifikasi Siskohat: ${val}`);
     }
 
     document.addEventListener('DOMContentLoaded', () => {

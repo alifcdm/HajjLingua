@@ -62,11 +62,14 @@ class HajjModuleAndLinguisticBreakdownTest extends TestCase
         $response->assertSee('Kartu Pintar Nusuk');
         $response->assertSee('Istitha', false);
 
-        // Portal Petugas PPIH (Bimtek)
-        $response->assertSee('Presensi Petugas');
-        $response->assertSee('Alif Chandramaya');
-        $response->assertSee('Pendidikan Jasmani');
-        $response->assertSee('Kelas Tusi');
+        // 4 Macam Fiqih Dam
+        $response->assertSee('Ketentuan 4 Macam Fiqih Dam');
+        $response->assertSee('Dam Tartib wa Taqdir');
+        $response->assertSee('Dam Takhyir wa Taqdir');
+
+        // Section Presensi Petugas PPIH dipastikan terhapus dari Modul Haji
+        $response->assertDontSee('Presensi Petugas');
+        $response->assertDontSee('Alif Chandramaya');
 
         // Video & Kuis
         $response->assertSee('Simulasi Visual 3D');

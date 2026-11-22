@@ -17,7 +17,6 @@ class HajjModuleService
             'officer_fiqh' => self::getOfficerFiqhData(),
             'prayers' => self::getPrayersData(),
             'regulations' => self::getRegulationsData(),
-            'officers_portal' => self::getOfficersPortalData(),
             'videos' => self::getVideoData(),
             'quiz' => self::getQuizData(),
         ];
@@ -198,6 +197,28 @@ class HajjModuleService
                 'pria' => ['Memakai pakaian bertangkup / berjahit yang membentuk lekuk tubuh (celana, kemeja, pakaian dalam).', 'Menutup kepala dengan penutup yang menempel (peci, topi, sorban).', 'Memakai sepatu atau alas kaki yang menutupi mata kaki dan jari.'],
                 'wanita' => ['Menutup wajah menggunakan cadar / niqab (boleh menutup dengan kain yang tidak menempel jika ada lelaki ajnabi).', 'Memakai sarung tangan yang menutup jari jemari.'],
                 'bersama' => ['Memakai wewangian pada badan maupun pakaian ihram setelah niat.', 'Memotong kuku tangan maupun kuku kaki.', 'Mencukur, mencabut, atau menggunting rambut kepala maupun bulu badan.', 'Membunuh atau memburu hewan darat buruan.', 'Menikah, menikahkan orang lain (menjadi wali), atau meminang.', 'Bersetubuh (rafats) atau bermesraan dengan syahwat.', 'Berbuat maksiat (fusuq) dan bertengkar / berbantah-bantahan (jidal).'],
+            ],
+            'dam_categories' => [
+                [
+                    'name' => '1. Dam Tartib wa Taqdir (Berurutan dengan Ketentuan Pasti)',
+                    'cause' => 'Mengerjakan Haji Tamattu\' atau Qiran, atau meninggalkan salah satu wajib haji (tidak berniat di miqat, tidak mabit di Muzdalifah, tidak mabit di Mina, tidak melontar jumrah, atau tidak tawaf wada\').',
+                    'penalty' => 'Wajib menyembelih 1 ekor kambing di tanah haram Makkah. Jika tidak mampu (finansial/fisik), wajib berpuasa 10 hari (3 hari di tanah suci selama musim haji + 7 hari setelah kembali ke tanah air).'
+                ],
+                [
+                    'name' => '2. Dam Takhyir wa Taqdir (Boleh Memilih dari Ukuran Tertentu)',
+                    'cause' => 'Melanggar larangan ihram ringan karena uzur atau sengaja: mencukur rambut/bulu badan, memotong kuku, memakai wewangian, memakai pakaian berjahit (pria), menutup kepala (pria), menutup wajah/cadar (wanita), atau memakai sarung tangan.',
+                    'penalty' => 'Bebas memilih salah satu: (1) Menyembelih 1 ekor kambing di Makkah, ATAU (2) Puasa 3 hari di mana saja, ATAU (3) Bersedekah memberi makan 6 orang fakir miskin (masing-masing 1/2 sha\' atau ~1,5 kg makanan pokok).'
+                ],
+                [
+                    'name' => '3. Dam Takhyir wa Ta\'dil (Boleh Memilih dengan Nilai Sepadan)',
+                    'cause' => 'Berburu, membunuh, atau membantu membunuh hewan darat buruan saat berihram, atau menebang pohon/mencabut tanaman di tanah haram Makkah.',
+                    'penalty' => 'Bebas memilih salah satu: (1) Menyembelih hewan ternak yang senilai dengan hewan buruan yang dibunuh, ATAU (2) Membeli makanan senilai hewan tersebut untuk dibagikan ke fakir miskin Makkah, ATAU (3) Berpuasa sebanyak hitungan mud makanan (1 hari puasa per 1 mud).'
+                ],
+                [
+                    'name' => '4. Dam Tartib wa Ta\'dil (Berurutan dan Sepadan - Pelanggaran Berat)',
+                    'cause' => 'Melakukan hubungan suami istri (bersetubuh / jima\') sebelum Tahallul Awwal (pelanggaran yang merusak/membatalkan haji).',
+                    'penalty' => 'Haji menjadi BATAL dan wajib diselesaikan amalannya hingga tuntas serta wajib diqadha di tahun berikutnya. Denda berurutan: Menyembelih 1 ekor unta di Makkah. Jika tidak mampu, 1 ekor sapi. Jika tidak mampu, 7 ekor kambing. Jika tidak mampu, membeli makanan senilai unta untuk fakir miskin Makkah. Jika tidak mampu, berpuasa senilai mud makanan tersebut.'
+                ]
             ]
         ];
     }
@@ -312,6 +333,42 @@ class HajjModuleService
                 'trans' => 'Allāhumma aṡbit lī bikulli sya‘ratin ḥasanah, wamḥu ‘annī bihā sayyi\'ah, warfa‘ lī bihā ‘indaka darajah',
                 'meaning' => 'Ya Allah, tetapkanlah bagiku dari setiap helai rambut satu kebaikan, hapuskanlah dariku satu keburukan, dan angkatlah derajatku di sisi-Mu dengannya.',
                 'audio' => 'Allahumma atsbit li bikulli sya\'ratin hasanah'
+            ],
+            [
+                'id' => 'p13',
+                'title' => 'Doa Istighfar & Munajat Wukuf di Padang Arafah',
+                'occasion' => 'Dibaca saat wukuf di Arafah pada 9 Dzulhijjah menghadap kiblat',
+                'arabic' => 'أَسْتَغْفِرُ اللَّهَ الْعَظِيمَ الَّذِي لَا إِلَهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ وَأَتُوبُ إِلَيْهِ',
+                'trans' => 'Astaghfirullāhal-‘aẓīm allażī lā ilāha illā huwal-ḥayyul-qayyūmu wa atūbu ilaih',
+                'meaning' => 'Aku memohon ampun kepada Allah Yang Maha Agung, tiada Tuhan selain Dia Yang Maha Hidup lagi terus menerus mengurus makhluk-Nya, dan aku bertaubat kepada-Nya.',
+                'audio' => 'Astaghfirullahal \'adzim alladzi la ilaha illa huwal hayyul qayyum wa atubu ilaih'
+            ],
+            [
+                'id' => 'p14',
+                'title' => 'Doa Mabit di Muzdalifah & Masy\'aril Haram',
+                'occasion' => 'Dibaca pada malam 10 Dzulhijjah saat berdzikir di Muzdalifah',
+                'arabic' => 'اللَّهُمَّ كَمَا وَقَفْتَنَا فِيهِ وَأَرَيْتَنَا إِيَّاهُ فَوَفِّقْنَا لِذِكْرِكَ كَمَا هَدَيْتَنَا',
+                'trans' => 'Allāhumma kamā waqaftanā fīhi wa araitanā iyyāhu fawaffiqnā liżikrika kamā hadaitanā',
+                'meaning' => 'Ya Allah, sebagaimana Engkau telah menempatkan kami di tempat mulia ini dan memperlihatkannya kepada kami, maka berilah kami taufiq untuk senantiasa mengingat-Mu sebagaimana Engkau telah memberi petunjuk kepada kami.',
+                'audio' => 'Allahumma kama waqaftana fihi wa araitana iyyahu fawaffiqna lidzikrika kama hadaitana'
+            ],
+            [
+                'id' => 'p15',
+                'title' => 'Doa Sesudah Selesai Melontar Tiga Jumrah (Hari Tasyrik)',
+                'occasion' => 'Dibaca setelah tuntas melontar Jumrah Ula, Wustha, dan Aqabah pada 11-13 Dzulhijjah',
+                'arabic' => 'اللَّهُمَّ اجْعَلْهُ حَجًّا مَبْرُورًا، وَعَمَلًا صَالِحًا مَقْبُولًا، وَذَنْبًا مَغْفُورًا، وَتِجَارَةً لَنْ تَبُورَ',
+                'trans' => 'Allāhummaj‘alhu ḥajjan mabrūrā, wa ‘amalan ṣāliḥan maqbūlā, wa żanban magfūrā, wa tijāratan lan tabūr',
+                'meaning' => 'Ya Allah, jadikanlah hajiku ini haji yang mabrur, amal shaleh yang diterima, dosa yang diampuni, dan perniagaan yang tidak akan pernah merugi.',
+                'audio' => 'Allahummaj\'alhu hajjan mabrura wa \'amalan shalihan maqbula'
+            ],
+            [
+                'id' => 'p16',
+                'title' => 'Doa Tawaf Wada\' (Tawaf Perpisahan Meninggalkan Makkah)',
+                'occasion' => 'Dibaca setelah selesai 7 putaran Tawaf Wada\' sebelum melangkah keluar dari Masjidil Haram',
+                'arabic' => 'اللَّهُمَّ لَا تَجْعَلْ هَذَا آخِرَ الْعَهْدِ بِبَيْتِكَ الْحَرَامِ، وَإِنْ جَعَلْتَهُ فَاعْوِضْنِي عَنْهُ الْجَنَّةَ بِرَحْمَتِكَ يَا أَرْحَمَ الرَّاحِمِينَ',
+                'trans' => 'Allāhumma lā taj‘al hāżā ākhiral-‘ahdi bibaitikal-ḥarām, wa in ja‘altahū fa‘wiḍnī ‘anhul-jannata biraḥmatika yā arḥamar-rāḥimīn',
+                'meaning' => 'Ya Allah, janganlah Engkau jadikan kunjungan ini saat terakhir bagiku dengan Baitullah-Mu yang mulia. Sekiranya Engkau menjadikannya yang terakhir, gantikanlah untukku dengan surga berkat rahmat-Mu, wahai Dzat Yang Maha Pengasih lagi Maha Penyayang.',
+                'audio' => 'Allahumma la taj\'al hadza akhiral \'ahdi bibaitikal haram'
             ]
         ];
     }
@@ -535,53 +592,6 @@ class HajjModuleService
                     'topic' => '6. Skema Murur & Tanazul bagi Petugas dan Lansia',
                     'desc' => 'Penerapan skema Murur (melintas Muzdalifah di dalam bus menuju Mina tanpa turun) dan skema Tanazul (pemulangan jemaah lemah ke hotel Makkah) adalah sah menurut fiqih kontemporer Kemenhaj RI demi memelihara jiwa (Hifzhun Nafs) dari bahaya kepadatan ekstrem.'
                 ]
-            ]
-        ];
-    }
-
-    /**
-     * Portal Pelatihan & Presensi Petugas Haji (PPIH) Kementerian Haji dan Umrah RI
-     */
-    private static function getOfficersPortalData(): array
-    {
-        return [
-            'institution' => 'Kementerian Haji dan Umrah',
-            'country' => 'REPUBLIK INDONESIA',
-            'program_title' => 'Bimbingan Teknis (Bimtek) Terintegrasi Petugas Haji PPIH',
-            'sample_officer' => [
-                'registration_id' => '4858941',
-                'name' => 'Alif Chandramaya',
-                'officer_type' => 'PPIH Arab Saudi / PPIH Kloter Terintegrasi',
-                'service_type' => 'Layanan Konsumsi & Akomodasi Masyair',
-                'date' => '22-11-2026 · 10:25 WIB',
-                'attendance_summary' => '2 dari 4 Sesi',
-                'attended_sessions' => ['Sesi 1', 'Sesi 2'],
-                'sessions_schedule' => [
-                    ['session' => 'Sesi 1', 'class' => 'Kelas Besar', 'status' => 'ditutup 08:00', 'color' => 'bg-rose-950/70 text-rose-300 border-rose-800'],
-                    ['session' => 'Sesi 2', 'class' => 'Kelas Besar', 'status' => 'ditutup 09:30', 'color' => 'bg-rose-950/70 text-rose-300 border-rose-800'],
-                    ['session' => 'Sesi 3', 'class' => 'Kelas Besar', 'status' => 'buka 16:00', 'color' => 'bg-amber-950/70 text-amber-300 border-amber-800'],
-                    ['session' => 'Sesi 4', 'class' => 'Kelas Tusi', 'status' => 'buka 19:30', 'color' => 'bg-amber-950/70 text-amber-300 border-amber-800'],
-                ],
-                'current_detail' => [
-                    'session_title' => 'Sesi 1 (04:00-08:00)',
-                    'subject' => 'Pendidikan Jasmani & Ketahanan Fisik Lapangan',
-                    'class_name' => 'Kelas Besar',
-                    'speaker' => 'Kolonel (Purn.) Muftiono',
-                    'moderator' => 'Letkol (Purn.) Tulus Widodo',
-                    'competencies' => [
-                        'Bina fisik ketahanan cuaca ekstrem tanah suci (suhu 45°C - 50°C)',
-                        'Protokol evakuasi jemaah tersesat dan crowd emergency di Mina-Jamarat',
-                        'Kerjasama tim terintegrasi antar seksi tusi akomodasi, katering, dan linjam'
-                    ]
-                ]
-            ],
-            'tusi_categories' => [
-                ['name' => 'Layanan Akomodasi', 'desc' => 'Penempatan hotel Makkah & Madinah, distribusi kunci, dan kelaikan fasilitas sanitasi.'],
-                ['name' => 'Layanan Konsumsi', 'desc' => 'Standar higienitas 3x makan sehari bercita rasa nusantara & distribusi katering Armuzna.'],
-                ['name' => 'Layanan Transportasi', 'desc' => 'Bus antarkota (Madinah-Makkah), Bus Shalawat 24 jam, dan armada feeder Masyair.'],
-                ['name' => 'Bimbingan Ibadah (Bimbad)', 'desc' => 'Konsultasi manasik, safari wukuf lansia risti, dan penanganan kasus fiqih khusus.'],
-                ['name' => 'Perlindungan Jemaah (Linjam)', 'desc' => 'Pengamanan sektor, sweeping jemaah terpisah, koordinasi Askar Saudi dan Maktab.'],
-                ['name' => 'Layanan Lansia & Disabilitas', 'desc' => 'Pendampingan khusus kursi roda, tenda prioritas Arafah-Mina, dan skema murur.'],
             ]
         ];
     }
