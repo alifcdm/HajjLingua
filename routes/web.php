@@ -31,6 +31,7 @@ Route::post('/placement/{slug}/submit', [PlacementController::class, 'submit'])-
 // Learn & Curriculum Roadmap
 Route::get('/learn/{slug}', [LearnController::class, 'index'])->name('learn.index');
 Route::get('/lesson/{id}', [LearnController::class, 'showLesson'])->name('lesson.show');
+Route::get('/lesson/{id}/dialogues', [LearnController::class, 'getLessonDialogues'])->name('lesson.dialogues');
 Route::post('/lesson/{id}/complete', [LearnController::class, 'completeLesson'])->name('lesson.complete');
 
 // Level Exams & Certification

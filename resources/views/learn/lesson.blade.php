@@ -86,7 +86,7 @@
                                     {{ $alpha['char'] }}
                                 </div>
                                 <div class="text-xs font-semibold text-slate-500 mb-2">
-                                    {{ $alpha['name'] ?? ($alpha['romaji'] ?? ($alpha['romaja'] ?? $alpha['phonetic'])) }}
+                                    {{ $alpha['name'] ?? ($alpha['romaji'] ?? ($alpha['romaja'] ?? ($alpha['phonetic'] ?? ($alpha['trans'] ?? '')))) }}
                                 </div>
                                 <button type="button" data-text="{{ $alpha['audio'] ?? $alpha['char'] }}" data-lang="{{ $lesson->unit->level->language->code }}" onclick="playVoice(this)" class="w-9 h-9 rounded-full bg-blue-100 text-blue-700 hover:bg-blue-600 hover:text-white transition flex items-center justify-center mx-auto shadow-sm" title="Dengarkan pengucapan huruf">
                                     <i data-lucide="volume-2" class="w-4 h-4"></i>
@@ -227,17 +227,9 @@
                 </div>
             @endif
 
-            <!-- 5. Interactive Communications (100 Skenario Komunikasi 2 Orang atau Lebih) -->
+            <!-- 5. Interactive Communications (100+ Skenario Komunikasi 2 Orang atau Lebih yang Bervariasi & Kontekstual) -->
             @php
-                $dialogueList = $lesson->content_body['interactive_dialogues'] ?? [];
-                if (empty($dialogueList) || count($dialogueList) < 100) {
-                    $dialogueList = \App\Services\InteractiveDialogueService::generate100Dialogues(
-                        $lesson->unit->level->language->code,
-                        $lesson->content_body['vocabularies'] ?? [],
-                        [],
-                        $lesson->sort_order
-                    );
-                }
+                $dialogueList = $dialogues ?? \App\Services\InteractiveDialogueService::getDialoguesForLesson($lesson, $variationSeed ?? 0);
             @endphp
 
             <div class="rounded-3xl border border-emerald-200 bg-gradient-to-b from-emerald-50/50 via-white to-slate-50 p-5 sm:p-7 shadow-sm">
@@ -248,16 +240,41 @@
                                 <i data-lucide="messages-square" class="w-4 h-4"></i>
                             </span>
                             <h3 class="text-base sm:text-lg font-extrabold text-slate-900">
-                                100 Modul Percakapan Interaktif (Komunikasi 2 Orang atau Lebih)
+                                Modul Percakapan Interaktif (2 Orang atau Lebih)
                             </h3>
                         </div>
                         <p class="text-xs text-slate-500 mt-1 max-w-2xl leading-relaxed">
-                            Simulasi komunikasi situasional nyata dengan minimal 100 modul percakapan multi-penutur. Lengkap dengan pelafalan penutur asli, transliterasi huruf abjad, terjemahan Indonesia, dan bedah suku kata.
+                            Simulasi percakapan nyata yang dirancang khusus dan selalu bervariasi di setiap materi. Menampilkan dialog kontekstual kosakata bab ini, dilanjutkan ratusan skenario situasional multi-penutur dengan transliterasi abjad, terjemahan Indonesia, dan bedah suku kata.
                         </p>
                     </div>
-                    <span class="px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 text-xs font-bold border border-emerald-200 shadow-2xs">
-                        100 Skenario Tersedia
-                    </span>
+                    <div class="flex items-center gap-2">
+                        <span class="px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 text-xs font-bold border border-emerald-200 shadow-2xs">
+                            {{ count($dialogueList) }} Skenario Tersedia
+                        </span>
+                        <button type="button" onclick="shuffleDialogues()" id="btnShuffleDialogues" class="px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition shadow-xs flex items-center gap-1.5 group" title="Acak susunan dan tampilkan variasi percakapan baru untuk materi ini">
+                            <i data-lucide="shuffle" class="w-3.5 h-3.5 transition-transform group-hover:rotate-180"></i>
+                            <span>Acak Variasi Baru</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Mode & Filter Tabs -->
+                <div class="flex flex-wrap items-center gap-1.5 mb-4 p-1.5 rounded-2xl bg-slate-100/80 border border-slate-200 text-xs">
+                    <button type="button" onclick="filterParticipantMode('all', this)" class="participant-filter-btn px-3 py-1.5 rounded-xl font-bold bg-white text-emerald-800 shadow-2xs border border-emerald-200 transition">
+                        Semua Skenario ({{ count($dialogueList) }})
+                    </button>
+                    <button type="button" onclick="filterParticipantMode('featured', this)" class="participant-filter-btn px-3 py-1.5 rounded-xl font-semibold text-slate-600 hover:text-slate-900 transition flex items-center gap-1">
+                        <i data-lucide="star" class="w-3 h-3 text-amber-500 fill-current"></i>
+                        <span>Percakapan Khusus Bab Ini</span>
+                    </button>
+                    <button type="button" onclick="filterParticipantMode('2', this)" class="participant-filter-btn px-3 py-1.5 rounded-xl font-semibold text-slate-600 hover:text-slate-900 transition flex items-center gap-1">
+                        <i data-lucide="users" class="w-3 h-3 text-emerald-600"></i>
+                        <span>Percakapan 2 Orang</span>
+                    </button>
+                    <button type="button" onclick="filterParticipantMode('3', this)" class="participant-filter-btn px-3 py-1.5 rounded-xl font-semibold text-slate-600 hover:text-slate-900 transition flex items-center gap-1">
+                        <i data-lucide="message-circle" class="w-3 h-3 text-blue-600"></i>
+                        <span>Diskusi 3 Orang</span>
+                    </button>
                 </div>
 
                 <!-- Search and Filter Bar -->
@@ -267,41 +284,63 @@
                         <input type="text" id="dialogueSearchInput" onkeyup="filterDialogueScenarios()" placeholder="Cari skenario percakapan, topik, atau situasi..." class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 bg-white text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none shadow-xs">
                     </div>
                     <select id="dialogueCategoryFilter" onchange="filterDialogueScenarios()" class="px-4 py-2.5 rounded-xl border border-slate-200 bg-white text-xs font-semibold text-slate-700 focus:ring-2 focus:ring-emerald-500 focus:outline-none shadow-xs">
-                        <option value="all">Semua Kategori (100 Skenario)</option>
-                        <option value="Salam & Perkenalan">Salam & Perkenalan (10 Skenario)</option>
-                        <option value="Restoran & Kuliner">Restoran & Kuliner (10 Skenario)</option>
-                        <option value="Navigasi & Stasiun">Navigasi & Stasiun (10 Skenario)</option>
-                        <option value="Pasar & Belanja">Pasar & Belanja (10 Skenario)</option>
-                        <option value="Kampus & Pendidikan">Kampus & Pendidikan (10 Skenario)</option>
-                        <option value="Kantor & Rapat">Kantor & Rapat (10 Skenario)</option>
-                        <option value="Hotel & Wisata">Hotel & Wisata (10 Skenario)</option>
-                        <option value="Kesehatan & Medis">Kesehatan & Medis (10 Skenario)</option>
-                        <option value="Diskusi 3 Orang">Diskusi 3 Orang (10 Skenario)</option>
-                        <option value="Solusi Masalah & Darurat">Solusi Masalah & Darurat (10 Skenario)</option>
+                        <option value="all">Semua Kategori Topik</option>
+                        <option value="Salam & Perkenalan">Salam & Perkenalan</option>
+                        <option value="Restoran & Kuliner">Restoran & Kuliner</option>
+                        <option value="Navigasi & Stasiun">Navigasi & Stasiun</option>
+                        <option value="Pasar & Belanja">Pasar & Belanja</option>
+                        <option value="Kampus & Pendidikan">Kampus & Pendidikan</option>
+                        <option value="Kantor & Rapat">Kantor & Rapat</option>
+                        <option value="Hotel & Wisata">Hotel & Wisata</option>
+                        <option value="Kesehatan & Medis">Kesehatan & Medis</option>
+                        <option value="Diskusi 3 Orang">Diskusi 3 Orang</option>
+                        <option value="Solusi Masalah & Darurat">Solusi Masalah & Darurat</option>
                     </select>
                 </div>
 
                 <!-- Scenario Cards Container -->
                 <div id="dialogueScenariosContainer" class="space-y-4">
                     @foreach($dialogueList as $scIndex => $sc)
-                        <div class="dialogue-scenario-card p-5 rounded-2xl border border-slate-200 bg-white hover:border-emerald-300 transition shadow-xs {{ $scIndex >= 10 ? 'hidden' : '' }}" data-index="{{ $scIndex }}" data-category="{{ $sc['category'] }}" data-search="{{ strtolower($sc['title'] . ' ' . $sc['category'] . ' ' . implode(' ', $sc['participants'] ?? [])) }}">
+                        @php
+                            $isFeatured = ($sc['is_featured'] ?? false);
+                            $cardBorder = $isFeatured 
+                                ? 'border-2 border-emerald-400 bg-gradient-to-br from-emerald-50/70 via-white to-amber-50/20 shadow-md ring-2 ring-emerald-200/40' 
+                                : 'border border-slate-200 bg-white hover:border-emerald-300 shadow-xs';
+                        @endphp
+                        <div class="dialogue-scenario-card p-5 rounded-2xl {{ $cardBorder }} transition {{ $scIndex >= 10 ? 'hidden' : '' }}" 
+                             data-index="{{ $scIndex }}" 
+                             data-is-featured="{{ $isFeatured ? '1' : '0' }}"
+                             data-participants-count="{{ $sc['participant_count'] ?? 2 }}"
+                             data-category="{{ $sc['category'] }}" 
+                             data-search="{{ strtolower($sc['title'] . ' ' . $sc['category'] . ' ' . implode(' ', $sc['participants'] ?? [])) }}">
                             
                             <!-- Scenario Header -->
                             <div class="flex flex-wrap items-center justify-between gap-2 pb-3 mb-3 border-b border-slate-100">
                                 <div>
-                                    <div class="flex items-center gap-2">
-                                        <span class="px-2 py-0.5 rounded-md bg-emerald-100 text-emerald-800 text-[10px] font-bold">
-                                            {{ $sc['category'] }}
-                                        </span>
+                                    <div class="flex items-center gap-2 flex-wrap">
+                                        @if($isFeatured)
+                                            <span class="px-2.5 py-0.5 rounded-full bg-emerald-600 text-white text-[10px] font-extrabold flex items-center gap-1 shadow-2xs">
+                                                <i data-lucide="star" class="w-3 h-3 fill-current"></i>
+                                                <span>{{ $sc['badge'] ?? '⭐ KONTEKSTUAL BAB INI' }}</span>
+                                            </span>
+                                        @else
+                                            <span class="px-2 py-0.5 rounded-md bg-emerald-100 text-emerald-800 text-[10px] font-bold">
+                                                {{ $sc['category'] }}
+                                            </span>
+                                        @endif
                                         <span class="text-xs font-bold text-slate-900">
                                             {{ $sc['title'] }}
                                         </span>
                                     </div>
-                                    <p class="text-[11px] text-slate-500 mt-0.5">
+                                    <p class="text-[11px] text-slate-500 mt-1">
                                         {{ $sc['situation'] }}
                                     </p>
                                 </div>
                                 <div class="flex items-center gap-1.5 flex-wrap">
+                                    <span class="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full {{ ($sc['participant_count'] ?? 2) >= 3 ? 'bg-blue-100 text-blue-800' : 'bg-slate-100 text-slate-700' }}">
+                                        <i data-lucide="users" class="w-3 h-3"></i>
+                                        <span>{{ ($sc['participant_count'] ?? 2) }} Penutur</span>
+                                    </span>
                                     @foreach($sc['participants'] as $pName)
                                         <span class="inline-flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded-full bg-slate-100 text-slate-700">
                                             <i data-lucide="user" class="w-3 h-3 text-slate-500"></i>
@@ -609,8 +648,24 @@
         if (form) form.submit();
     }
 
-    // 100 Dialogues Client Controller (Pagination, Filter & Full Play)
+    // 100+ Dialogues Client Controller (Pagination, Filter, Modes & Shuffle)
     let visibleScenariosCount = 10;
+    let currentVariationSeed = {{ $variationSeed ?? 0 }};
+    let activeParticipantFilter = 'all';
+
+    function filterParticipantMode(mode, btn) {
+        activeParticipantFilter = mode;
+        document.querySelectorAll('.participant-filter-btn').forEach(b => {
+            b.classList.remove('bg-white', 'text-emerald-800', 'shadow-2xs', 'border', 'border-emerald-200', 'font-bold');
+            b.classList.add('font-semibold', 'text-slate-600');
+        });
+        if (btn) {
+            btn.classList.add('bg-white', 'text-emerald-800', 'shadow-2xs', 'border', 'border-emerald-200', 'font-bold');
+            btn.classList.remove('text-slate-600');
+        }
+        visibleScenariosCount = 10;
+        filterDialogueScenarios();
+    }
 
     function filterDialogueScenarios() {
         const q = (document.getElementById('dialogueSearchInput')?.value || '').toLowerCase().trim();
@@ -621,12 +676,24 @@
         cards.forEach(card => {
             const cardCat = card.getAttribute('data-category');
             const cardSearch = card.getAttribute('data-search') || '';
+            const isFeatured = card.getAttribute('data-is-featured') === '1';
+            const participantsCount = card.getAttribute('data-participants-count') || '2';
+
             const matchesCat = (cat === 'all' || cardCat === cat);
             const matchesQuery = (q === '' || cardSearch.includes(q));
 
-            if (matchesCat && matchesQuery) {
+            let matchesMode = true;
+            if (activeParticipantFilter === 'featured') {
+                matchesMode = isFeatured;
+            } else if (activeParticipantFilter === '2') {
+                matchesMode = (participantsCount === '2');
+            } else if (activeParticipantFilter === '3') {
+                matchesMode = (parseInt(participantsCount) >= 3);
+            }
+
+            if (matchesCat && matchesQuery && matchesMode) {
                 matchedCount++;
-                if (q !== '' || cat !== 'all' || matchedCount <= visibleScenariosCount) {
+                if (q !== '' || cat !== 'all' || activeParticipantFilter !== 'all' || matchedCount <= visibleScenariosCount) {
                     card.classList.remove('hidden');
                 } else {
                     card.classList.add('hidden');
@@ -638,8 +705,19 @@
 
         const indicator = document.getElementById('scenarioCountIndicator');
         if (indicator) {
-            indicator.innerText = `Menampilkan ${Math.min(matchedCount, (q !== '' || cat !== 'all' ? matchedCount : visibleScenariosCount))} dari ${matchedCount} Skenario Ditemukan`;
+            indicator.innerText = `Menampilkan ${Math.min(matchedCount, (q !== '' || cat !== 'all' || activeParticipantFilter !== 'all' ? matchedCount : visibleScenariosCount))} dari ${matchedCount} Skenario Ditemukan`;
         }
+    }
+
+    function shuffleDialogues() {
+        const btn = document.getElementById('btnShuffleDialogues');
+        if (btn) {
+            btn.classList.add('animate-spin');
+        }
+        currentVariationSeed++;
+        const url = new URL(window.location.href);
+        url.searchParams.set('variation', currentVariationSeed);
+        window.location.href = url.toString();
     }
 
     function loadMoreScenarios() {

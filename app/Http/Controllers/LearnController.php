@@ -43,7 +43,7 @@ class LearnController extends Controller
         return view('learn.index', compact('pair', 'levels', 'selectedLevel', 'levelOneVocabs', 'totalLessons', 'totalHours'));
     }
 
-    public function showLesson($id)
+    public function showLesson(Request $request, $id)
     {
         $lesson = Lesson::with(['unit.level.language', 'exercises'])
             ->findOrFail($id);
@@ -79,26 +79,26 @@ class LearnController extends Controller
             $nextLesson = $nextUnit?->lessons()->orderBy('sort_order')->first();
         }
 
-        // Pastikan materi memiliki minimal 100 pembelajaran interaktif komunikasi 2 orang atau lebih yang murni autentik
-        $body = $lesson->content_body;
-        $dialogues = $body['interactive_dialogues'] ?? [];
-        $needsRefresh = empty($dialogues) || count($dialogues) < 100;
-        if (!$needsRefresh && isset($dialogues[0]['turns'][0]['text']) && str_contains($dialogues[0]['turns'][0]['text'], 'Menyapa Rekan Baru')) {
-            $needsRefresh = true;
-        }
+        // Pembelajaran interaktif komunikasi 2 orang atau lebih yang kontekstual dan bervariasi per materi
+        $variationSeed = (int) $request->input('variation', 0);
+        $dialogues = \App\Services\InteractiveDialogueService::getDialoguesForLesson($lesson, $variationSeed);
 
-        if ($needsRefresh) {
-            $body['interactive_dialogues'] = \App\Services\InteractiveDialogueService::generate100Dialogues(
-                $lesson->unit->level->language->code,
-                $body['vocabularies'] ?? [],
-                [],
-                $lesson->sort_order
-            );
-            $lesson->content_body = $body;
-            $lesson->save();
-        }
+        return view('learn.lesson', compact('lesson', 'pair', 'nextLesson', 'previousLesson', 'dialogues', 'variationSeed'));
+    }
 
-        return view('learn.lesson', compact('lesson', 'pair', 'nextLesson', 'previousLesson'));
+    public function getLessonDialogues(Request $request, $id)
+    {
+        $lesson = Lesson::with('unit.level.language')->findOrFail($id);
+        $seed = (int) $request->input('seed', 0);
+        $dialogues = \App\Services\InteractiveDialogueService::getDialoguesForLesson($lesson, $seed);
+
+        return response()->json([
+            'success' => true,
+            'lesson_id' => $lesson->id,
+            'seed' => $seed,
+            'count' => count($dialogues),
+            'dialogues' => $dialogues,
+        ]);
     }
 
     public function completeLesson(Request $request, $id)

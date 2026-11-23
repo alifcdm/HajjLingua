@@ -6,6 +6,8 @@ class HajjModuleService
 {
     /**
      * Data Lengkap Modul Pembelajaran Ibadah Haji Terpadu
+     * Berdasarkan Al-Qur'an, Hadits Shahih, Fiqih 4 Mazhab, Regulasi Ditjen Pelayanan Haji Kemenhaj RI,
+     * Serta Dokumen RPH 1448 H / 2027 M (Keputusan Dirjen No. 26 Tahun 2026) dan Slide Bimtek Pelatihan PPIH 1448 H / 2027 M.
      */
     public static function getModuleData(): array
     {
@@ -13,6 +15,7 @@ class HajjModuleService
             'overview' => self::getOverviewData(),
             'timeline' => self::getTimelineData(),
             'rph_timeline' => self::getRphTimelineData(),
+            'ppih_bimtek' => self::getPpihBimtekData(),
             'fiqh' => self::getFiqhData(),
             'officer_fiqh' => self::getOfficerFiqhData(),
             'prayers' => self::getPrayersData(),
@@ -26,7 +29,7 @@ class HajjModuleService
     {
         return [
             'title' => 'Modul Panduan & Manasik Ibadah Haji Terpadu',
-            'subtitle' => 'Panduan Komprehensif Berdasarkan Al-Qur\'an, Sunnah Shahihah, Fiqih 4 Mazhab, & Regulasi Resmi Kementerian Haji dan Umrah RI',
+            'subtitle' => 'Panduan Komprehensif Berdasarkan Al-Qur\'an, Sunnah Shahihah, Fiqih 4 Mazhab, Regulasi Ditjen Pelayanan Haji Kemenhaj RI, RPH 1448 H / 2027 M & Pelatihan PPIH',
             'dalil_quran' => [
                 'surah' => 'QS. Ali \'Imran : 97',
                 'arabic' => 'وَلِلَّهِ عَلَى النَّاسِ حِجُّ الْبَيْتِ مَنِ اسْتَطَاعَ إِلَيْهِ سَبِيلًا',
@@ -42,8 +45,8 @@ class HajjModuleService
             'pillars_summary' => [
                 ['name' => '6 Rukun Haji', 'desc' => 'Wajib dikerjakan, tidak sah haji jika tertinggal, tidak bisa diganti Dam.'],
                 ['name' => '6 Wajib Haji', 'desc' => 'Wajib dikerjakan, jika tertinggal haji tetap sah namun wajib bayar Dam.'],
-                ['name' => '16 Doa Manasik', 'desc' => 'Teks Arab, transliterasi huruf abjad latin, arti bahasa Indonesia & audio asli.'],
-                ['name' => 'Regulasi Kemenhaj RI', 'desc' => 'Perpres 92/2025, UU 8/2019 jo UU 14/2025, Siskohatkes, Bipih & Smart Card Nusuk.'],
+                ['name' => '24 Agenda RPH 1448H', 'desc' => 'Kalender resmi Keputusan Dirjen Pelayanan Haji No. 26/2026 (10 April – 20 Juni 2027).'],
+                ['name' => 'Bimtek PPIH 1448H', 'desc' => 'Materi pelatihan manasik petugas: Ihram, Thawaf, Sa\'i, Tahallul, & Layanan Jemaah.'],
             ]
         ];
     }
@@ -154,6 +157,508 @@ class HajjModuleService
         ];
     }
 
+    /**
+     * Rencana Perjalanan Haji (RPH) Tahun 1448 H / 2027 M
+     * Sumber Asli Dokumen: Keputusan Direktur Jenderal Pelayanan Haji Nomor 26 Tahun 2026, Kementerian Haji dan Umrah RI
+     */
+    public static function getRphTimelineData(): array
+    {
+        return [
+            'document_title' => 'Rencana Perjalanan Haji (RPH) Tahun 1448 Hijriah / 2027 Masehi',
+            'legal_reference' => 'Keputusan Direktur Jenderal Pelayanan Haji Nomor 26 Tahun 2026, Ditjen Pelayanan Haji Kementerian Haji dan Umrah Republik Indonesia (Ditetapkan 29 September 2026)',
+            'signatory' => 'Ian Heriyawan (Direktur Jenderal Pelayanan Haji)',
+            'drive_source_url' => 'https://drive.google.com/file/d/1QOF0RUCqNcrucc6ph_ShjTCJRMA3BI_6/view?usp=sharing',
+            'operational_summary' => [
+                'masa_pemberangkatan' => '30 Hari (Gel I: 15 Hari Tanah Air ke Madinah, Gel II: 15 Hari Tanah Air ke Jeddah)',
+                'masa_pemulangan' => '30 Hari (Gel I: 15 Hari Jeddah ke Tanah Air, Gel II: 15 Hari Madinah ke Tanah Air)',
+                'masa_tinggal' => '38 s.d. 40 Hari Rata-Rata Tinggal Jemaah Haji di Arab Saudi',
+                'closing_date' => '10 Mei 2027 (04 Dzulhijjah 1448 H) Pukul 24.00 WSA di Bandara KAIA Jeddah',
+                'hari_arafah' => '15 Mei 2027 (09 Dzulhijjah 1448 H) Wukuf di Padang Arafah',
+                'idul_adha' => '16 Mei 2027 (10 Dzulhijjah 1448 H) Hari Nahr / Idul Adha 1448 H',
+            ],
+            // 24 butir kalender kegiatan lengkap dari lampiran resmi dokumen
+            'events' => [
+                [
+                    'no' => 1,
+                    'miladiyah' => '10 April 2027',
+                    'hijriah' => '03 Dzulqa\'idah 1448',
+                    'activity' => 'Jemaah Haji mulai masuk asrama haji',
+                    'phase' => 'Persiapan Tanah Air',
+                    'badge' => 'Embarkasi'
+                ],
+                [
+                    'no' => 2,
+                    'miladiyah' => '11 April 2027',
+                    'hijriah' => '04 Dzulqa\'idah 1448',
+                    'activity' => 'Awal pemberangkatan Jemaah Haji Gelombang I dari Tanah Air ke Madinah',
+                    'phase' => 'Keberangkatan Gel. I',
+                    'badge' => 'Tanah Air -> Madinah'
+                ],
+                [
+                    'no' => 3,
+                    'miladiyah' => '19 April 2027',
+                    'hijriah' => '12 Dzulqa\'idah 1448',
+                    'activity' => 'Awal pemberangkatan Jemaah Haji Gelombang I dari Madinah ke Makkah',
+                    'phase' => 'Pergeseran Gel. I',
+                    'badge' => 'Madinah -> Makkah (Miqat Bir Ali)'
+                ],
+                [
+                    'no' => 4,
+                    'miladiyah' => '25 April 2027',
+                    'hijriah' => '18 Dzulqa\'idah 1448',
+                    'activity' => 'Akhir pemberangkatan Jemaah Haji Gelombang I dari Tanah Air ke Madinah',
+                    'phase' => 'Keberangkatan Gel. I',
+                    'badge' => 'Penutupan Gel. I Madinah'
+                ],
+                [
+                    'no' => 5,
+                    'miladiyah' => '26 April 2027',
+                    'hijriah' => '19 Dzulqa\'idah 1448',
+                    'activity' => 'Awal pemberangkatan Jemaah Haji Gelombang II dari Tanah Air ke Jeddah',
+                    'phase' => 'Keberangkatan Gel. II',
+                    'badge' => 'Tanah Air -> Jeddah'
+                ],
+                [
+                    'no' => 6,
+                    'miladiyah' => '03 Mei 2027',
+                    'hijriah' => '26 Dzulqa\'idah 1448',
+                    'activity' => 'Akhir pemberangkatan Jemaah Haji Gelombang I dari Madinah ke Makkah',
+                    'phase' => 'Pergeseran Gel. I',
+                    'badge' => 'Tuntas Arbain Gel. I'
+                ],
+                [
+                    'no' => 7,
+                    'miladiyah' => '10 Mei 2027',
+                    'hijriah' => '04 Dzulhijjah 1448',
+                    'activity' => 'Akhir pemberangkatan Jemaah Haji Gelombang II dari Tanah Air ke Jeddah',
+                    'phase' => 'Keberangkatan Gel. II',
+                    'badge' => 'Akhir Terbang Gel. II'
+                ],
+                [
+                    'no' => 8,
+                    'miladiyah' => '10 Mei 2027',
+                    'hijriah' => '04 Dzulhijjah 1448',
+                    'activity' => 'Closing Date di King Abdul Aziz International Airport Jeddah (Pukul 24.00 Waktu Arab Saudi)',
+                    'phase' => 'Batas Akhir Masuk',
+                    'badge' => 'Closing Date KAIA'
+                ],
+                [
+                    'no' => 9,
+                    'miladiyah' => '14 Mei 2027',
+                    'hijriah' => '08 Dzulhijjah 1448',
+                    'activity' => 'Pemberangkatan Jemaah Haji dari Makkah ke Arafah (Hari Tarwiyah)',
+                    'phase' => 'Puncak Masyair Armuzna',
+                    'badge' => 'Makkah -> Arafah'
+                ],
+                [
+                    'no' => 10,
+                    'miladiyah' => '15 Mei 2027',
+                    'hijriah' => '09 Dzulhijjah 1448',
+                    'activity' => 'Wukuf di Padang Arafah (Puncak Ibadah Haji Akbar)',
+                    'phase' => 'Puncak Masyair Armuzna',
+                    'badge' => 'Rukun Haji Akbar'
+                ],
+                [
+                    'no' => 11,
+                    'miladiyah' => '16 Mei 2027',
+                    'hijriah' => '10 Dzulhijjah 1448',
+                    'activity' => 'Idhul Adha 1448 Hijriah (Mabit Muzdalifah, Lontar Jumrah Aqabah & Tahallul Awwal)',
+                    'phase' => 'Puncak Masyair Armuzna',
+                    'badge' => 'Hari Nahr / Idul Adha'
+                ],
+                [
+                    'no' => 12,
+                    'miladiyah' => '17 Mei 2027',
+                    'hijriah' => '11 Dzulhijjah 1448',
+                    'activity' => 'Hari Tasyrik I (Mabit di Mina & Melontar Jumrah Ula, Wustha, Aqabah)',
+                    'phase' => 'Puncak Masyair Armuzna',
+                    'badge' => 'Tasyrik I'
+                ],
+                [
+                    'no' => 13,
+                    'miladiyah' => '18 Mei 2027',
+                    'hijriah' => '12 Dzulhijjah 1448',
+                    'activity' => 'Hari Tasyrik II (Nafar Awal - Mabit Mina & Lontar 3 Jumrah)',
+                    'phase' => 'Puncak Masyair Armuzna',
+                    'badge' => 'Nafar Awal'
+                ],
+                [
+                    'no' => 14,
+                    'miladiyah' => '19 Mei 2027',
+                    'hijriah' => '13 Dzulhijjah 1448',
+                    'activity' => 'Hari Tasyrik III (Nafar Tsani - Penyelesaian Lontar 3 Jumrah di Mina)',
+                    'phase' => 'Puncak Masyair Armuzna',
+                    'badge' => 'Nafar Tsani'
+                ],
+                [
+                    'no' => 15,
+                    'miladiyah' => '21 Mei 2027',
+                    'hijriah' => '15 Dzulhijjah 1448',
+                    'activity' => 'Awal Pemulangan Jemaah Haji Gelombang I dari Makkah melalui Bandara King Abdul Aziz International Airport Jeddah ke Tanah Air',
+                    'phase' => 'Pemulangan Gel. I',
+                    'badge' => 'Jeddah -> Tanah Air'
+                ],
+                [
+                    'no' => 16,
+                    'miladiyah' => '21 Mei 2027',
+                    'hijriah' => '15 Dzulhijjah 1448',
+                    'activity' => 'Awal Kedatangan Jemaah Haji Gelombang I di Tanah Air (Debarkasi)',
+                    'phase' => 'Pemulangan Gel. I',
+                    'badge' => 'Tiba di Tanah Air'
+                ],
+                [
+                    'no' => 17,
+                    'miladiyah' => '27 Mei 2027',
+                    'hijriah' => '21 Dzulhijjah 1448',
+                    'activity' => 'Awal Pemberangkatan Jemaah Haji Gelombang II dari Makkah ke Madinah (Menuju Shalat Arbain)',
+                    'phase' => 'Pergeseran Gel. II',
+                    'badge' => 'Makkah -> Madinah'
+                ],
+                [
+                    'no' => 18,
+                    'miladiyah' => '04 Juni 2027',
+                    'hijriah' => '29 Dzulhijjah 1448',
+                    'activity' => 'Akhir Pemulangan Jemaah Haji Gelombang I dari Jeddah ke Tanah Air',
+                    'phase' => 'Pemulangan Gel. I',
+                    'badge' => 'Akhir Pulang Gel. I'
+                ],
+                [
+                    'no' => 19,
+                    'miladiyah' => '05 Juni 2027',
+                    'hijriah' => '30 Dzulhijjah 1448',
+                    'activity' => 'Awal Pemulangan Jemaah Haji Gelombang II dari Madinah melalui Bandara Pangeran Mohammad bin Abdul Aziz Madinah ke Tanah Air',
+                    'phase' => 'Pemulangan Gel. II',
+                    'badge' => 'Madinah -> Tanah Air'
+                ],
+                [
+                    'no' => 20,
+                    'miladiyah' => '05 Juni 2027',
+                    'hijriah' => '30 Dzulhijjah 1448',
+                    'activity' => 'Awal Kedatangan Jemaah Haji Gelombang II di Tanah Air',
+                    'phase' => 'Pemulangan Gel. II',
+                    'badge' => 'Kedatangan Gel. II'
+                ],
+                [
+                    'no' => 21,
+                    'miladiyah' => '06 Juni 2027',
+                    'hijriah' => '01 Muharram 1449',
+                    'activity' => 'Tahun Baru Hijriyah 1449 Hijriah',
+                    'phase' => 'Momentum Bersejarah',
+                    'badge' => '1 Muharram 1449 H'
+                ],
+                [
+                    'no' => 22,
+                    'miladiyah' => '11 Juni 2027',
+                    'hijriah' => '06 Muharram 1449',
+                    'activity' => 'Akhir Pemberangkatan Jemaah Haji Gelombang II dari Makkah ke Madinah',
+                    'phase' => 'Pergeseran Gel. II',
+                    'badge' => 'Akhir Makkah ke Madinah'
+                ],
+                [
+                    'no' => 23,
+                    'miladiyah' => '19 Juni 2027',
+                    'hijriah' => '14 Muharram 1449',
+                    'activity' => 'Akhir Pemulangan Jemaah Haji Gelombang II dari Madinah melalui Bandara Pangeran Mohammad bin Abdul Aziz Madinah ke Tanah Air',
+                    'phase' => 'Pemulangan Gel. II',
+                    'badge' => 'Akhir Terbang Madinah'
+                ],
+                [
+                    'no' => 24,
+                    'miladiyah' => '20 Juni 2027',
+                    'hijriah' => '15 Muharram 1449',
+                    'activity' => 'Akhir Kedatangan Jemaah Haji Gelombang II di Tanah Air (Operasional Haji 1448 H Tuntas Resmi)',
+                    'phase' => 'Penutupan Operasional',
+                    'badge' => 'Operasional Selesai'
+                ],
+            ]
+        ];
+    }
+
+    /**
+     * Bimtek & Manasik Haji Petugas PPIH 1448 H / 2027 M
+     * Riset Lengkap dari Slide Presentasi Pelatihan Resmi Kemenhaj & Kemenag RI
+     */
+    public static function getPpihBimtekData(): array
+    {
+        return [
+            'title' => 'Bimtek & Manasik Haji Petugas PPIH 1448 H / 2027 M',
+            'subtitle' => 'Materi Pembekalan Resmi Manasik Petugas Penyelenggara Ibadah Haji Berdasarkan Regulasi Ditjen Pelayanan Haji Kemenhaj RI',
+            'structure_types' => [
+                [
+                    'title' => 'PPIH Pusat',
+                    'scope' => 'Kementerian Haji dan Umrah RI / Kementerian Agama RI',
+                    'desc' => 'Bertanggung jawab atas kebijakan nasional, regulasi, alokasi kuota, pengawasan maskapai penerbangan, dan koordinasi tingkat kementerian dengan Pemerintah Kerajaan Arab Saudi.',
+                    'badge' => 'Nasional / Jakarta'
+                ],
+                [
+                    'title' => 'PPIH Embarkasi',
+                    'scope' => 'Asrama Haji Seluruh Indonesia (Jakarta, Solo, Surabaya, Medan, Makassar, dll)',
+                    'desc' => 'Melayani proses One Stop Service: pemeriksaan kesehatan tahap akhir, pembagian living cost (uang saku SAR), kartu identitas gelang anti-karat, dan dokumen paspor/visa.',
+                    'badge' => '14 Embarkasi RI'
+                ],
+                [
+                    'title' => 'PPIH Arab Saudi',
+                    'scope' => 'Daker Bandara, Daker Madinah, Daker Makkah & Satgas Khusus Armuzna',
+                    'desc' => 'Melaksanakan fungsi pelayanan akomodasi hotel, katering 3x sehari, transportasi bus Shalawat, bimbingan manasik, posko KKHI medis, dan perlindungan keamanan jemaah (Linjam).',
+                    'badge' => 'Daker & Satgas'
+                ],
+                [
+                    'title' => 'PPIH Kloter (Kelompok Terbang)',
+                    'scope' => 'Mendampingi Langsung Jemaah dari Tanah Air hingga Pulang',
+                    'desc' => 'Terdiri dari 5 personel inti per kloter: 1 Ketua Kloter (TPHI), 1 Pembimbing Ibadah (TPIHI), 1 Dokter (TKHI) dan 2 Perawat (TKHI) yang hidup bersama jemaah 24 jam.',
+                    'badge' => 'Garis Terdepan Jemaah'
+                ],
+            ],
+            'can_officer_hajj' => [
+                'main_principle' => 'Tugas pokok PPIH adalah khidmat (pelayanan), serta pembinaan dan perlindungan kepada jemaah. Namun, PPIH kloter dan PPIH Arab Saudi dapat melaksanakan ibadah haji dengan tanpa mengganggu tugas pokok pelayanannya.',
+                'rules' => [
+                    [
+                        'point' => 'Hanya Boleh Haji Tamattu\'',
+                        'desc' => 'Seluruh petugas PPIH diwajibkan hanya mengambil jenis Haji Tamattu\' (mengerjakan Umrah terlebih dahulu, bertahallul bebas, lalu berihram haji pada 8 Dzulhijjah). Dilarang mengambil Ifrad atau Qiran agar leluasa bertugas memakai seragam dinas.'
+                    ],
+                    [
+                        'point' => 'Tata Cara PPIH Kloter',
+                        'desc' => 'Dilakukan bersama-sama dengan jemaah kloternya karena keberadaan dan posisinya wajib mendampingi serta melayani kebutuhan ibadah jemaah kloter sepanjang rute.'
+                    ],
+                    [
+                        'point' => 'Tata Cara PPIH Arab Saudi',
+                        'desc' => 'Memiliki kekhususan waktu dan shift pelaksanaan ibadah sesuai dengan perbedaan jenis layanan yang ditugaskan (pelayanan konsumsi, transportasi, atau medis rumah sakit).'
+                    ]
+                ]
+            ],
+            'sunnah_ihram' => [
+                'practices' => [
+                    'a. Mandi sunnah ihram, termasuk disunnahkan bagi wanita yang sedang haid, nifas, dan anak-anak.',
+                    'b. Mencukur bulu ketiak, bulu kemaluan, merapikan kumis, memotong kuku, dan semua tindakan membersihkan badan.',
+                    'c. Memakai pakaian ihram berwarna putih bersih bagi laki-laki (2 lembar kain tanpa jahitan).',
+                    'd. Memakai wewangian di badan (bukan di kain pakaian ihram), baik di kepala, jenggot, ketiak, dan anggota badan lainnya sebelum berniat ihram.',
+                    'e. Salat sunat ihram dua rakaat (rakaat pertama membaca Al-Kafirun, rakaat kedua Al-Ikhlas).'
+                ],
+                'locations' => [
+                    [
+                        'group' => 'PPIH Kloter Gelombang I',
+                        'location' => 'Hotel Pemondokan di Madinah',
+                        'timing' => 'Sebelum berangkat menuju Makkah al-Mukarramah'
+                    ],
+                    [
+                        'group' => 'PPIH Kloter Gelombang II',
+                        'location' => 'Asrama Haji Embarkasi di Tanah Air',
+                        'timing' => 'Sebelum naik ke dalam pesawat terbang'
+                    ],
+                    [
+                        'group' => 'PPIH Arab Saudi',
+                        'location' => 'Ruang Transit Bandara KAIA Jeddah',
+                        'timing' => 'Sesaat setelah tiba dan menyelesaikan pos imigrasi Bandara'
+                    ]
+                ]
+            ],
+            'niat_miqat' => [
+                'doa_ihram' => [
+                    'arabic_1' => 'لَبَّيْكَ اللَّهُمَّ عُمْرَةً',
+                    'latin_1' => 'Labbaikallāhumma ‘umratan',
+                    'meaning_1' => 'Aku sambut panggilan-Mu ya Allah untuk berumrah.',
+                    'arabic_2' => 'نَوَيْتُ الْعُمْرَةَ وَأَحْرَمْتُ بِهَا لِلَّهِ تَعَالَى',
+                    'latin_2' => 'Nawaitul-‘umrata wa aḥramtu bihā lillāhi ta‘ālā',
+                    'meaning_2' => 'Aku berniat umrah dengan berihram karena Allah Ta\'ala.'
+                ],
+                'miqat_rules' => [
+                    [
+                        'group' => 'PPIH Kloter Gelombang I',
+                        'location' => 'Masjid Dzulhulaifah / Bir Ali (Madinah)',
+                        'notes' => 'Niat ihram dilaksanakan setelah salat sunah ihram atau di atas bus sebelum bergerak meninggalkan titik miqat.'
+                    ],
+                    [
+                        'group' => 'PPIH Kloter Gelombang II',
+                        'location' => 'Asrama Haji Embarkasi, di Pesawat sebelum Yalamlam, atau Bandara KAA Jeddah',
+                        'notes' => 'Di pesawat sebelum melewati garis batas miqat Yalamlam (diumumkan oleh pilot/awak kabin).'
+                    ],
+                    [
+                        'group' => 'PPIH Arab Saudi',
+                        'location' => 'Bandara King Abdul Aziz (KAA) Jeddah',
+                        'notes' => 'Niat ihram dilakukan setelah salat sunah atau di atas bus sebelum bergerak menuju Makkah.'
+                    ]
+                ],
+                'special_notes' => 'Niat ihram dilakukan oleh semua petugas PPIH termasuk wanita yang sedang haidh (kecuali PPIH Daker Madinah dan Bandara, karena harus segera meninggalkan Makkah menuju Madinah/Bandara untuk melaksanakan tugas dinas). Setelah berniat ihram, seluruh ketentuan larangan ihram berlaku mutlak.'
+            ],
+            'larangan_ihram' => [
+                'laki_laki' => [
+                    'Memakai pakaian bertangkup / berjahit yang membentuk lekuk tubuh (celana, kemeja, kaus, pakaian dalam).',
+                    'Memakai kaos kaki atau sepatu yang menutupi mata kaki dan tumit.',
+                    'Menutup kepala dengan penutup yang melekat seperti topi, peci, helm, atau sorban.'
+                ],
+                'perempuan' => [
+                    'Menutup kedua telapak tangan dengan kaos tangan / sarung tangan.',
+                    'Menutup muka dengan cadar, masker kain, atau penutup yang menempel langsung pada wajah.'
+                ],
+                'bersama' => [
+                    'Memakai wangi-wangian (parfum) kecuali yang sudah dipakai di badan sebelum niat haji/umrah.',
+                    'Memotong kuku dan mencukur atau mencabut rambut dan bulu badan.',
+                    'Memburu dan menganiaya atau membunuh binatang dengan cara apa pun (kecuali binatang buas yang membahayakan).',
+                    'Memakan daging hewan hasil buruan di Tanah Suci.',
+                    'Memotong kayu-kayuan dan mencabut rumput/tanaman liar di Tanah Haram.',
+                    'Menikah, menikahkan orang lain (menjadi wali), atau meminang perempuan untuk dinikahi.',
+                    'Bersetubuh dan pendahuluannya seperti bercumbu, mencium, atau merayu yang mendatangkan syahwat.',
+                    'Mencaci, bertengkar (jidal), atau mengucapkan kata-kata kotor.',
+                    'Melakukan kejahatan dan maksiat (fusuq).',
+                    'Memakai pakaian yang dicelup dengan bahan yang wangi.'
+                ]
+            ],
+            'hal_diperbolehkan' => [
+                'Membunuh binatang buas atau yang membahayakan (misalnya: kalajengking, tikus, ular, anjing buas, gagak, nyamuk, lalat).',
+                'Mandi membersihkan badan (tanpa sabun beraroma tajam).',
+                'Menyikat gigi dan berkumur.',
+                'Berbekam untuk pengobatan.',
+                'Memakai minyak angin, balsem, atau obat oles yang dimaksudkan untuk pengobatan.',
+                'Menyembelih binatang ternak yang jinak dan binatang buruan laut.',
+                'Memakai kacamata, jam tangan, cincin, dan sabuk ikat pinggang.',
+                'Bernaung di bawah payung, mobil, tenda kemah, dan pohon rindang.',
+                'Membuka tangan dan kaki bagi wanita ketika berwudhu di tempat wudhu khusus perempuan.',
+                'Mencuci dan mengganti kain ihram dengan kain ihram cadangan yang bersih.',
+                'Menggaruk kepala dan badan secara wajar tanpa merontokkan rambut dengan sengaja.',
+                'Memakai perhiasan bagi wanita yang biasa dipakai.'
+            ],
+            'perjalanan_ke_makkah' => [
+                'talbiyah_guidelines' => 'Selama perjalanan menuju ke Makkah, disunnahkan memperbanyak membaca talbiyah, dan berakhir sesaat sebelum melaksanakan tawaf.',
+                'cara_bertalbiyah' => 'Talbiyah dibaca 3 (tiga) kali berturut-turut dengan khusyu\' dan tidak dijeda oleh aktivitas apa pun, selanjutnya membaca shalawat dan doa permohonan surga serta perlindungan neraka.',
+                'doa_sapujagat' => 'رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً وَفِي الآخِرَةِ حَسَنَةً وَقِنَا عَذَابَ النَّارِ'
+            ],
+            'masjidil_haram_prep' => [
+                'timing' => 'PPIH kloter bersama jemaah berangkat menuju Masjidil Haram pada waktu Ba\'da Isya\' atau waktu Dhuha demi menghindari cuaca panas ekstrem.',
+                'haidh_officer' => 'PPIH wanita yang sedang haidh dan sudah berniat ihram, menunggu di hotel hingga suci dengan tetap menjaga larangan-larangan ihram.',
+                'gates' => [
+                    ['num' => '1', 'name' => 'Bab King Abdul Aziz (Pintu Utama Sektor Selatan)'],
+                    ['num' => '5', 'name' => 'Bab Ajyad (Arah Menuju Hotel Sektor Ajyad & Mispalah)'],
+                    ['num' => '10', 'name' => 'Bab Isma\'il'],
+                    ['num' => '11', 'name' => 'Bab As Safa (Akses Langsung Bukit Shafa)'],
+                    ['num' => '19', 'name' => 'Bab Ali (Arah Terminal Bus Bab Ali & Mahbas Jin)'],
+                    ['num' => '20', 'name' => 'Bab Al Abbas'],
+                    ['num' => '24', 'name' => 'Bab As Salam (Pintu Sunnah Memasuki Masjid)'],
+                    ['num' => '31', 'name' => 'Bab Al Marwah (Pintu Keluar Setelah Selesai Sa\'i)'],
+                    ['num' => '45', 'name' => 'Bab Al Fath (Sektor Utara)'],
+                    ['num' => '55', 'name' => 'Bab Al Quds'],
+                    ['num' => '58', 'name' => 'Bab Al Hudaybiyah'],
+                    ['num' => '62', 'name' => 'Bab Al Umrah (Arah Menuju Jarwal & Syib Amir)'],
+                    ['num' => '79', 'name' => 'Bab King Fahd (Pintu Utama Sayap Barat)']
+                ],
+                'terminals' => [
+                    ['name' => 'Terminal Syib Amir', 'direction' => 'Utara Masjidil Haram', 'notes' => 'Melayani rute bus Shalawat sektor Mahbas Jin, Raudhah, Syisyah, dan Jarwal.'],
+                    ['name' => 'Terminal Bab Ali', 'direction' => 'Timur Masjidil Haram', 'notes' => 'Akses terowongan pejalan kaki (pedestrian tunnel) menuju Mahbas Jin & Aziziah.'],
+                    ['name' => 'Terminal Ajyad / Kudai', 'direction' => 'Selatan Masjidil Haram', 'notes' => 'Akses jemaah sektor Mispalah, Bakhutmah, dan Kudai.'],
+                ]
+            ],
+            'thawaf_details' => [
+                'syarat_sah' => [
+                    'Menutup aurat. Jika terbuka auratnya, maka putaran tawafnya batal. Batal tawaf wanita yang terbuka kakinya, atau kepalanya, bahkan ketika tampak sehelai rambutnya.',
+                    'Dimulai dari Hajar Aswad. Jika dimulai selain itu, maka putarannya tidak dihitung.',
+                    'Posisi Ka\'bah selalu berada di sebelah kiri badan jemaah.',
+                    'Mengelilingi Ka\'bah 7 (tujuh) kali putaran secara yakin tanpa ragu.',
+                    'Tawaf dilakukan di tempat tawaf resmi (Mathaf), baik di pelataran Ka\'bah maupun lantai bertingkat Masjidil Haram.',
+                    'Suci dari hadats dan najis. (Catatan Fiqih Mazhab: Menurut Mazhab Hanafi, sah tawafnya orang yang berhadats kecil dengan dikenakan dam seekor kambing, dan bagi yang haidh atau junub dikenakan dam seekor unta atau sapi).'
+                ],
+                'tata_cara' => [
+                    'Laki-laki disunnahkan berpakaian Idhtiba\': ujung kain ihram menutup bahu kiri, bagian tengah kain di bawah ketiak kanan, pundak yang terbuka menghadap ke arah luar dan pundak tertutup berhadapan dengan Ka\'bah.',
+                    'Menghadap seluruh badan ke arah Ka\'bah seperti salat yang harus menghadap kiblat, atau jika tidak memungkinkan, cukup dengan sebagian badan yang menghadap ke arah Hajar Aswad.',
+                    'Membaca doa ma\'tsur pada saat memulai tawaf, setelah istilam (menyentuh dengan tangan kanan) atau memberi isyarat dengan mengangkat tangan kanan ke arah Hajar Aswad seraya berucap "Bismillāhi Allāhu Akbar".',
+                    'Memperpendek langkah kaki guna memperbanyak jumlah pahala langkah saat berthawaf.',
+                    'Mencium Hajar Aswad jika memungkinkan tanpa menyakiti orang lain. Mazhab Hanbaliyah dan Hanafiyah mensunnahkan mencium di setiap akhir putaran; Imam Maliki dan Syafi\'i mensunnahkan di awal tawaf. Jika tidak mungkin, cukup memberi isyarat tangan dan mengecup tangan sebanyak 3 kali.',
+                    'Berlari-lari kecil pada putaran 1, 2, dan 3, serta berjalan biasa pada putaran selanjutnya bagi laki-laki. Jika tidak memungkinkan lari karena padat, disunnahkan memberi isyarat gerakan seolah berlari kecil.',
+                    'Laki-laki disunnahkan dekat dengan Ka\'bah jika tidak sesak. Wanita disunnahkan di pinggir tempat tawaf (mathaf) supaya lebih terjaga dari persentuhan dengan laki-laki.',
+                    'Sunnah mengusap Rukun Yamani dengan tangan tanpa mencium (dan tidak dianjurkan melambaikan tangan jika tidak sampai).',
+                    'Tawaf dilaksanakan secara berturut-turut (muwalat). Jika tawaf terhenti karena salat berjamaah atau batal wudhu, boleh melanjutkan dari tempat terputus, namun lebih utama jika isti\'naf (mengulang putaran dari Hajar Aswad).',
+                    'Berdoa antara Rukun Yamani dan Hajar Aswad membaca Doa Sapu Jagat (Rabbanā ātinā fid-dunyā ḥasanah...).',
+                    'Berdzikir di setiap putaran: "Subḥānallāh, wal-ḥamdu lillāh, wa lā ilāha illallāh, wallāhu akbar". Mazhab Syafi\'i mensunnahkan membaca Al-Qur\'an.',
+                    'Salat sunat 2 rakaat setelah tawaf di belakang Maqam Ibrahim (membaca surat Al-Kafirun dan Al-Ikhlas). Jika tidak memungkinkan, salat di mana saja di dalam Masjidil Haram.',
+                    'Berdoa di Multazam (area dinding antara Hajar Aswad dan Pintu Ka\'bah) dengan posisi berdiri menempelkan pipi, dada, lengan, dan telapak tangan pada dinding Ka\'bah.',
+                    'Salat sunat di dalam Hijr Ismail jika antrean memungkinkan.'
+                ],
+                'larangan_thawaf' => [
+                    'Menyentuh sebagian dinding dan syazarwan (bibir pondasi Ka\'bah). Jika menyentuh maka putaran tawafnya batal, namun putaran sebelumnya masih sah.',
+                    'Masuk ke dalam area Hijr Ismail (karena Hijr Ismail merupakan bagian dari Ka\'bah).',
+                    'Memutus tawaf tanpa alasan syar\'i. Jika memutus karena sakit, boleh melanjutkan jika jedanya sebentar; jika jedanya lama hingga orang mengira tawaf telah selesai, maka tawaf batal.'
+                ],
+                'adab_thawaf' => [
+                    '1. Khusyu\' dan khudhu\' dengan menghadirkan hati bahwa tawaf yang dilakukan adalah tawaf terakhir.',
+                    '2. Pandangan tertunduk ke lantai, tidak mendongak ke langit atau memandang Ka\'bah secara liar. Bayangkan tawafnya para malaikat yang selalu bertasbih (QS Az-Zumar: 75).',
+                    '3. Tidak berbicara kecuali dzikir atau pembicaraan yang disunnahkan semisal amar ma\'ruf.',
+                    '4. Menjaga pandangan dari sesuatu yang tidak halal.',
+                    '5. Menangis berserah diri. Nabi SAW bersabda kepada Umar RA: "Di sinilah tempat menumpahkan air mata kesedihan dan penyesalan."'
+                ],
+                'hikmah_thawaf' => [
+                    'Putaran 7 kali bisa dimaknai ibarat 7 hari dalam sepekan yang kita lalui senantiasa dalam dzikir dan doa kepada Allah.',
+                    'Sebagaimana tawaf yang berdesakan, begitulah realitas hidup: kadang ada yang menyenggol, menyikut, dan dibutuhkan kesabaran tinggi untuk terus melangkah.',
+                    'Dalam kondisi apa pun, kita harus selalu berputar mendekat kepada Allah, menjadikan Allah sebagai poros pusat segala orientasi hidup kita.'
+                ]
+            ],
+            'zamzam_details' => [
+                'doa' => [
+                    'arabic' => 'اللَّهُمَّ إِنِّي أَسْأَلُكَ عِلْمًا نَافِعًا، وَرِزْقًا وَاسِعًا، وَشِفَاءً مِنْ كُلِّ دَاءٍ',
+                    'latin' => 'Allāhumma innī as\'aluka ‘ilman nāfi‘an, wa rizqan wāsi‘an, wa syifā\'an min kulli dā\'in',
+                    'meaning' => 'Ya Allah, sesungguhnya aku memohon kepada-Mu ilmu yang bermanfaat, rezeki yang melimpah ruah, dan kesembuhan dari segala macam penyakit.'
+                ],
+                'adab' => 'Minum dengan menghadap kiblat / Ka\'bah, membaca basmalah, meniatkan dalam hati hajat yang diinginkan, memegang gelas dengan tangan kanan, minum secara tadhalla\' (meneguk banyak dan kenyang), dan selesai minum mengucapkan hamdalah.',
+                'benefits' => [
+                    'Menjadi wasilah terkabulnya doa sesuai yang diniatkan (Ma\'u Zamzama lima syuriba lah).',
+                    'Menjadi obat penawar bagi berbagai penyakit jasmani dan rohani.',
+                    'Menjadi minuman sekaligus makanan yang mengenyangkan.',
+                    'Menghilangkan sifat munafik dari dalam dada.'
+                ]
+            ],
+            'sai_details' => [
+                'ketentuan' => [
+                    'Dimulai dari bukit Shafa dan berakhir di bukit Marwah.',
+                    'Perjalanan dari bukit Shafa ke bukit Marwah dihitung satu kali perjalanan, demikian pula sebaliknya (total 7 kali lintasan).',
+                    'Menyempurnakan 7 kali perjalanan dengan hitungan yang meyakinkan.',
+                    'Dilakukan setelah Tawaf Qudum atau Tawaf Umrah atau Tawaf Ifadhah bagi yang berhaji Tamattu\'.',
+                    'Tidak disyaratkan harus dalam keadaan suci dari hadats (baik laki-laki maupun wanita yang sedang haidh sah melakukan sa\'i).',
+                    'Mengerjakan sa\'i secara berturut-turut (muwalat), tanpa berhenti kecuali ada udzur (seperti salat berjamaah atau kelelahan).',
+                    'Dilakukan setelah tawaf; jika dilakukan sebelum tawaf, maka sa\'inya tidak sah.'
+                ],
+                'tata_cara' => [
+                    'Ketika hendak mendaki bukit Shafa sebelum memulai sa\'i, menghadap Ka\'bah dan membaca doa: "Innaṣ-ṣafā wal-marwata min sya‘ā\'irillāh... Abda\'u bimā bada\'allāhu bihi wa rasūluh".',
+                    'Berdoa di atas bukit Shafa ketika menghadap Ka\'bah: "Allāhu Akbar (3x) wa lillāhil-ḥamd. Lā ilāha illallāhu waḥdahū lā syarīka lah, lahul-mulku wa lahul-ḥamdu wa huwa ‘alā kulli syai\'in qadīr...".',
+                    'Laki-laki disunnahkan berlari-lari kecil di antara dua tanda lampu hijau dengan membaca doa: "Rabbighfir warḥam, wa‘fu wa takarram, wa tajāwaz ‘ammā ta‘lam, innaka ta‘lamu mā lā na‘lam...".',
+                    'Selama perjalanan sa\'i disunnahkan berdzikir, membaca Al-Qur\'an, atau berdoa sesuai tuntunan buku pedoman manasik.'
+                ],
+                'adab_dan_falsafah' => [
+                    'Menjaga kebersihan hati, menjaga pandangan dari maksiat, mengendalikan emosi dari berdesakan, bersabar, khusyu\', tidak terburu-buru, dan ikhlas karena Allah.',
+                    'Ketika berlari Shafa-Marwah, hendaknya ia menghadirkan niat berlari dari godaan setan dan hawa nafsu.',
+                    'Sa\'i merupakan bentuk pengharapan mutlak kepada Allah, karena manusia tidak tahu amalnya diterima atau tidak.',
+                    'Sa\'i adalah ibadah Ta\'abbudi, yaitu ketaatan murni yang tidak perlu dicari-cari logika mengapa dilakukan. Ibadah Ta\'abbudi lebih kuat dalam mengikis hawa nafsu dibanding ibadah Ta\'aqquli.'
+                ]
+            ],
+            'tahallul_details' => [
+                'definition' => 'Tahallul ialah keadaan seseorang yang telah dihalalkan (dibolehkan) melakukan perbuatan yang sebelumnya dilarang selama berihram.',
+                'types' => [
+                    ['name' => 'Tahallul Umrah', 'desc' => 'Tahallul yang dilakukan setelah sa\'i antara Shafa dan Marwah, yakni selesainya seluruh rangkaian rukun dan wajib umrah.'],
+                    ['name' => 'Tahallul Haji', 'desc' => 'Terbagi menjadi Tahallul Awwal (setelah melontar Jumrah Aqabah dan bercukur pada 10 Dzulhijjah) dan Tahallul Tsani / Kubra (setelah Tawaf Ifadhah dan Sa\'i).']
+                ],
+                'prosedur' => [
+                    'Bercukur disunnahkan dilaksanakan di bukit Marwah sesaat setelah menyelesaikan lintasan ke-7 sa\'i. Namun dapat dilaksanakan di hotel pemondokan dengan catatan selama belum bercukur masih dalam status ihram.',
+                    'Bagi laki-laki dapat mencukur gundul (halq - lebih utama) atau memotong rambut (taqshir). Mencukur dimulai dari separuh kepala bagian kanan kemudian separuh bagian kiri.',
+                    'Wanita cukup menggunting rambut saja sekurang-kurangnya 3 helai rambut sepanjang satu ruas ujung jari jemari.',
+                    'Disunnahkan berdoa ketika memotong/mencukur rambut, dan berdoa memuji Allah setelah selesai bertahallul.'
+                ]
+            ],
+            'post_umrah_duty' => [
+                'summary' => 'Setelah selesai melaksanakan ibadah umrah wajib, seluruh petugas PPIH segera berganti seragam dinas operasional dan menempati pos tugas layanan Duyufurrahman:',
+                'deployments' => [
+                    [
+                        'target' => 'PPIH Daker Bandara & Daker Madinah',
+                        'role' => 'Bersiap menuju Madinah dan Bandara KAIA Jeddah untuk menyambut, mengarahkan, dan melayani kedatangan jemaah haji serta penyiapan hotel Madinah.'
+                    ],
+                    [
+                        'target' => 'PPIH Daker Makkah',
+                        'role' => 'Menuju ke sektor masing-masing (Sektor 1 s.d. 11 dan Sektor Khusus Masjidil Haram) untuk melaksanakan layanan akomodasi, katering, transportasi bus Shalawat, dan bimbingan ibadah.'
+                    ],
+                    [
+                        'target' => 'PPIH Kloter',
+                        'role' => 'Memberikan layanan 24 jam penuh mendampingi jemaah kloter di hotel pemondokan, memastikan kesehatan fisik jemaah, dan mengawal persiapan menuju puncak Arafah.'
+                    ]
+                ]
+            ]
+        ];
+    }
+
     private static function getFiqhData(): array
     {
         return [
@@ -175,16 +680,16 @@ class HajjModuleService
             ],
             'types' => [
                 [
-                    'name' => 'Haji Tamattu\' (Paling Populer)',
-                    'desc' => 'Mengerjakan Umrah terlebih dahulu di bulan-bulan haji (Syawal, Dzulqa\'dah, Dzulhijjah), bertahallul penuh (bisa melepas kain ihram dan hidup normal), kemudian pada 8 Dzulhijjah berihram kembali untuk ibadah Haji.',
+                    'name' => 'Haji Tamattu\' (Pilihan Wajib PPIH)',
+                    'desc' => 'Mengerjakan Umrah terlebih dahulu di bulan-bulan haji (Syawal, Dzulqa\'dah, Dzulhijjah), bertahallul penuh (melepas kain ihram dan memakai pakaian biasa), kemudian pada 8 Dzulhijjah berihram kembali untuk ibadah Haji.',
                     'hukum_dam' => 'Wajib membayar Dam Nusuk (menyembelih 1 kambing atau puasa 3 hari di tanah suci + 7 hari di tanah air).',
-                    'keunggulan' => 'Sangat praktis dan tidak memberatkan jemaah karena masa memakai ihram tidak terlalu lama.',
+                    'keunggulan' => 'Sangat praktis dan tidak memberatkan jemaah & petugas karena masa memakai ihram tidak terlalu lama.',
                 ],
                 [
                     'name' => 'Haji Ifrad',
                     'desc' => 'Berniat dan mengerjakan ibadah Haji terlebih dahulu hingga selesai seluruh rukun dan wajibnya pada 12 atau 13 Dzulhijjah, baru kemudian berihram untuk Umrah.',
                     'hukum_dam' => 'Tidak wajib membayar Dam.',
-                    'keunggulan' => 'Sangat afdhal secara amalan mandiri, namun menuntut jemaah menjaga larangan ihram dalam waktu yang relatif panjang.',
+                    'keunggulan' => 'Sangat afdhal secara amalan mandiri, namun menuntut menjaga larangan ihram dalam waktu yang relatif panjang.',
                 ],
                 [
                     'name' => 'Haji Qiran',
@@ -447,113 +952,10 @@ class HajjModuleService
         ];
     }
 
-    /**
-     * Rencana Perjalanan Haji (RPH) Tahun 1448 H / 2027 M
-     * Sumber: Keputusan Direktur Jenderal Pelayanan Haji No. 26 Tahun 2026, Kementerian Haji dan Umrah RI
-     */
-    private static function getRphTimelineData(): array
-    {
-        return [
-            'document_title' => 'Rencana Perjalanan Haji (RPH) Tahun 1448 Hijriah / 2027 Masehi',
-            'legal_reference' => 'Keputusan Direktur Jenderal Pelayanan Haji Nomor 26 Tahun 2026, Kementerian Haji dan Umrah Republik Indonesia',
-            'drive_source_url' => 'https://drive.google.com/file/d/1QOF0RUCqNcrucc6ph_ShjTCJRMA3BI_6/view?usp=sharing',
-            'operational_duration' => '40 Hari Masa Operasional Haji di Arab Saudi',
-            'phases' => [
-                [
-                    'milestone' => 'Tahap 1: Masuk Asrama Haji',
-                    'date_masehi' => '10 April 2027',
-                    'date_hijriah' => '03 Dzulqa\'dah 1448 H',
-                    'badge' => 'Embarkasi RI',
-                    'summary' => 'Jemaah haji mulai masuk ke asrama haji embarkasi seluruh Indonesia untuk pemeriksaan akhir kesehatan (One Stop Service), pembagian paspor, gelang logam anti-karat, dan living cost (uang saku SAR).'
-                ],
-                [
-                    'milestone' => 'Tahap 2: Keberangkatan Gelombang I (ke Madinah)',
-                    'date_masehi' => '11 – 25 April 2027',
-                    'date_hijriah' => '04 – 18 Dzulqa\'dah 1448 H',
-                    'badge' => 'Gelombang I',
-                    'summary' => 'Pemberangkatan jemaah haji Gelombang I dari Tanah Air langsung menuju Bandara AMAA Madinah untuk menunaikan Shalat Arbain (40 waktu di Masjid Nabawi) dan ziarah Raudhah.'
-                ],
-                [
-                    'milestone' => 'Tahap 3: Pergerakan Gelombang I (Madinah ke Makkah)',
-                    'date_masehi' => '20 April – 04 Mei 2027',
-                    'date_hijriah' => '13 – 27 Dzulqa\'dah 1448 H',
-                    'badge' => 'Miqat Bir Ali',
-                    'summary' => 'Jemaah Gelombang I yang telah menyelesaikan Arbain diberangkatkan bergelombang dari Madinah ke Makkah, mengambil miqat dan berniat ihram di Masjid Dzulhulaifah (Bir Ali).'
-                ],
-                [
-                    'milestone' => 'Tahap 4: Keberangkatan Gelombang II (ke Jeddah)',
-                    'date_masehi' => '26 April – 10 Mei 2027',
-                    'date_hijriah' => '19 Dzulqa\'dah – 04 Dzulhijjah 1448 H',
-                    'badge' => 'Gelombang II',
-                    'summary' => 'Pemberangkatan jemaah haji Gelombang II dari Tanah Air mendarat di Bandara KAIA Jeddah, berniat ihram di pesawat di atas Yalamlam / asrama embarkasi, langsung menuju Makkah untuk Umrah Wajib.'
-                ],
-                [
-                    'milestone' => 'Tahap 5: Closing Date Bandara Arab Saudi',
-                    'date_masehi' => '10 Mei 2027 (Pukul 24:00 WSA)',
-                    'date_hijriah' => '04 Dzulhijjah 1448 H',
-                    'badge' => 'Batas Akhir Masuk',
-                    'summary' => 'Batas akhir (closing date) seluruh penerbangan jemaah haji internasional mendarat di Bandara King Abdul Aziz Jeddah dan Bandara AMAA Madinah.'
-                ],
-                [
-                    'milestone' => 'Tahap 6: Pergerakan Menuju Arafah & Mina',
-                    'date_masehi' => '14 Mei 2027',
-                    'date_hijriah' => '08 Dzulhijjah 1448 H (Tarwiyah)',
-                    'badge' => 'Pemberangkatan Armuzna',
-                    'summary' => 'Jemaah haji Indonesia diberangkatkan dari hotel pemondokan Makkah menuju tenda Padang Arafah atau Mina dengan pengawalan Satgas Operasional Armuzna PPIH.'
-                ],
-                [
-                    'milestone' => 'Tahap 7: Puncak Wukuf di Padang Arafah',
-                    'date_masehi' => '15 Mei 2027',
-                    'date_hijriah' => '09 Dzulhijjah 1448 H',
-                    'badge' => 'Rukun Haji Akbar',
-                    'summary' => 'Pelaksanaan puncak ibadah haji: Wukuf di Padang Arafah mulai tergelincir matahari (waktu Zhuhur) hingga terbenam matahari, dilanjutkan pergerakan mabit ke Muzdalifah.'
-                ],
-                [
-                    'milestone' => 'Tahap 8: Hari Raya Idul Adha (Hari Nahr)',
-                    'date_masehi' => '16 Mei 2027',
-                    'date_hijriah' => '10 Dzulhijjah 1448 H',
-                    'badge' => 'Nahr & Tahallul',
-                    'summary' => 'Melontar Jumrah Aqabah 7 kerikil di Jamarat Mina, penyembelihan Dam Tamattu\' melalui Rumah Potong Hewan Adahi resmi, Tahallul Awwal, dan Tawaf Ifadhah di Masjidil Haram.'
-                ],
-                [
-                    'milestone' => 'Tahap 9: Hari-Hari Tasyrik di Mina',
-                    'date_masehi' => '17 – 19 Mei 2027',
-                    'date_hijriah' => '11 – 13 Dzulhijjah 1448 H',
-                    'badge' => 'Mabit & Jamarat',
-                    'summary' => 'Bermalam (mabit) di tenda Mina dan melontar 3 jumrah (Ula, Wustha, Aqabah). Nafar Awwal selesai 12 Dzulhijjah (18 Mei), Nafar Tsani selesai 13 Dzulhijjah (19 Mei).'
-                ],
-                [
-                    'milestone' => 'Tahap 10: Pemulangan Gelombang I (via Jeddah)',
-                    'date_masehi' => '21 Mei – 04 Juni 2027',
-                    'date_hijriah' => '15 – 29 Dzulhijjah 1448 H',
-                    'badge' => 'Pemulangan Gel. I',
-                    'summary' => 'Pemulangan jemaah haji Gelombang I dari Makkah setelah Tawaf Wada\' melalui Bandara Internasional King Abdul Aziz (KAIA) Jeddah kembali ke Tanah Air.'
-                ],
-                [
-                    'milestone' => 'Tahap 11: Pergeseran Gelombang II (Makkah ke Madinah)',
-                    'date_masehi' => '27 Mei – 11 Juni 2027',
-                    'date_hijriah' => '21 Dzulhijjah 1448 H – 06 Muharram 1449 H',
-                    'badge' => 'Arbain Gel. II',
-                    'summary' => 'Pergerakan jemaah haji Gelombang II dari Makkah menuju Madinah al-Munawwarah untuk melaksanakan ibadah Shalat Arbain di Masjid Nabawi dan ziarah bersejarah.'
-                ],
-                [
-                    'milestone' => 'Tahap 12: Pemulangan Gelombang II (via Madinah)',
-                    'date_masehi' => '05 – 20 Juni 2027',
-                    'date_hijriah' => '30 Dzulhijjah 1448 H – 15 Muharram 1449 H',
-                    'badge' => 'Pemulangan Gel. II (Penutup)',
-                    'summary' => 'Pemulangan jemaah haji Gelombang II dari Bandara AMAA Madinah menuju debarkasi masing-masing di Tanah Air. Operasional haji tahun 1448 H resmi berakhir.'
-                ]
-            ]
-        ];
-    }
-
-    /**
-     * Fiqih Petugas Haji: Riset Panduan Resmi Kementerian Agama & Kementerian Haji dan Umrah RI
-     */
     private static function getOfficerFiqhData(): array
     {
         return [
-            'title' => 'Fiqih Petugas Haji (Tuntunan Manasik Pelayan Dhuyufurrahman)',
+            'title' => 'Fiqih Khusus Petugas Haji (Prinsip Ibadah Muta\'addiyah)',
             'authorities' => 'Kementerian Agama RI & Kementerian Haji dan Umrah Republik Indonesia',
             'legal_foundations' => [
                 'dalil_social_worship' => [
@@ -635,46 +1037,51 @@ class HajjModuleService
             ],
             [
                 'id' => 2,
-                'question' => 'Kapan waktu pelaksanaan Wukuf di Padang Arafah yang sah menurut syariat?',
+                'question' => 'Berdasarkan Keputusan Dirjen Pelayanan Haji No. 26 Tahun 2026 tentang RPH 1448 H / 2027 M, kapankah waktu pelaksanaan Wukuf di Padang Arafah?',
                 'options' => [
-                    'Mulai tergelincir matahari (Zhuhur) 9 Dzulhijjah hingga terbit fajar 10 Dzulhijjah',
-                    'Sejak terbit matahari 8 Dzulhijjah hingga maghrib',
-                    'Pada tanggal 10 Dzulhijjah setelah shalat Idul Adha',
-                    'Sepanjang hari-hari Tasyrik (11-13 Dzulhijjah)'
+                    '15 Mei 2027 (09 Dzulhijjah 1448 H)',
+                    '10 April 2027 (03 Dzulqa\'idah 1448 H)',
+                    '16 Mei 2027 (10 Dzulhijjah 1448 H)',
+                    '20 Juni 2027 (15 Muharram 1449 H)'
                 ],
-                'correct' => 'Mulai tergelincir matahari (Zhuhur) 9 Dzulhijjah hingga terbit fajar 10 Dzulhijjah',
-                'explanation' => 'Waktu wukuf sah dimulai sejak zawal (masuk waktu Zhuhur) 9 Dzulhijjah hingga fajar 10 Dzulhijjah.'
+                'correct' => '15 Mei 2027 (09 Dzulhijjah 1448 H)',
+                'explanation' => 'Berdasarkan RPH 1448 H / 2027 M butir ke-10, Wukuf di Padang Arafah dilaksanakan pada 15 Mei 2027 bertepatan dengan 09 Dzulhijjah 1448 H.'
             ],
             [
                 'id' => 3,
-                'question' => 'Berdasarkan regulasi resmi Kementerian Haji dan Umrah RI, syarat mutlak sebelum jemaah dapat melakukan pelunasan Biaya Perjalanan Ibadah Haji (Bipih) adalah:',
+                'question' => 'Berdasarkan slide materi Pelatihan Petugas Haji (PPIH), jenis ibadah haji apakah yang HANYA BOLEH dilaksanakan oleh seluruh petugas PPIH?',
                 'options' => [
-                    'Lulus verifikasi dan dinyatakan Memenuhi Syarat Istitha\'ah Kesehatan di Siskohatkes',
-                    'Mengikuti bimbingan manasik minimal 20 kali',
-                    'Memiliki paspor dengan masa berlaku minimal 3 bulan',
-                    'Membayar asuransi penerbangan mandiri'
+                    'Haji Tamattu\' (Umrah terlebih dahulu, lalu bertahallul penuh)',
+                    'Haji Ifrad (Haji terlebih dahulu tanpa umrah)',
+                    'Haji Qiran (Ihram bersamaan tanpa tahallul)',
+                    'Bebas memilih apa saja sesuai keinginan'
                 ],
-                'correct' => 'Lulus verifikasi dan dinyatakan Memenuhi Syarat Istitha\'ah Kesehatan di Siskohatkes',
-                'explanation' => 'Sesuai regulasi Kemenhaj RI, status istitha\'ah kesehatan yang diterbitkan Dinas Kesehatan via Siskohatkes merupakan syarat mutlak sebelum pelunasan Bipih di bank persepsi.'
+                'correct' => 'Haji Tamattu\' (Umrah terlebih dahulu, lalu bertahallul penuh)',
+                'explanation' => 'Sesuai materi manasik PPIH, petugas hanya boleh melaksanakan Haji Tamattu\' agar setelah tahallul umrah dapat kembali bertugas melayani jemaah memakai seragam dinas tanpa terkendala larangan ihram.'
             ],
             [
                 'id' => 4,
-                'question' => 'Bagi wanita yang sedang mengalami haid atau nifas ketika hendak pulang meninggalkan Makkah, bagaimanakah status Tawaf Wada\'-nya?',
+                'question' => 'Berdasarkan ketentuan Thawaf di Masjidil Haram, manakah yang merupakan salah satu LARANGAN THAWAF yang membatalkan putaran?',
                 'options' => [
-                    'Gugur kewajibannya dan tidak wajib membayar Dam apapun',
-                    'Wajib membayar denda menyembelih 1 ekor unta',
-                    'Wajib menunggu di Makkah hingga suci bagaimanapun keadaannya',
-                    'Hajinya batal dan harus mengulang tahun depan'
+                    'Menyentuh dinding Ka\'bah & syazarwan (bibir pondasi Ka\'bah)',
+                    'Memperpendek langkah kaki saat berthawaf',
+                    'Berlari-lari kecil pada 3 putaran pertama bagi pria',
+                    'Berdoa membaca Doa Sapu Jagat di antara Rukun Yamani & Hajar Aswad'
                 ],
-                'correct' => 'Gugur kewajibannya dan tidak wajib membayar Dam apapun',
-                'explanation' => 'Rasulullah SAW memberi keringanan (rukhsah) bagi wanita haid/nifas untuk tidak melaksanakan Tawaf Wada\' tanpa denda apapun (HR. Bukhari & Muslim).'
+                'correct' => 'Menyentuh dinding Ka\'bah & syazarwan (bibir pondasi Ka\'bah)',
+                'explanation' => 'Menyentuh dinding Ka\'bah atau syazarwan saat tawaf membatalkan putaran karena syazarwan termasuk pondasi Ka\'bah, sehingga orang yang menyentuhnya berada di atas/di dalam bagian Ka\'bah.'
             ],
             [
                 'id' => 5,
-                'question' => 'Kartu pintar resmi berteknologi RFID dari Pemerintah Arab Saudi yang wajib dimiliki jemaah untuk akses masuk Armuzna adalah:',
-                'options' => ['Nusuk Smart Card', 'Hajj Passport Card', 'Iqama Gold Card', 'Saudi Green Pass'],
-                'correct' => 'Nusuk Smart Card',
-                'explanation' => 'Kartu Pintar Nusuk (Nusuk Smart Card) adalah identitas resmi digital yang diwajibkan Kementerian Haji Saudi untuk verifikasi visa haji resmi dan akses Armuzna.'
+                'question' => 'Berdasarkan adab dan hakikat Sa\'i, mengapa Sa\'i digolongkan sebagai ibadah TA\'ABBUDI?',
+                'options' => [
+                    'Karena merupakan bentuk ketaatan mutlak kepada Allah tanpa perlu dicari logika rasionalnya',
+                    'Karena hanya boleh dilakukan saat matahari terbit',
+                    'Karena harus diselesaikan dalam waktu kurang dari 15 menit',
+                    'Karena wajib dalam keadaan suci dari hadats kecil dan besar'
+                ],
+                'correct' => 'Karena merupakan bentuk ketaatan mutlak kepada Allah tanpa perlu dicari logika rasionalnya',
+                'explanation' => 'Ibadah Ta\'abbudi adalah amalan murni yang menekankan ketundukan dan ketaatan kepada perintah Allah di mana akal dan hawa nafsu tidak ikut campur menentukan sebab/alasannya.'
             ]
         ];
     }
